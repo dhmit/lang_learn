@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-from pathlib import Path
 
 CONFIG_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BACKEND_DIR = os.path.dirname(CONFIG_DIR)
