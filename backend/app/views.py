@@ -3,6 +3,7 @@ These view functions and classes implement API endpoints
 """
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from gender_analysis import corpus
 
 from .models import (
     Text
