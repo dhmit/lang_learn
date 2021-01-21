@@ -1,7 +1,13 @@
 asgiref==3.3.1
+click==7.1.2
 Django==3.1.5
 django-cors-headers==3.6.0
 django-webpack-loader==0.7.0
 djangorestframework==3.12.2
+joblib==1.0.0
+nltk==3.5
+numpy==1.19.5
 pytz==2020.5
+regex==2020.11.13
 sqlparse==0.4.1
+tqdm==4.56.0
