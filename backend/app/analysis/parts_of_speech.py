@@ -7,6 +7,7 @@ def get_parts_of_speech_tags(text):
 
 
 def get_part_of_speech_words(text, part):
+    part = part.lower()
     tags = {
         'noun': ['NN', 'NNS', 'NNP', 'NNPS'],
         'verb': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
