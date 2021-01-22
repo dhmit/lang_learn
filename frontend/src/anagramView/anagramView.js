@@ -25,11 +25,15 @@ export class AnagramView extends React.Component {
             const response = await fetch(apiURL);
             const data = await response.json();
             const targetWords = [];
+            const letters = [];
             const targetWordDefs = [];
             for (let i = 0; i < (data['word_data']).length; i++) {
                 const word = data['word_data'][i];
                 targetWords.push(word['word_data']);
                 targetWordDefs.push(word['definition']);
+            }
+            for (let i = 0; i < (data['letters']).length; i++) {
+                letters.push(data['letters'][i].toUpperCase());
             }
 
             const extraWordsSet = new Set(data['extra_words']);
@@ -37,7 +41,7 @@ export class AnagramView extends React.Component {
                 targetWordDefs: data['word_data'],
                 extraWords: extraWordsSet,
                 targetWords: targetWords,
-                letters: data['letters'],
+                letters: letters,
             });
         } catch (e) {
             console.log(e);
@@ -54,29 +58,29 @@ export class AnagramView extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const userInput = this.state.userInput;
+        const userInput = this.state.userInput.toLowerCase();
         const targetWords = this.state.targetWords;
         const extraWords = this.state.extraWords;
-        if (targetWords.includes(userInput)) {
+        if (targetWords.includes(userInput) && !this.state.targetWordsFound.includes(userInput)) {
             this.setState({
                 targetWordsFound: this.state.targetWordsFound.concat(userInput),
             });
-        } else if (extraWords.has(userInput)) {
+        } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
             this.setState({
                 extraWordsFound: this.state.extraWordsFound.concat(userInput),
             });
         }
         this.setState({
-          userInput: '',
+            userInput: '',
         });
     }
 
     render() {
         if (!this.state.targetWordDefs) {
             return (
-              <div className="spinner-border text-primary" role="status">
-                  <span className="sr-only">Loading...</span>
-              </div>
+                <div className="spinner-border text-primary" role="status" >
+                    <span className="sr-only">Loading...</span>
+                </div>
             );
         }
         return (<React.Fragment>
