@@ -1,7 +1,6 @@
 import React from 'react';
 // import * as PropTypes from 'prop-types';
-import Navbar from '../UILibrary/navbar';
-import { Footer } from '../UILibrary/components';
+import { Navbar, Footer } from '../UILibrary/components';
 
 export class IndexView extends React.Component {
     constructor(props) {
@@ -28,6 +27,8 @@ export class IndexView extends React.Component {
 
         return (<React.Fragment>
             <Navbar />
+            <div className="page">
+            </div>
             <Footer />
         </React.Fragment>);
     }
