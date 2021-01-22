@@ -35,8 +35,8 @@ class MainTests(TestCase):
                          , def_dict_2)
 
     def test_word_examples(self):
-        example_dict_1 = parts_of_speech.get_word_definition(["hello", "happy"])
-        example_dict_2 = parts_of_speech.get_word_definition(["word", "boat", "sky"])
+        example_dict_1 = parts_of_speech.get_word_examples(["hello", "happy"])
+        example_dict_2 = parts_of_speech.get_word_examples(["word", "boat", "sky"])
         self.assertEqual({'hello': ['every morning they exchanged polite hellos'],
                           'happy': ['a happy smile', 'spent many happy days on the beach',
                                     'a happy marriage']}
