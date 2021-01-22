@@ -26,7 +26,7 @@ def get_part_of_speech_words(text, part):
         return "Part of speech not valid"
 
     tokens = get_parts_of_speech_tags(text)
-    return [token[0] for token in tokens if token[1] in tags[part] and "'" not in token[0]]
+    return [token[0] for token in tokens if token[1] in tags[part]]
 
 
 def get_word_definition(word_list):
