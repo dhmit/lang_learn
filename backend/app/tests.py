@@ -15,13 +15,10 @@ class MainTests(TestCase):
     #     super().setUp()
     #     do any setup here
 
-    def test_sample(self):
-        """
-        Remove me once we have real tests here.
-        """
-        two = 2
-        another_two = 2
-        self.assertEqual(two + another_two, 4)
+
+    def test_get_part_of_speech_words(self):
+        text_1 = "Sally shouldn't sell sea shells by the sea shore."
+        
 
     def test_word_def(self):
         def_dict_1 = parts_of_speech.get_word_definition(["hello", "happy"])
