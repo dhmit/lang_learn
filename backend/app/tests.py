@@ -36,6 +36,9 @@ class MainTests(TestCase):
                          set(parts_of_speech.get_part_of_speech_words(text_1, 'adverb')))
 
     def test_word_def(self):
+        """
+        Checks if correct definitions are outputted
+        """
         def_dict_1 = parts_of_speech.get_word_definition(["hello", "happy"])
         def_dict_2 = parts_of_speech.get_word_definition(["word", "boat", "sky"])
         self.assertEqual({'hello': 'an expression of greeting',
@@ -47,6 +50,9 @@ class MainTests(TestCase):
                          , def_dict_2)
 
     def test_word_examples(self):
+        """
+        Checks if correct examples are outputted
+        """
         example_dict_1 = parts_of_speech.get_word_examples(["hello", "happy"])
         example_dict_2 = parts_of_speech.get_word_examples(["word", "boat", "sky"])
         self.assertEqual({'hello': ['every morning they exchanged polite hellos'],
