@@ -7,6 +7,8 @@ except LookupError:
     nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet as wn
 
+# Need to implement a better system of expanding contractions,
+# contractions and pycontractions both fail to install
 
 CONTRACTIONS = {
     "ain't": "am not",  # / are not",
