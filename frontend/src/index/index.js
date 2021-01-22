@@ -1,5 +1,6 @@
 import React from 'react';
 // import * as PropTypes from 'prop-types';
+import { Button } from 'react-bootstrap';
 import { Navbar, Footer } from '../UILibrary/components';
 
 export class IndexView extends React.Component {
@@ -22,6 +23,7 @@ export class IndexView extends React.Component {
         if (!this.state.data) {
             return (<>
                 Hello, world! There is no application here yet.
+                <Button href="/anagram" variant="outline-primary">Anagram</Button>
             </>);
         }
 

@@ -16,7 +16,6 @@ django-cors-headers==3.6.0
 django-webpack-loader==0.7.0
 djangorestframework==3.12.2
 flake8==3.8.4
--e git+https://github.com/dhmit/gender_analysis.git@711a51e98f13960510f8a51e92dd9660f172f856#egg=gender_analysis
 gutenberg-cleaner==0.1.6
 idna==2.10
 iniconfig==1.1.1
