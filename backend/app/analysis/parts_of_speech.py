@@ -203,4 +203,3 @@ def get_word_examples(word_list):
         syns = wn.synsets(word)
         word_examples[word] = syns[0].examples()
     return word_examples
-
