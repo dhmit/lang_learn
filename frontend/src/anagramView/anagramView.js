@@ -35,6 +35,32 @@ export class AnagramView extends React.Component {
         return (<React.Fragment>
             <Navbar />
             <div className="page">
+                <h2>Anagrams</h2>
+                <div className="row">
+                    <div className="col-3" >
+                        <h3>Extra Words</h3>
+                    </div>
+                    <div className="col-3">
+                        <h3>Words Found</h3>
+                    </div>
+                    <div className="col-6">
+                        <h3>Definitions</h3>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-3" >
+                    </div>
+                    <div className="col-9">
+                        <p>Letters will go here</p>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-3" >
+                    </div>
+                    <div className="col-9">
+                        <p>Typing word and submit button go here</p>
+                    </div>
+                </div>
             </div>
             <Footer />
         </React.Fragment>);

@@ -22,16 +22,17 @@ code {
     margin-bottom: 1px;
 }
 
+$header-padding: 10px;
 $side-padding: 100px;
 
 .page {
-    padding: 0 $side-padding 0;
+    padding: $header-padding $side-padding 0;
     flex: 1 0 auto;
 }
 
 @media (max-width: 992px) {
     .page {
-        padding: 0 0 0;
+        padding: $header-padding 0 0;
     }
 }
 
