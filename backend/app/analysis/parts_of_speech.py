@@ -132,22 +132,38 @@ CONTRACTIONS = {
 
 
 def remove_contractions(text):
+    """
+    :param text: A body of text as a string
+    :return: New body of text as a string without contractions
+    """
     words = text.split(' ')
     for i, word in enumerate(words):
         expanded_contraction = CONTRACTIONS.get(word.lower(), word)
+
         if expanded_contraction[0] != word[0]:
             expanded_contraction = word[0] + expanded_contraction[1:]
+
         words[i] = expanded_contraction
+
     new_text = ' '.join(words)
     return new_text
 
 
 def get_parts_of_speech_tags(text):
+    """
+    :param text: A body of text as a string
+    :return: List of tuples containing word, part_of_speech_code
+    """
     tokens = nltk.word_tokenize(text)
     return nltk.pos_tag(tokens)
 
 
 def get_part_of_speech_words(text, part):
+    """
+    :param text: A body of text as a string
+    :param part: The part of speech to search for in the text
+    :return: List of words that match the part of speech
+    """
     text = remove_contractions(text)
     part = part.lower()
     tags = {
@@ -165,6 +181,10 @@ def get_part_of_speech_words(text, part):
 
 
 def get_word_definition(word_list):
+    """
+    :param word_list: A list of words to get the definition of
+    :return: A dictionary of word:definition pairs
+    """
     word_def = {}
     for word in word_list:
         syns = wn.synsets(word)
@@ -173,6 +193,11 @@ def get_word_definition(word_list):
 
 
 def get_word_examples(word_list):
+    """
+    :param word_list: A list of words to find example sentences for
+    :return: A dictionary of word:list_of_examples pairs
+    """
+    # Entering the word 'the' causes an error
     word_examples = {}
     for word in word_list:
         syns = wn.synsets(word)
