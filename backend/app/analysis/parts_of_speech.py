@@ -33,7 +33,7 @@ def get_part_of_speech_words(text, part):
 
 def filter_pos(word_list, part):
     token_list = nltk.pos_tag(word_list)
-    return [word[0] for word in token_list if word[1] in tags[part]]
+    return [word[0] for word in token_list if word[1] in tags[part] and len(word[0]) >= 3]
 
 
 def get_word_definition(word_list):
