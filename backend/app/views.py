@@ -16,6 +16,7 @@ from .analysis.parts_of_speech import (
     get_part_of_speech_words,
     get_word_examples,
     get_word_definition,
+    filter_pos
 )
 from .analysis.anagrams import (
     get_anagrams,
@@ -51,11 +52,11 @@ def get_anagram(request, text_id, part_of_speech):
     the id of the text and the part of speech. The anagrams will be random.
     """
     text_obj = Text.objects.get(id=text_id)
-    words = [word for word in get_part_of_speech_words(text_obj.text, part_of_speech)
-             if "'" not in word]
+    words = list(set(word for word in get_part_of_speech_words(text_obj.text, part_of_speech)
+                     if "'" not in word))
     random.shuffle(words)
     # TODO: Determine how many words from text we should use and which to use
-    words = words[:int(len(words) / 2)]
+    words = words[:5]
 
     definitions = get_word_definition(words)
     examples = get_word_examples(words)
@@ -69,8 +70,13 @@ def get_anagram(request, text_id, part_of_speech):
                 anagram_freq[letter] = cur_freq[letter]
             elif anagram_freq[letter] < cur_freq[letter]:
                 anagram_freq[letter] = cur_freq[letter]
+
     extra_words = get_anagrams(anagram_freq)
     extra_words -= set(words)  # Remove words from text from extra words
+    extra_words = filter_pos(extra_words, part_of_speech)
 
-    res = {'extra_words': extra_words}
-    return Response("hi")
+    word_data = [{'word_data': word, 'definition': definitions[word], 'example': examples[word]}
+                 for word in words]
+    res = {'word_data': word_data, 'extra_words': extra_words}
+
+    return Response(res)

@@ -1,6 +1,9 @@
+import os
+from django.conf import settings
+
+
 def get_word_set():
-    word_file = './nltk_data/words/en'
-    # word_file = './nltk_data/words/en-basic'
+    word_file = os.path.join(settings.NLTK_WORD_DIR, 'en')
     with open(word_file) as file:
         word_set = set(line.strip() for line in file.readlines())
     return word_set
