@@ -90,6 +90,7 @@ export class AnagramView extends React.Component {
     }
 
     handleShuffle(event) {
+        event.preventDefault();
         this.setState({
             letters: shuffleArray(this.state.letters),
         });
@@ -142,11 +143,11 @@ export class AnagramView extends React.Component {
                                         buffer += '_ ';
                                     }
                                     return (
-                                      <li key={i}>
-                                          {buffer}
-                                      </li>
+                                        <li key={i}>
+                                            {buffer}
+                                        </li>
                                     );
-                            })}
+                                })}
                         </ul>
                     </div>
                     <div className="col-6">
@@ -155,7 +156,8 @@ export class AnagramView extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-3" >
-                    <button className="btn btn-outline-dark float-right" onClick={this.handleShuffle}>Shuffle</button>
+                        <button className="btn btn-outline-dark float-right"
+                            onClick={this.handleShuffle}>Shuffle</button>
                     </div>
                     <div className="col-9">
                         {this.state.letters}
@@ -168,7 +170,8 @@ export class AnagramView extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <input className="formControl" type="text" name="userInput"
                                 onChange={this.handleChange} value={this.state.userInput} />
-                            <button className="btn btn-outline-dark mx-2" type="submit">Enter</button>
+                            <button className="btn btn-outline-dark mx-2"
+                                type="submit">Enter</button>
                         </form>
                     </div>
                 </div>
