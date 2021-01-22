@@ -12,7 +12,7 @@ export class AnagramView extends React.Component {
             userInput: null,
             targetWordsFound: [],
             extraWordsFound: [],
-            score: null,
+            score: 0,
             letters: [],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,10 +64,12 @@ export class AnagramView extends React.Component {
         if (targetWords.includes(userInput) && !this.state.targetWordsFound.includes(userInput)) {
             this.setState({
                 targetWordsFound: this.state.targetWordsFound.concat(userInput),
+                score: this.state.score + (userInput.length * 2),
             });
         } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
             this.setState({
                 extraWordsFound: this.state.extraWordsFound.concat(userInput),
+                score: this.state.score + userInput.length,
             });
         }
         this.setState({
@@ -87,29 +89,44 @@ export class AnagramView extends React.Component {
             <Navbar />
             <div className="page">
                 <h1>Anagrams</h1>
+                <div>
+                    Score: {this.state.score}
+                </div>
                 <div className="row">
                     <div className="col-3" >
                         <h3>Extra Words</h3>
-                            <ul>
-                                {
-                                    this.state.extraWordsFound.map((word, i) => (
-                                        <li key={i}>
-                                            {word}
-                                        </li>
-                                    ))
-                                }
-                            </ul>
-                    </div>
-                    <div className="col-3">
-                        <h3>Words Found</h3>
                         <ul>
                             {
-                                this.state.targetWordsFound.map((word, i) => (
+                                this.state.extraWordsFound.map((word, i) => (
                                     <li key={i}>
                                         {word}
                                     </li>
                                 ))
                             }
+                        </ul>
+                    </div>
+                    <div className="col-3">
+                        <h3>Words Found</h3>
+                        <ul>
+                            {
+                                this.state.targetWords.map((word, i) => {
+                                    if (this.state.targetWordsFound.includes(word)) {
+                                        return (
+                                            <li key={i}>
+                                                {word}
+                                            </li>
+                                        );
+                                    }
+                                    let buffer = '';
+                                    for (let j = 0; j < word.length; j++) {
+                                        buffer += '_ ';
+                                    }
+                                    return (
+                                      <li key={i}>
+                                          {buffer}
+                                      </li>
+                                    );
+                            })}
                         </ul>
                     </div>
                     <div className="col-6">
