@@ -17,6 +17,7 @@ export class AnagramView extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleShuffle = this.handleShuffle.bind(this);
     }
 
     async componentDidMount() {
@@ -77,6 +78,23 @@ export class AnagramView extends React.Component {
         });
     }
 
+    handleShuffle(event) {
+        console.log('start');
+        const letters = this.state.letters;
+        for (let i = letters.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [letters[i], letters[j]] = [letters[j], letters[i]];
+        }
+        console.log(letters);
+        this.setState({
+            letters: letters,
+        });
+        console.log(this.state.letters);
+        console.log('finish');
+    }
+
+
+
     render() {
         if (!this.state.targetWordDefs) {
             return (
@@ -135,6 +153,7 @@ export class AnagramView extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-3" >
+                    <button className="btn btn-outline-dark float-right" onClick={this.handleShuffle}>Shuffle</button>
                     </div>
                     <div className="col-9">
                         {this.state.letters}
@@ -147,7 +166,7 @@ export class AnagramView extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <input className="formControl" type="text" name="userInput"
                                 onChange={this.handleChange} value={this.state.userInput} />
-                            <button className="btn btn-outline-dark" type="submit">Enter</button>
+                            <button className="btn btn-outline-dark mx-2" type="submit">Enter</button>
                         </form>
                     </div>
                 </div>
