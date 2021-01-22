@@ -140,7 +140,6 @@ def remove_contractions(text):
     return new_text
 
 
-
 def get_parts_of_speech_tags(text):
     tokens = nltk.word_tokenize(text)
     return nltk.pos_tag(tokens)
