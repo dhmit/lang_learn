@@ -2,6 +2,17 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
 export class AnagramView extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +37,7 @@ export class AnagramView extends React.Component {
             const response = await fetch(apiURL);
             const data = await response.json();
             const targetWords = [];
-            const letters = [];
+            let letters = [];
             const targetWordDefs = [];
             for (let i = 0; i < (data['word_data']).length; i++) {
                 const word = data['word_data'][i];
@@ -36,8 +47,8 @@ export class AnagramView extends React.Component {
             for (let i = 0; i < (data['letters']).length; i++) {
                 letters.push(data['letters'][i].toUpperCase());
             }
-
             const extraWordsSet = new Set(data['extra_words']);
+            letters = shuffleArray(letters);
             this.setState({
                 targetWordDefs: data['word_data'],
                 extraWords: extraWordsSet,
@@ -79,18 +90,9 @@ export class AnagramView extends React.Component {
     }
 
     handleShuffle(event) {
-        console.log('start');
-        const letters = this.state.letters;
-        for (let i = letters.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [letters[i], letters[j]] = [letters[j], letters[i]];
-        }
-        console.log(letters);
         this.setState({
-            letters: letters,
+            letters: shuffleArray(this.state.letters),
         });
-        console.log(this.state.letters);
-        console.log('finish');
     }
 
 
