@@ -188,7 +188,10 @@ def get_word_definition(word_list):
     word_def = {}
     for word in word_list:
         syns = wn.synsets(word)
-        word_def[word] = syns[0].definition()
+        if len(syns) > 0:
+            word_def[word] = syns[0].definition()
+        else:
+            word_def[word] = ''
     return word_def
 
 
@@ -201,5 +204,9 @@ def get_word_examples(word_list):
     word_examples = {}
     for word in word_list:
         syns = wn.synsets(word)
-        word_examples[word] = syns[0].examples()
+        if len(syns) > 0:
+            word_examples[word] = syns[0].examples()
+        else:
+            word_examples[word] = ''
+
     return word_examples
