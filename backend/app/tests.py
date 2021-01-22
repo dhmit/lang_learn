@@ -15,10 +15,25 @@ class MainTests(TestCase):
     #     super().setUp()
     #     do any setup here
 
-
     def test_get_part_of_speech_words(self):
-        text_1 = "Sally shouldn't sell sea shells by the sea shore."
-        
+        """
+        Tests the get_part_of_speech_words function. It checks that the function
+        tokenizes extracts the correct parts of speech from the text.
+        """
+        text_1 = "John shouldn't suspiciously sell small, fragile sea shells by the very blue "\
+                 + "and openly mucky sea shore."
+        solution_1 = {'sea', 'shells', 'shore', "John"}
+        solution_2 = {'sell'}
+        solution_3 = {'small', 'fragile', 'mucky', 'blue'}
+        solution_4 = {'suspiciously', 'very', 'openly', 'not'}
+        self.assertEqual(solution_1,
+                         set(parts_of_speech.get_part_of_speech_words(text_1, 'noun')))
+        self.assertEqual(solution_2,
+                         set(parts_of_speech.get_part_of_speech_words(text_1, 'verb')))
+        self.assertEqual(solution_3,
+                         set(parts_of_speech.get_part_of_speech_words(text_1, 'adjective')))
+        self.assertEqual(solution_4,
+                         set(parts_of_speech.get_part_of_speech_words(text_1, 'adverb')))
 
     def test_word_def(self):
         def_dict_1 = parts_of_speech.get_word_definition(["hello", "happy"])
