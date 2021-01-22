@@ -31,11 +31,13 @@ export class AnagramView extends React.Component {
                 targetWords.push(word['word_data']);
                 targetWordDefs.push(word['definition']);
             }
+
             const extraWordsSet = new Set(data['extra_words']);
             this.setState({
                 targetWordDefs: data['word_data'],
                 extraWords: extraWordsSet,
                 targetWords: targetWords,
+                letters: data['letters'],
             });
         } catch (e) {
             console.log(e);
@@ -77,7 +79,6 @@ export class AnagramView extends React.Component {
               </div>
             );
         }
-
         return (<React.Fragment>
             <Navbar />
             <div className="page">
@@ -109,15 +110,13 @@ export class AnagramView extends React.Component {
                     </div>
                     <div className="col-6">
                         <h3>Definitions</h3>
-                        {this.state.targetWords}
-                        {this.state.extraWords}
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-3" >
                     </div>
                     <div className="col-9">
-                        <p>Letters will go here</p>
+                        {this.state.letters}
                     </div>
                 </div>
                 <div className="row">
