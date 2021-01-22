@@ -58,3 +58,9 @@ $side-padding: 100px;
 .map-square:hover {
     color: black;
 }
+
+#anagram-button {
+    z-index: 999;
+    position: absolute;
+    vertical-align: center;
+}

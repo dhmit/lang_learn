@@ -1,7 +1,16 @@
 import React from 'react';
 // import * as PropTypes from 'prop-types';
+import { Button } from 'react-bootstrap';
 import Navbar from '../UILibrary/navbar';
 import { Footer } from '../UILibrary/components';
+
+function AnagramButton() {
+    return (
+        <>
+            <Button id="anagram-button" variant="outline-primary">Anagram</Button>
+        </>
+    );
+}
 
 export class IndexView extends React.Component {
     constructor(props) {
@@ -23,12 +32,14 @@ export class IndexView extends React.Component {
         if (!this.state.data) {
             return (<>
                 Hello, world! There is no application here yet.
+                <Button href="/anagram" variant="outline-primary">Anagram</Button>
             </>);
         }
 
         return (<React.Fragment>
             <Navbar />
             <Footer />
+            <AnagramButton />
         </React.Fragment>);
     }
 }
