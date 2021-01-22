@@ -31,3 +31,12 @@ def text(request, text_id):
     text_obj = Text.objects.get(id=text_id)
     serializer = TextSerializer(text_obj)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_anagram(request, text_id, part_of_speech):
+    """
+    API endpoint for getting the necessary information for the anagram exercise given
+    the id of the text and the part of speech. The anagrams will be random.
+    """
+    return Response("hi")
