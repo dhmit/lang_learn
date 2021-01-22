@@ -59,7 +59,8 @@ $side-padding: 100px;
 }
 
 #anagram-button {
-    z-index: 999;
     position: absolute;
-    vertical-align: center;
+    align-self: center;
+    top: 100px;
 }
+
