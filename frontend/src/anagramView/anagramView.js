@@ -5,18 +5,25 @@ import { Navbar, Footer } from '../UILibrary/components';
 export class AnagramView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            wordData: null,
+            extraWords: null,
+        };
     }
 
-    // async componentDidMount() {
-    //     try {
-    //         const response = await fetch('/api/ENDPOINT/');
-    //         const data = await response.json();
-    //         this.setState({data});
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+    async componentDidMount() {
+        try {
+            const apiURL = `/api/get_anagram/${this.props.textID}/noun`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            this.setState({
+                wordData: data['word_data'],
+                extraWords: data['extra_words'],
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     render() {
         // if (!this.state.data) {
@@ -33,3 +40,6 @@ export class AnagramView extends React.Component {
         </React.Fragment>);
     }
 }
+AnagramView.propTypes = {
+    textID: PropTypes.number,
+};
