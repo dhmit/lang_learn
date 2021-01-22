@@ -12,6 +12,7 @@ def get_word_set():
 def get_letter_freq(letters):
     freq = {}
     for letter in letters:
+        letter = letter.lower()
         cur_freq = freq.setdefault(letter, 0)
         freq[letter] = cur_freq + 1
     return freq
