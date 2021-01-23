@@ -110,11 +110,11 @@ export class AnagramView extends React.Component {
             <Navbar />
             <div className="page">
                 <h1>Anagrams</h1>
-                <div>
-                    Score: {this.state.score}
+                <div className="text-right">
+                    <h4><span className="score">Score: {this.state.score}</span></h4>
                 </div>
                 <div className="row">
-                    <div className="col-3" >
+                    <div className="col shaded-box" >
                         <h3>Extra Words</h3>
                         <ul>
                             {
@@ -126,15 +126,15 @@ export class AnagramView extends React.Component {
                             }
                         </ul>
                     </div>
-                    <div className="col-3">
+                    <div className="col shaded-box mx-4">
                         <h3>Words Found</h3>
-                        <ul>
+                        <ol>
                             {
                                 this.state.targetWords.map((word, i) => {
                                     if (this.state.targetWordsFound.includes(word)) {
                                         return (
                                             <li key={i}>
-                                                {word}
+                                                <span>{word}</span>
                                             </li>
                                         );
                                     }
@@ -144,25 +144,28 @@ export class AnagramView extends React.Component {
                                     }
                                     return (
                                         <li key={i}>
-                                            {buffer}
+                                            <span>{buffer}</span>
                                         </li>
                                     );
                                 })}
-                        </ul>
+                        </ol>
                     </div>
-                    <div className="col-6">
+                    <div className="col-6 shaded-box">
                         <h3>Definitions</h3>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-3" >
                         <button className="btn btn-outline-dark float-right"
-                            onClick={this.handleShuffle}>Shuffle</button>
+                            onClick={this.handleShuffle}>
+                            <img className="shuffle" src='../../static/img/shuffle.png'/>
+                        </button>
                     </div>
-                    <div className="col-9">
+                    <div className="col-9 letters">
                         {this.state.letters}
                     </div>
                 </div>
+                <br/>
                 <div className="row">
                     <div className="col-3" >
                     </div>
