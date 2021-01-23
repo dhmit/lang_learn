@@ -41,8 +41,8 @@ export class AnagramView extends React.Component {
             const targetWordDefs = [];
             for (let i = 0; i < (data['word_data']).length; i++) {
                 const word = data['word_data'][i];
-                targetWords.push(word['word_data']);
-                targetWordDefs.push(word['definition']);
+                targetWords.push(word[0]);
+                targetWordDefs.push(word[1]['definition']);
             }
             for (let i = 0; i < (data['letters']).length; i++) {
                 letters.push(data['letters'][i].toUpperCase());
@@ -50,7 +50,7 @@ export class AnagramView extends React.Component {
             const extraWordsSet = new Set(data['extra_words']);
             letters = shuffleArray(letters);
             this.setState({
-                targetWordDefs: data['word_data'],
+                targetWordDefs: targetWordDefs,
                 extraWords: extraWordsSet,
                 targetWords: targetWords,
                 letters: letters,
@@ -152,13 +152,22 @@ export class AnagramView extends React.Component {
                     </div>
                     <div className="col-6 shaded-box">
                         <h3>Definitions</h3>
+                        <ol>
+                            {
+                                this.state.targetWordDefs.map((def, i) => (
+                                    <li key={i}>
+                                        <span>{def}</span>
+                                    </li>
+                                ))
+                            }
+                        </ol>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-3" >
                         <button className="btn btn-outline-dark float-right"
                             onClick={this.handleShuffle}>
-                            <img className="shuffle" src='../../static/img/shuffle.png'/>
+                            <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
                         </button>
                     </div>
                     <div className="col-9 letters">
