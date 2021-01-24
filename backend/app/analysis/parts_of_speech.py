@@ -135,7 +135,7 @@ def remove_contractions(text):
         expanded_contraction = CONTRACTIONS.get(word.lower(), word)
         if expanded_contraction[0] != word[0]:
             expanded_contraction = word[0] + expanded_contraction[1:]
-        words[i] = expanded_contraction
+        words[i] = expanded_contraction.strip('\"')
     new_text = ' '.join(words)
     return new_text
 
