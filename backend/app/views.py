@@ -53,7 +53,7 @@ def get_anagram(request, text_id, part_of_speech):
     """
     text_obj = Text.objects.get(id=text_id)
     words = list(set(word for word in get_part_of_speech_words(text_obj.text, part_of_speech)
-                     if "'" not in word))
+                     if ("'" not in word and len(word) > 2)))
     random.shuffle(words)
     # TODO: Determine how many words from text we should use and which to use
     words = words[:5]
