@@ -78,8 +78,6 @@ def get_anagram(request, text_id, part_of_speech):
     word_data = [[word, {'definition': definitions[word], 'example': examples[word]}]
                  for word in words]
 
-    # word_data = [{'word_data': word, 'definition': definitions[word], 'example': examples[word]}
-    #              for word in words]
     scrambled_letters = []
     for letter in anagram_freq:
         for i in range(anagram_freq[letter]):
