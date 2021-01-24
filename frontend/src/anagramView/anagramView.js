@@ -179,8 +179,9 @@ export class AnagramView extends React.Component {
                     <div className="col-3" >
                     </div>
                     <div className="col-9">
-                        <form onSubmit={this.handleSubmit}>
-                            <input className="formControl" type="text" name="userInput"
+                        <form className="form-inline" onSubmit={this.handleSubmit}>
+                            <input className="form-control" type="text" name="userInput"
+                                placeholder="Type here"
                                 onChange={this.handleChange} value={this.state.userInput} />
                             <button className="btn btn-outline-dark mx-2"
                                 type="submit">Enter</button>
