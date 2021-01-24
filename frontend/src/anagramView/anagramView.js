@@ -20,7 +20,7 @@ export class AnagramView extends React.Component {
             targetWordDefs: null,
             targetWords: [],
             extraWords: [],
-            userInput: null,
+            userInput: '',
             targetWordsFound: [],
             extraWordsFound: [],
             score: 0,
@@ -71,7 +71,7 @@ export class AnagramView extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const userInput = this.state.userInput.toLowerCase();
-        const targetWords = this.state.targetWords;
+        const targetWords = this.state.targetWords.map((word) => (word.toLowerCase()));
         const extraWords = this.state.extraWords;
         if (targetWords.includes(userInput) && !this.state.targetWordsFound.includes(userInput)) {
             this.setState({
@@ -95,7 +95,6 @@ export class AnagramView extends React.Component {
             letters: shuffleArray(this.state.letters),
         });
     }
-
 
 
     render() {
@@ -131,7 +130,7 @@ export class AnagramView extends React.Component {
                         <ol>
                             {
                                 this.state.targetWords.map((word, i) => {
-                                    if (this.state.targetWordsFound.includes(word)) {
+                                    if (this.state.targetWordsFound.includes(word.toLowerCase())) {
                                         return (
                                             <li key={i}>
                                                 <span>{word}</span>
