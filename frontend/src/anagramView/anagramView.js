@@ -154,11 +154,20 @@ export class AnagramView extends React.Component {
                         <h3>Definitions</h3>
                         <ol>
                             {
-                                this.state.targetWordDefs.map((def, i) => (
-                                    <li key={i}>
-                                        <span>{def}</span>
-                                    </li>
-                                ))
+                                this.state.targetWordDefs.map((def, i) => {
+                                    if (def === '') {
+                                        return (
+                                            <li key={i}>
+                                                <span>N/A</span>
+                                            </li>
+                                        );
+                                    }
+                                    return (
+                                        <li key={i}>
+                                            <span>{def}</span>
+                                        </li>
+                                    );
+                                })
                             }
                         </ol>
                     </div>
