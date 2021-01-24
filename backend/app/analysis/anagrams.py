@@ -30,5 +30,5 @@ def get_anagrams(anagram_freq):
     word_set = get_word_set()
     for word in word_set:
         if is_anagram(get_letter_freq(word), anagram_freq):
-            anagrams.add(word)
+            anagrams.add(word.lower())
     return anagrams

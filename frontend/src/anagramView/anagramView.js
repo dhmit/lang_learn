@@ -25,6 +25,7 @@ export class AnagramView extends React.Component {
             extraWordsFound: [],
             score: 0,
             letters: [],
+            gameOver: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -70,14 +71,20 @@ export class AnagramView extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const userInput = this.state.userInput.toLowerCase();
+        const userInput = this.state.userInput.toLowerCase().trim();
         const targetWords = this.state.targetWords.map((word) => (word.toLowerCase()));
+        const targetWordsFound = this.state.targetWordsFound;
         const extraWords = this.state.extraWords;
-        if (targetWords.includes(userInput) && !this.state.targetWordsFound.includes(userInput)) {
+        if (targetWords.includes(userInput) && !targetWordsFound.includes(userInput)) {
             this.setState({
                 targetWordsFound: this.state.targetWordsFound.concat(userInput),
                 score: this.state.score + (userInput.length * 2),
             });
+            if (targetWords.length === targetWordsFound.length + 1) {
+                this.setState({
+                    gameOver: true,
+                });
+            }
         } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
             this.setState({
                 extraWordsFound: this.state.extraWordsFound.concat(userInput),
@@ -109,6 +116,13 @@ export class AnagramView extends React.Component {
             <Navbar />
             <div className="page">
                 <h1>Anagrams</h1>
+                {
+                    this.state.gameOver
+                        ? <div className="alert alert-success" role="alert">
+                            Congratulation! You found all the target words!
+                        </div>
+                        : null
+                }
                 <div className="text-right">
                     <h4><span className="score">Score: {this.state.score}</span></h4>
                 </div>
@@ -189,9 +203,10 @@ export class AnagramView extends React.Component {
                     <div className="col-9">
                         <form className="form-inline" onSubmit={this.handleSubmit}>
                             <input className="form-control" type="text" name="userInput"
-                                placeholder="Type here"
+                                placeholder="Type here" disabled={this.state.gameOver}
                                 onChange={this.handleChange} value={this.state.userInput} />
                             <button className="btn btn-outline-dark mx-2"
+                                disabled={this.state.gameOver}
                                 type="submit">Enter</button>
                         </form>
                     </div>

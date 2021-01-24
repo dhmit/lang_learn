@@ -70,9 +70,9 @@ def get_anagram(request, text_id, part_of_speech):
                 anagram_freq[letter] = cur_freq[letter]
             elif anagram_freq[letter] < cur_freq[letter]:
                 anagram_freq[letter] = cur_freq[letter]
-
+    target_words = [x.lower() for x in words]
     extra_words = get_anagrams(anagram_freq)
-    extra_words -= set(words)  # Remove words from text from extra words
+    extra_words -= set(target_words)  # Remove words from text from extra words
     extra_words = filter_pos(extra_words, part_of_speech)
 
     word_data = [[word, {'definition': definitions[word], 'example': examples[word]}]
