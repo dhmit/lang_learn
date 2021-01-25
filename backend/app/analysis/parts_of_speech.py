@@ -1,5 +1,6 @@
 import nltk
-
+import re
+from PyDictionary import PyDictionary
 # find better way to download wordnet
 try:
     nltk.data.find('wordnet')
@@ -171,14 +172,12 @@ def filter_pos(word_list, part):
     return [word[0].lower() for word in token_list if word[1] in tags[part] and len(word[0]) >= 3]
 
 
-def get_word_definition(word_list):
+def get_word_definition(word_list, pos):
+    pos = pos.capitalize()
+    defs = PyDictionary()
     word_def = {}
     for word in word_list:
-        syns = wn.synsets(word)
-        if len(syns) > 0:
-            word_def[word] = syns[0].definition()
-        else:
-            word_def[word] = ''
+        word_def[word] = [re.sub("[()]", " ", meaning) for meaning in defs.meaning(word)[pos]]
     return word_def
 
 

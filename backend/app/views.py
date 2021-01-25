@@ -66,7 +66,7 @@ def get_anagram(request, text_id, part_of_speech):
     # TODO: Determine how many words from text we should use and which to use
     words = words[:5]
 
-    definitions = get_word_definition(words)
+    definitions = get_word_definition(words, part_of_speech)
     examples = get_word_examples(words)
 
     # Gets the minimum possible numbers of each letter required to generate all the text
