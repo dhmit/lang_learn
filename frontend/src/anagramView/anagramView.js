@@ -33,6 +33,7 @@ export class AnagramView extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleShuffle = this.handleShuffle.bind(this);
         this.startNewGame = this.startNewGame.bind(this);
+        this.giveUp = this.giveUp.bind(this);
     }
 
     async componentDidMount() {
@@ -86,6 +87,7 @@ export class AnagramView extends React.Component {
             targetWordDefs: null,
             targetWords: [],
             extraWords: [],
+            targetExamples: [],
             userInput: '',
             targetWordsFound: [],
             extraWordsFound: [],
@@ -133,6 +135,13 @@ export class AnagramView extends React.Component {
         }
     }
 
+    giveUp() {
+      this.setState({
+        gameOver: true,
+        targetWordsFound: this.state.targetWords,
+      });
+    }
+
     render() {
         if (!this.state.targetWordDefs) {
             return (
@@ -155,13 +164,8 @@ export class AnagramView extends React.Component {
                 }
                 <div className="row">
                     <div className="col-6 text-left">
-                        {!this.state.gameOver
-                            ? <button type="button"
-                                className="btn btn-secondary" disabled>Restart</button>
-                            : <button type="button"
-                                className="btn btn-secondary"
-                                onClick={this.startNewGame}>Restart</button>
-                        }
+                        <button type="button" className="btn btn-primary" disabled={!this.state.gameOver}>Restart</button>
+                        <button className="btn btn-danger mx-3" onClick={this.giveUp}>Give Up</button>
                     </div>
                     <div className="col-6 text-right">
                         <h4><span className="score">Score: {this.state.score}</span></h4>
@@ -272,7 +276,8 @@ export class AnagramView extends React.Component {
                 <div className="row">
                     <div className="col-3" >
                         <button className="btn btn-outline-dark float-right"
-                            onClick={this.handleShuffle}>
+                            onClick={this.handleShuffle}
+                            disabled={this.state.gameOver}>
                             <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
                         </button>
                     </div>
