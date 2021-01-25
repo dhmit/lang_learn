@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
@@ -20,6 +21,7 @@ export class AnagramView extends React.Component {
             targetWordDefs: null,
             targetWords: [],
             extraWords: [],
+            targetExamples: [],
             userInput: '',
             targetWordsFound: [],
             extraWordsFound: [],
@@ -30,35 +32,11 @@ export class AnagramView extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleShuffle = this.handleShuffle.bind(this);
+        this.startNewGame = this.startNewGame.bind(this);
     }
 
     async componentDidMount() {
-        try {
-            const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
-            const response = await fetch(apiURL);
-            const data = await response.json();
-            const targetWords = [];
-            let letters = [];
-            const targetWordDefs = [];
-            for (let i = 0; i < (data['word_data']).length; i++) {
-                const word = data['word_data'][i];
-                targetWords.push(word[0]);
-                targetWordDefs.push(word[1]['definition']);
-            }
-            for (let i = 0; i < (data['letters']).length; i++) {
-                letters.push(data['letters'][i].toUpperCase());
-            }
-            const extraWordsSet = new Set(data['extra_words']);
-            letters = shuffleArray(letters);
-            this.setState({
-                targetWordDefs: targetWordDefs,
-                extraWords: extraWordsSet,
-                targetWords: targetWords,
-                letters: letters,
-            });
-        } catch (e) {
-            console.log(e);
-        }
+        await this.startNewGame();
     }
 
     handleChange(event) {
@@ -103,6 +81,57 @@ export class AnagramView extends React.Component {
         });
     }
 
+    reset() {
+        this.setState({
+            targetWordDefs: null,
+            targetWords: [],
+            extraWords: [],
+            userInput: '',
+            targetWordsFound: [],
+            extraWordsFound: [],
+            score: 0,
+            letters: [],
+            gameOver: false,
+        });
+    }
+
+    async startNewGame() {
+        this.reset();
+        try {
+            const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            const targetWords = [];
+            let letters = [];
+            const targetWordDefs = [];
+            const targetExamples = [];
+            for (let i = 0; i < (data['word_data']).length; i++) {
+                const word = data['word_data'][i];
+                const examples = word[1]['example'];
+                targetWords.push(word[0]);
+                targetWordDefs.push(word[1]['definition']);
+                if (examples.length === 0) {
+                    targetExamples.push(['N/A']);
+                } else {
+                    targetExamples.push(word[1]['example']);
+                }
+            }
+            for (let i = 0; i < (data['letters']).length; i++) {
+                letters.push(data['letters'][i].toUpperCase());
+            }
+            const extraWordsSet = new Set(data['extra_words']);
+            letters = shuffleArray(letters);
+            this.setState({
+                targetWordDefs: targetWordDefs,
+                extraWords: extraWordsSet,
+                targetWords: targetWords,
+                letters: letters,
+                targetExamples: targetExamples,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     render() {
         if (!this.state.targetWordDefs) {
@@ -119,12 +148,24 @@ export class AnagramView extends React.Component {
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
-                            Congratulation! You found all the target words!
+                            Congratulations! You found all the target words!
+                            Click restart to start a new game!
                         </div>
                         : null
                 }
-                <div className="text-right">
-                    <h4><span className="score">Score: {this.state.score}</span></h4>
+                <div className="row">
+                    <div className="col-6 text-left">
+                        {!this.state.gameOver
+                            ? <button type="button"
+                                className="btn btn-secondary" disabled>Restart</button>
+                            : <button type="button"
+                                className="btn btn-secondary"
+                                onClick={this.startNewGame}>Restart</button>
+                        }
+                    </div>
+                    <div className="col-6 text-right">
+                        <h4><span className="score">Score: {this.state.score}</span></h4>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col shaded-box" >
@@ -146,9 +187,31 @@ export class AnagramView extends React.Component {
                                 this.state.targetWords.map((word, i) => {
                                     if (this.state.targetWordsFound.includes(word.toLowerCase())) {
                                         return (
-                                            <li key={i}>
-                                                <span>{word}</span>
-                                            </li>
+                                            <>
+                                                <li key={i}>
+                                                    <span data-tip data-for={word}>{word}</span>
+                                                </li>
+                                                <ReactTooltipDefaultExport id={word} place="right"
+                                                    effect="solid">
+                                                    Examples:
+                                                    <br/>
+                                                    {
+                                                        this.state.targetExamples[i]
+                                                            .map((example, j) => {
+                                                                if (j + 1 !== this.state
+                                                                    .targetExamples[i].length) {
+                                                                    return (
+                                                                        <>
+                                                                            {example}
+                                                                            <br/>
+                                                                        </>
+                                                                    );
+                                                                }
+                                                                return example;
+                                                            })
+                                                    }
+                                                </ReactTooltipDefaultExport>
+                                            </>
                                         );
                                     }
                                     let buffer = '';
@@ -156,9 +219,30 @@ export class AnagramView extends React.Component {
                                         buffer += '_ ';
                                     }
                                     return (
-                                        <li key={i}>
-                                            <span>{buffer}</span>
-                                        </li>
+                                        <>
+                                            <li key={i}>
+                                                <span data-tip data-for={word}>{buffer}</span>
+                                            </li>
+                                            <ReactTooltipDefaultExport id={word} place="right" effect="solid">
+                                                Examples:
+                                                <br/>
+                                                {
+                                                    this.state.targetExamples[i].map((ex, j) => {
+                                                        const example = ex.replace(word, buffer);
+                                                        if (j + 1
+                                                          !== this.state.targetExamples[i].length) {
+                                                            return (
+                                                                <>
+                                                                    {example}
+                                                                    <br/>
+                                                                </>
+                                                            );
+                                                        }
+                                                        return example;
+                                                    })
+                                                }
+                                            </ReactTooltipDefaultExport>
+                                        </>
                                     );
                                 })}
                         </ol>
