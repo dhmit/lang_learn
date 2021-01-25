@@ -9,15 +9,17 @@
 
 .score {
     background-color: #404040;
-    padding: 5px;
-    margin-top: 5px;
+    padding: 8px;
     border-radius: 5px;
     color: white;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .shaded-box {
     background: #bfbfbf;
     margin: 10px 0 20px 0;
+    padding-top: 10px;
     border-radius: 5px;
 }
 
@@ -27,4 +29,13 @@ ol {
 
 li span {
     font-weight: normal;
+}
+
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
 }
