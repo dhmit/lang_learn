@@ -223,7 +223,11 @@ export class AnagramView extends React.Component {
                                             <li key={i}>
                                                 <span data-tip data-for={word}>{buffer}</span>
                                             </li>
-                                            <ReactTooltipDefaultExport id={word} place="right" effect="solid">
+                                            <ReactTooltipDefaultExport
+                                                id={word}
+                                                place="right"
+                                                effect="solid"
+                                            >
                                                 Examples:
                                                 <br/>
                                                 {
@@ -251,8 +255,8 @@ export class AnagramView extends React.Component {
                         <h3>Definitions</h3>
                         <ol>
                             {
-                                this.state.targetWordDefs.map((def, i) => {
-                                    if (def === '') {
+                                this.state.targetWordDefs.map((defs, i) => {
+                                    if (defs === '') {
                                         return (
                                             <li key={i}>
                                                 <span>N/A</span>
@@ -260,8 +264,25 @@ export class AnagramView extends React.Component {
                                         );
                                     }
                                     return (
-                                        <li key={i}>
-                                            <span>{def}</span>
+                                        <li data-tip data-for={defs[0]} key={i}>
+                                            <ReactTooltipDefaultExport
+                                                id={defs[0]}
+                                                place="top"
+                                                effect="solid"
+                                            >
+                                                Definitions:
+                                                <br/>
+                                                <ol>
+                                                    {
+                                                        defs.map((def, j) => (
+                                                            <li key={j}>
+                                                                {def}
+                                                            </li>
+                                                        ))
+                                                    }
+                                                </ol>
+                                            </ReactTooltipDefaultExport>
+                                            {defs[0]}
                                         </li>
                                     );
                                 })
