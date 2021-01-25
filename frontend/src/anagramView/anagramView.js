@@ -28,7 +28,6 @@ export class AnagramView extends React.Component {
             score: 0,
             letters: [],
             gameOver: false,
-            rules: false,
 
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,7 +35,6 @@ export class AnagramView extends React.Component {
         this.handleShuffle = this.handleShuffle.bind(this);
         this.startNewGame = this.startNewGame.bind(this);
         this.giveUp = this.giveUp.bind(this);
-        this.showRules = this.showRules.bind(this);
     }
 
     async componentDidMount() {
@@ -97,7 +95,6 @@ export class AnagramView extends React.Component {
             score: 0,
             letters: [],
             gameOver: false,
-            rules: false,
         });
     }
 
@@ -165,12 +162,15 @@ export class AnagramView extends React.Component {
             <div className="page">
                 <h1>
                     Anagrams
-                    <button className="btn btn-outline-dark btn-circle mx-3" style={{ 'border': '3px solid', 'font-size': '20px'}}
+                    <button className="btn btn-outline-dark btn-circle mx-3"
+                        style= {{ 'border': '3px solid', 'font-size': '20px' }}
                         onClick={this.showRules} data-tip data-for="rules">
                         <b>?</b>
                     </button>
                 </h1>
-                <ReactTooltipDefaultExport id="rules" place="right" style= {{'font-size': '20px' }}>
+                <ReactTooltipDefaultExport id="rules" place="right"
+                    style= {{ 'font-size': '25px' }}>
+                    <h3> INSTRUCTIONS </h3>
                     (Rules will be placed in here !!!!
                     Loook at me !!!!
                     Don't forget me!!!!)
@@ -225,11 +225,12 @@ export class AnagramView extends React.Component {
                                                     Examples:
                                                     <ol>
                                                         {
-                                                          this.state.targetExamples[i].map((ex, j) => (
-                                                                <li key={j}>
-                                                                    {ex}
-                                                                </li>
-                                                            ))
+                                                            this.state.targetExamples[i]
+                                                                .map((ex, j) => (
+                                                                    <li key={j}>
+                                                                        {ex}
+                                                                    </li>
+                                                                ))
                                                         }
                                                     </ol>
                                                 </ReactTooltipDefaultExport>
@@ -245,15 +246,16 @@ export class AnagramView extends React.Component {
                                                 <ReactTooltipDefaultExport id={word} place="right">
                                                     Examples:
                                                     <ol>
-                                                    {
-                                                        this.state.targetExamples[i].map((ex, j) => {
-                                                            return (
-                                                                <li key={j}>
-                                                                    {ex}
-                                                                </li>
-                                                            );
-                                                        })
-                                                    }
+                                                        {
+                                                            this.state.targetExamples[i]
+                                                                .map((ex, j) => {
+                                                                    return (
+                                                                        <li key={j}>
+                                                                            {ex}
+                                                                        </li>
+                                                                    );
+                                                                })
+                                                        }
                                                     </ol>
                                                 </ReactTooltipDefaultExport>
                                             </>
@@ -271,16 +273,16 @@ export class AnagramView extends React.Component {
                                             <ReactTooltipDefaultExport id={word} place="right">
                                                 Examples:
                                                 <ol>
-                                                {
-                                                    this.state.targetExamples[i].map((ex, j) => {
-                                                        const example = ex.replace(word, buffer);
-                                                        return (
-                                                            <li key={j}>
-                                                                {example}
-                                                            </li>
-                                                        );
-                                                    })
-                                                }
+                                                    {
+                                                        this.state.targetExamples[i]
+                                                            .map((ex, j) => {
+                                                                return (
+                                                                    <li key={j}>
+                                                                        {ex.replace(word, buffer)}
+                                                                    </li>
+                                                                );
+                                                            })
+                                                    }
                                                 </ol>
                                             </ReactTooltipDefaultExport>
                                         </>
