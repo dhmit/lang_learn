@@ -30,6 +30,7 @@ export class AnagramView extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleShuffle = this.handleShuffle.bind(this);
+        this.startNewGame = this.startNewGame.bind(this);
     }
 
     async componentDidMount() {
@@ -137,12 +138,20 @@ export class AnagramView extends React.Component {
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
-                            Congratulation! You found all the target words!
+                            Congratulations! You found all the target words! Click restart to start a new game!
                         </div>
                         : null
                 }
-                <div className="text-right">
-                    <h4><span className="score">Score: {this.state.score}</span></h4>
+                <div className="row">
+                    <div className="col-6 text-left">
+                      {!this.state.gameOver ?
+                          <button type="button" className="btn btn-secondary" disabled>Restart</button> :
+                          <button type="button" className="btn btn-secondary" onClick={this.startNewGame}>Restart</button>
+                      }
+                    </div>
+                    <div className="col-6 text-right">
+                        <h4><span className="score">Score: {this.state.score}</span></h4>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col shaded-box" >
