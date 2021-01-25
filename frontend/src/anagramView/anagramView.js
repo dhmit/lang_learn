@@ -33,32 +33,7 @@ export class AnagramView extends React.Component {
     }
 
     async componentDidMount() {
-        try {
-            const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
-            const response = await fetch(apiURL);
-            const data = await response.json();
-            const targetWords = [];
-            let letters = [];
-            const targetWordDefs = [];
-            for (let i = 0; i < (data['word_data']).length; i++) {
-                const word = data['word_data'][i];
-                targetWords.push(word[0]);
-                targetWordDefs.push(word[1]['definition']);
-            }
-            for (let i = 0; i < (data['letters']).length; i++) {
-                letters.push(data['letters'][i].toUpperCase());
-            }
-            const extraWordsSet = new Set(data['extra_words']);
-            letters = shuffleArray(letters);
-            this.setState({
-                targetWordDefs: targetWordDefs,
-                extraWords: extraWordsSet,
-                targetWords: targetWords,
-                letters: letters,
-            });
-        } catch (e) {
-            console.log(e);
-        }
+        await this.startNewGame();
     }
 
     handleChange(event) {
@@ -103,6 +78,49 @@ export class AnagramView extends React.Component {
         });
     }
 
+    reset() {
+        this.setState({
+            targetWordDefs: null,
+            targetWords: [],
+            extraWords: [],
+            userInput: '',
+            targetWordsFound: [],
+            extraWordsFound: [],
+            score: 0,
+            letters: [],
+            gameOver: false,
+        });
+    }
+
+    async startNewGame() {
+        this.reset();
+        try {
+            const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            const targetWords = [];
+            let letters = [];
+            const targetWordDefs = [];
+            for (let i = 0; i < (data['word_data']).length; i++) {
+                const word = data['word_data'][i];
+                targetWords.push(word[0]);
+                targetWordDefs.push(word[1]['definition']);
+            }
+            for (let i = 0; i < (data['letters']).length; i++) {
+                letters.push(data['letters'][i].toUpperCase());
+            }
+            const extraWordsSet = new Set(data['extra_words']);
+            letters = shuffleArray(letters);
+            this.setState({
+                targetWordDefs: targetWordDefs,
+                extraWords: extraWordsSet,
+                targetWords: targetWords,
+                letters: letters,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     render() {
         if (!this.state.targetWordDefs) {
