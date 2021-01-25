@@ -20,6 +20,7 @@ class MainTests(TestCase):
         Tests the get_part_of_speech_words function. It checks that the function
         tokenizes extracts the correct parts of speech from the text.
         """
+        # The NLTK part of speech tagger has problems with names that end with "ly"
         text_1 = "John shouldn't suspiciously sell small, fragile sea shells by the very blue "\
                  + "and openly mucky sea shore."
         solution_1 = {'sea', 'shells', 'shore', "John"}

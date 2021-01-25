@@ -133,6 +133,7 @@ CONTRACTIONS = {
 
 def remove_contractions(text):
     """
+    Given a piece of text, expand all of the contractions in that text
     :param text: A body of text as a string
     :return: New body of text as a string without contractions
     """
@@ -151,6 +152,7 @@ def remove_contractions(text):
 
 def get_parts_of_speech_tags(text):
     """
+    Tags each token in a piece of text with a part of speech code
     :param text: A body of text as a string
     :return: List of tuples containing word, part_of_speech_code
     """
@@ -160,6 +162,7 @@ def get_parts_of_speech_tags(text):
 
 def get_part_of_speech_words(text, part):
     """
+    Filters a piece of text by part of speech
     :param text: A body of text as a string
     :param part: The part of speech to search for in the text
     :return: List of words that match the part of speech
@@ -182,6 +185,7 @@ def get_part_of_speech_words(text, part):
 
 def get_word_definition(word_list):
     """
+    Find the definitions of words from a list
     :param word_list: A list of words to get the definition of
     :return: A dictionary of word:definition pairs
     """
@@ -197,6 +201,7 @@ def get_word_definition(word_list):
 
 def get_word_examples(word_list):
     """
+    Find examples of words used in a sentence given a word list
     :param word_list: A list of words to find example sentences for
     :return: A dictionary of word:list_of_examples pairs
     """
