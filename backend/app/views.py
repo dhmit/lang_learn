@@ -83,7 +83,7 @@ def get_anagram(request, text_id, part_of_speech):
     extra_words -= set(target_words)  # Remove words from text from extra words
     extra_words = filter_pos(extra_words, part_of_speech)
 
-    word_data = [[word, {'definition': definitions[word], 'example': examples[word]}]
+    word_data = [[word.lower(), {'definition': definitions[word], 'example': examples[word]}]
                  for word in words]
 
     scrambled_letters = []
@@ -92,5 +92,4 @@ def get_anagram(request, text_id, part_of_speech):
             scrambled_letters.append(letter)
 
     res = {'letters': scrambled_letters, 'word_data': word_data, 'extra_words': extra_words}
-
     return Response(res)

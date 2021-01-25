@@ -186,8 +186,12 @@ def get_word_examples(word_list):
     for word in word_list:
         syns = wn.synsets(word)
         if len(syns) > 0:
-            word_examples[word] = syns[0].examples()
+            examples = []
+            for net in syns:
+                for example in net.examples():
+                    if word.lower() in example.lower():
+                        examples.append(example.lower())
+            word_examples[word] = examples
         else:
             word_examples[word] = ''
-
     return word_examples
