@@ -130,6 +130,8 @@ CONTRACTIONS = {
 
 
 def remove_contractions(text):
+    text = text.replace('’', "'")
+    text = text.replace('“', '"')
     words = text.split(' ')
     for i, word in enumerate(words):
         expanded_contraction = CONTRACTIONS.get(word.lower(), word)
