@@ -204,7 +204,7 @@ export class AnagramView extends React.Component {
                             {
                                 this.state.extraWordsFound.map((word, i) => (
                                     <li key={i}>
-                                        {word}
+                                        {word.toUpperCase()}
                                     </li>
                                 ))
                             }
@@ -219,7 +219,9 @@ export class AnagramView extends React.Component {
                                         return (
                                             <>
                                                 <li key={i}>
-                                                    <span data-tip data-for={word}>{word}</span>
+                                                    <span data-tip data-for={word}>
+                                                        {word.toUpperCase()}
+                                                    </span>
                                                 </li>
                                                 <ReactTooltipDefaultExport id={word} place="right">
                                                     Examples:
@@ -241,7 +243,9 @@ export class AnagramView extends React.Component {
                                         return (
                                             <>
                                                 <li key={i}>
-                                                    <span data-tip data-for={word}>{word}</span>
+                                                    <span data-tip data-for={word}>
+                                                        {word.toUpperCase()}
+                                                    </span>
                                                 </li>
                                                 <ReactTooltipDefaultExport id={word} place="right">
                                                     Examples:
