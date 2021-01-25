@@ -34,7 +34,7 @@ export class AnagramView extends React.Component {
 
     async componentDidMount() {
         try {
-            const apiURL = `/api/get_anagram/${this.props.textID}/noun`;
+            const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
             const response = await fetch(apiURL);
             const data = await response.json();
             const targetWords = [];
@@ -218,4 +218,5 @@ export class AnagramView extends React.Component {
 }
 AnagramView.propTypes = {
     textID: PropTypes.number,
+    partOfSpeech: PropTypes.string,
 };

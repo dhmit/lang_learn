@@ -45,6 +45,14 @@ def text(request, text_id):
     return Response(serializer.data)
 
 
+def quote_in_word(word):
+    quotes = ["“", '"', "'", "’"]
+    for quote in quotes:
+        if quote in word:
+            return True
+    return False
+
+
 @api_view(['GET'])
 def get_anagram(request, text_id, part_of_speech):
     """
@@ -53,7 +61,7 @@ def get_anagram(request, text_id, part_of_speech):
     """
     text_obj = Text.objects.get(id=text_id)
     words = list(set(word for word in get_part_of_speech_words(text_obj.text, part_of_speech)
-                     if ("'" not in word and len(word) > 2)))
+                     if (not quote_in_word(word) and len(word) > 2)))
     random.shuffle(words)
     # TODO: Determine how many words from text we should use and which to use
     words = words[:5]
