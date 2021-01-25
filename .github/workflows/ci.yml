@@ -24,7 +24,7 @@ jobs:
     - name: Install Python packages and Ubuntu dependencies
       run: |
         pip install -r requirements.txt
-        python3 -m nltk.downloader punkt wordnet
+        python3 -m nltk.downloader punkt wordnet averaged_perceptron_tagger
     - name: Run Django tests
       run: |
         cd backend
