@@ -160,7 +160,7 @@ def get_part_of_speech_words(text, part):
     part = part.lower()
 
     if part not in tags:
-        return "Part of speech not valid"
+        return []
 
     tokens = get_parts_of_speech_tags(text)
     return [token[0] for token in tokens if token[1] in tags[part]]
