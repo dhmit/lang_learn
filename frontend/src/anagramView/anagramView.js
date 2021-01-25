@@ -28,6 +28,8 @@ export class AnagramView extends React.Component {
             score: 0,
             letters: [],
             gameOver: false,
+            instructions: false,
+
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -136,10 +138,9 @@ export class AnagramView extends React.Component {
     }
 
     giveUp() {
-      this.setState({
-        gameOver: true,
-        targetWordsFound: this.state.targetWords,
-      });
+        this.setState({
+            gameOver: true,
+        });
     }
 
     render() {
@@ -157,15 +158,20 @@ export class AnagramView extends React.Component {
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
-                            Congratulations! You found all the target words!
+                            Congratulations! You found <b>
+                                {this.state.targetWordsFound.length}
+                            </b> of the target words!
                             Click restart to start a new game!
                         </div>
                         : null
                 }
                 <div className="row">
                     <div className="col-6 text-left">
-                        <button type="button" className="btn btn-primary" disabled={!this.state.gameOver}>Restart</button>
-                        <button className="btn btn-danger mx-3" onClick={this.giveUp}>Give Up</button>
+                        <button type="button" className="btn btn-primary"
+                            disabled={!this.state.gameOver}
+                            onClick={this.startNewGame}>Restart</button>
+                        <button className="btn btn-danger mx-3"
+                            onClick={this.giveUp}>Give Up</button>
                     </div>
                     <div className="col-6 text-right">
                         <h4><span className="score">Score: {this.state.score}</span></h4>
@@ -189,14 +195,41 @@ export class AnagramView extends React.Component {
                         <ol>
                             {
                                 this.state.targetWords.map((word, i) => {
+                                    if (this.state.gameOver) {
+                                        return (
+                                            <>
+                                                <li key={i}>
+                                                    <span data-tip data-for={word}>{word}</span>
+                                                </li>
+                                                <ReactTooltipDefaultExport id={word} place="right">
+                                                    Examples:
+                                                    <br/>
+                                                    {
+                                                        this.state.targetExamples[i]
+                                                            .map((example, j) => {
+                                                                if (j + 1 !== this.state
+                                                                    .targetExamples[i].length) {
+                                                                    return (
+                                                                        <>
+                                                                            {example}
+                                                                            <br/>
+                                                                        </>
+                                                                    );
+                                                                }
+                                                                return example;
+                                                            })
+                                                    }
+                                                </ReactTooltipDefaultExport>
+                                            </>
+                                        );
+                                    }
                                     if (this.state.targetWordsFound.includes(word.toLowerCase())) {
                                         return (
                                             <>
                                                 <li key={i}>
                                                     <span data-tip data-for={word}>{word}</span>
                                                 </li>
-                                                <ReactTooltipDefaultExport id={word} place="right"
-                                                    effect="solid">
+                                                <ReactTooltipDefaultExport id={word} place="right">
                                                     Examples:
                                                     <br/>
                                                     {
@@ -227,11 +260,7 @@ export class AnagramView extends React.Component {
                                             <li key={i}>
                                                 <span data-tip data-for={word}>{buffer}</span>
                                             </li>
-                                            <ReactTooltipDefaultExport
-                                                id={word}
-                                                place="right"
-                                                effect="solid"
-                                            >
+                                            <ReactTooltipDefaultExport id={word} place="right">
                                                 Examples:
                                                 <br/>
                                                 {
