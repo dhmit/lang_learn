@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
+import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
@@ -191,7 +191,7 @@ export class AnagramView extends React.Component {
                                                 <li key={i}>
                                                     <span data-tip data-for={word}>{word}</span>
                                                 </li>
-                                                <ReactTooltip id={word} place="right"
+                                                <ReactTooltipDefaultExport id={word} place="right"
                                                     effect="solid">
                                                     Examples:
                                                     <br/>
@@ -210,7 +210,7 @@ export class AnagramView extends React.Component {
                                                                 return example;
                                                             })
                                                     }
-                                                </ReactTooltip>
+                                                </ReactTooltipDefaultExport>
                                             </>
                                         );
                                     }
@@ -223,7 +223,7 @@ export class AnagramView extends React.Component {
                                             <li key={i}>
                                                 <span data-tip data-for={word}>{buffer}</span>
                                             </li>
-                                            <ReactTooltip id={word} place="right" effect="solid">
+                                            <ReactTooltipDefaultExport id={word} place="right" effect="solid">
                                                 Examples:
                                                 <br/>
                                                 {
@@ -241,7 +241,7 @@ export class AnagramView extends React.Component {
                                                         return example;
                                                     })
                                                 }
-                                            </ReactTooltip>
+                                            </ReactTooltipDefaultExport>
                                         </>
                                     );
                                 })}
