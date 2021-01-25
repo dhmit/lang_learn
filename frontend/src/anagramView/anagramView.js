@@ -166,11 +166,15 @@ export class AnagramView extends React.Component {
                 <h1>
                     Anagrams
                     <button className="btn btn-outline-dark btn-circle mx-3" style={{ 'border': '3px solid', 'font-size': '20px'}}
-                        onClick={this.showRules}>
+                        onClick={this.showRules} data-tip data-for="rules">
                         <b>?</b>
                     </button>
                 </h1>
-
+                <ReactTooltipDefaultExport id="rules" place="right" style= {{'font-size': '20px' }}>
+                    (Rules will be placed in here !!!!
+                    Loook at me !!!!
+                    Don't forget me!!!!)
+                </ReactTooltipDefaultExport>
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
