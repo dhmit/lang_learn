@@ -274,11 +274,11 @@ export class AnagramView extends React.Component {
                     Anagrams
                     <button className="btn btn-outline-dark btn-circle mx-3"
                         style= {{ 'border': '3px solid', 'fontSize': '20px' }}
-                        onClick={this.showRules} data-tip data-for="rules">
+                        onClick={this.showRules} data-tip data-for="anagram-rules">
                         <b>?</b>
                     </button>
                 </h1>
-                <ReactTooltipDefaultExport id="rules" place="right"
+                <ReactTooltipDefaultExport id="anagram-rules" place="right"
                     style= {{ 'fontSize': '25px' }}>
                     <h3> INSTRUCTIONS </h3>
                     (Rules will be placed in here !!!!
