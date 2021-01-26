@@ -186,25 +186,29 @@ def get_word_definition(word_list, pos):
     return word_def
 
 
-def get_word_examples(word_list, part_of_speech):
+def get_word_examples(word_list, part_of_speech, text):
     pos_tags = {
         'noun': 'n',
         'verb': 'v',
         'adjective': 'a',
         'adverb': 'r'
     }
-    word_examples = {}
+    sentences = re.split("[?.!]", text)
+    word_examples = {word: [] for word in word_list}
+    for sentence in sentences:
+        for word in word_list:
+            if word in sentence:
+                word_examples[word].append(sentence)
+
     for word in word_list:
         syns = wn.synsets(word)
         if len(syns) > 0:
-            examples = []
             for net in syns:
                 if pos_tags[part_of_speech] != net.pos():
                     continue
                 for example in net.examples():
                     if word.lower() in example.lower():
-                        examples.append(example.lower())
-            word_examples[word] = examples
+                        word_examples[word].append(example.lower())
         else:
             word_examples[word] = ''
     return word_examples
