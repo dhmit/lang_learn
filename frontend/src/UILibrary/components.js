@@ -182,9 +182,11 @@ export class LoadingPage extends Component {
         return (
             <>
                 <Navbar/>
-                <div className="loading-text">Creating Anagram Quiz...</div>
-                <div className="spinner-border loading-spinner" role="status" >
-                    <span className="sr-only">Loading...</span>
+                <div className="loading">
+                    <div className="loading-text">Creating Anagram Quiz...</div>
+                    <div className="spinner-border loading-spinner" role="status" >
+                        <span className="sr-only">Loading...</span>
+                    </div>
                 </div>
                 <Footer/>
             </>
