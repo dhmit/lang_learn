@@ -302,7 +302,8 @@ export class AnagramView extends React.Component {
                             disabled={!this.state.gameOver}
                             onClick={this.startNewGame}>Restart</button>
                         <button className="btn btn-danger mx-3"
-                            onClick={this.giveUp}>Give Up</button>
+                            onClick={this.giveUp}
+                            disabled={this.state.gameOver}>Give Up</button>
                     </div>
                     <div className="col text-right">
                         <span className="score">Score: {this.state.score}</span>
