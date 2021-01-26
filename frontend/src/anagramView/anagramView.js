@@ -151,6 +151,125 @@ export class AnagramView extends React.Component {
                 </div>
             );
         }
+
+        /*
+         * Words Found
+         */
+        const wordsFound = this.state.targetWords.map((word, i) => {
+            if (this.state.gameOver) {
+                return (
+                    <>
+                        <li key={i}>
+                            <span data-tip data-for={word}>
+                                {word.toUpperCase()}
+                            </span>
+                        </li>
+                        <ReactTooltipDefaultExport id={word} place="right">
+                            Examples:
+                            <ol>
+                                {
+                                    this.state.targetExamples[i]
+                                        .map((ex, j) => (
+                                            <li key={j}>
+                                                {ex}
+                                            </li>
+                                        ))
+                                }
+                            </ol>
+                        </ReactTooltipDefaultExport>
+                    </>
+                );
+            }
+            if (this.state.targetWordsFound.includes(word.toLowerCase())) {
+                return (
+                    <>
+                        <li key={i}>
+                            <span data-tip data-for={word}>
+                                {word.toUpperCase()}
+                            </span>
+                        </li>
+                        <ReactTooltipDefaultExport id={word} place="right">
+                            Examples:
+                            <ol>
+                                {
+                                    this.state.targetExamples[i]
+                                        .map((ex, j) => {
+                                            return (
+                                                <li key={j}>
+                                                    {ex}
+                                                </li>
+                                            );
+                                        })
+                                }
+                            </ol>
+                        </ReactTooltipDefaultExport>
+                    </>
+                );
+            }
+            let buffer = '';
+            for (let j = 0; j < word.length; j++) {
+                buffer += '_ ';
+            }
+            return (
+                <>
+                    <li key={i}>
+                        <span data-tip data-for={word}>{buffer}</span>
+                    </li>
+                    <ReactTooltipDefaultExport id={word} place="right">
+                        Examples:
+                        <ol>
+                            {
+                                this.state.targetExamples[i]
+                                    .map((ex, j) => {
+                                        return (
+                                            <li key={j}>
+                                                {ex.replace(word, buffer)}
+                                            </li>
+                                        );
+                                    })
+                            }
+                        </ol>
+                    </ReactTooltipDefaultExport>
+                </>
+            );
+        });
+
+        /*
+         * Definitions
+         */
+        const definitions = this.state.targetWordDefs.map((defs, i) => {
+            if (defs.length === 0) {
+                return (
+                    <li key={i}>
+                        <span>N/A</span>
+                    </li>
+                );
+            }
+            return (
+                <>
+                    <li data-tip data-for={defs[0]} key={i}>
+                        <span>{defs[0]}</span>
+                    </li>
+                    <ReactTooltipDefaultExport
+                        id={defs[0]}
+                        place="top"
+                        effect="solid"
+                    >
+                        Definitions:
+                        <ol>
+                            {
+                                defs.map((def, j) => (
+                                    <li key={j}>
+                                        {def}
+                                    </li>
+                                ))
+                            }
+                        </ol>
+                    </ReactTooltipDefaultExport>
+                </>
+            );
+        });
+
         return (<React.Fragment>
             <Navbar />
 
@@ -158,13 +277,13 @@ export class AnagramView extends React.Component {
                 <h1>
                     Anagrams
                     <button className="btn btn-outline-dark btn-circle mx-3"
-                        style= {{ 'border': '3px solid', 'font-size': '20px' }}
+                        style= {{ 'border': '3px solid', 'fontSize': '20px' }}
                         onClick={this.showRules} data-tip data-for="rules">
                         <b>?</b>
                     </button>
                 </h1>
                 <ReactTooltipDefaultExport id="rules" place="right"
-                    style= {{ 'font-size': '25px' }}>
+                    style= {{ 'fontSize': '25px' }}>
                     <h3> INSTRUCTIONS </h3>
                     (Rules will be placed in here !!!!
                     Loook at me !!!!
@@ -207,126 +326,11 @@ export class AnagramView extends React.Component {
                     </div>
                     <div className="col shaded-box mx-4">
                         <h3>Words Found</h3>
-                        <ol>
-                            {
-                                this.state.targetWords.map((word, i) => {
-                                    if (this.state.gameOver) {
-                                        return (
-                                            <>
-                                                <li key={i}>
-                                                    <span data-tip data-for={word}>
-                                                        {word.toUpperCase()}
-                                                    </span>
-                                                </li>
-                                                <ReactTooltipDefaultExport id={word} place="right">
-                                                    Examples:
-                                                    <ol>
-                                                        {
-                                                            this.state.targetExamples[i]
-                                                                .map((ex, j) => (
-                                                                    <li key={j}>
-                                                                        {ex}
-                                                                    </li>
-                                                                ))
-                                                        }
-                                                    </ol>
-                                                </ReactTooltipDefaultExport>
-                                            </>
-                                        );
-                                    }
-                                    if (this.state.targetWordsFound.includes(word.toLowerCase())) {
-                                        return (
-                                            <>
-                                                <li key={i}>
-                                                    <span data-tip data-for={word}>
-                                                        {word.toUpperCase()}
-                                                    </span>
-                                                </li>
-                                                <ReactTooltipDefaultExport id={word} place="right">
-                                                    Examples:
-                                                    <ol>
-                                                        {
-                                                            this.state.targetExamples[i]
-                                                                .map((ex, j) => {
-                                                                    return (
-                                                                        <li key={j}>
-                                                                            {ex}
-                                                                        </li>
-                                                                    );
-                                                                })
-                                                        }
-                                                    </ol>
-                                                </ReactTooltipDefaultExport>
-                                            </>
-                                        );
-                                    }
-                                    let buffer = '';
-                                    for (let j = 0; j < word.length; j++) {
-                                        buffer += '_ ';
-                                    }
-                                    return (
-                                        <>
-                                            <li key={i}>
-                                                <span data-tip data-for={word}>{buffer}</span>
-                                            </li>
-                                            <ReactTooltipDefaultExport id={word} place="right">
-                                                Examples:
-                                                <ol>
-                                                    {
-                                                        this.state.targetExamples[i]
-                                                            .map((ex, j) => {
-                                                                return (
-                                                                    <li key={j}>
-                                                                        {ex.replace(word, buffer)}
-                                                                    </li>
-                                                                );
-                                                            })
-                                                    }
-                                                </ol>
-                                            </ReactTooltipDefaultExport>
-                                        </>
-                                    );
-                                })}
-                        </ol>
+                        <ol>{wordsFound}</ol>
                     </div>
                     <div className="col-6 shaded-box">
                         <h3>Definitions</h3>
-                        <ol>
-                            {
-                                this.state.targetWordDefs.map((defs, i) => {
-                                    if (defs.length === 0) {
-                                        return (
-                                            <li key={i}>
-                                                <span>N/A</span>
-                                            </li>
-                                        );
-                                    }
-                                    return (
-                                        <>
-                                            <li data-tip data-for={defs[0]} key={i}>
-                                                <span>{defs[0]}</span>
-                                            </li>
-                                            <ReactTooltipDefaultExport
-                                                id={defs[0]}
-                                                place="top"
-                                                effect="solid"
-                                            >
-                                                Definitions:
-                                                <ol>
-                                                    {
-                                                        defs.map((def, j) => (
-                                                            <li key={j}>
-                                                                {def}
-                                                            </li>
-                                                        ))
-                                                    }
-                                                </ol>
-                                            </ReactTooltipDefaultExport>
-                                        </>
-                                    );
-                                })
-                            }
-                        </ol>
+                        <ol>{definitions}</ol>
                     </div>
                 </div>
                 <div className="row">
