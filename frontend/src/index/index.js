@@ -43,13 +43,30 @@ export class IndexView extends React.Component {
         return (<React.Fragment>
             <Navbar />
             <div className="page">
-                {this.state.data.map((text) => (
-                    <>
-                        {PARTS_OF_SPEECH.map((pos) => (
-                            <AnagramButton key={`${text.id}/${pos}`} id={text.id} pos={pos}/>
+                <table border="2" width="1300px">
+                    <tbody>
+                        <tr>
+                            <th>Title</th>
+                            <th>Text</th>
+                            <th>Anagram Links</th>
+                        </tr>
+                        {this.state.data.map((text, k) => (
+                            <tr key={k}>
+                                <td>{text.title}</td>
+                                <td>{text.text}</td>
+                                <td>
+                                    {PARTS_OF_SPEECH.map((pos) => (
+                                        <AnagramButton
+                                            key={`${text.id}/${pos}`}
+                                            id={text.id}
+                                            pos={pos}
+                                        />
+                                    ))}
+                                </td>
+                            </tr>
                         ))}
-                    </>
-                ))}
+                    </tbody>
+                </table>
             </div>
             <Footer />
         </React.Fragment>);

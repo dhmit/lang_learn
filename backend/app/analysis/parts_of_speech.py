@@ -164,7 +164,6 @@ def get_part_of_speech_words(text, part):
         return []
 
     tokens = get_parts_of_speech_tags(text)
-    print(tokens)
     return [token[0] for token in tokens if token[1] in tags[part]]
 
 
