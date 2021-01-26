@@ -223,7 +223,7 @@ export class AnagramView extends React.Component {
                                     .map((ex, j) => {
                                         return (
                                             <li key={j}>
-                                                {ex.replace(word, buffer)}
+                                                {ex.replaceAll(word, buffer)}
                                             </li>
                                         );
                                     })
