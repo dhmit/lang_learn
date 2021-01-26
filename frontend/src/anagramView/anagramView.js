@@ -161,10 +161,10 @@ export class AnagramView extends React.Component {
         } else {
             const newTimeLeft = this.state.timeLeft - 1;
             if (newTimeLeft === 0 || this.state.gameOver) {
-              clearInterval(this.timer);
-              this.setState({gameOver: true});
+                clearInterval(this.timer);
+                this.setState({ gameOver: true });
             }
-            this.setState({timeLeft: newTimeLeft});
+            this.setState({ timeLeft: newTimeLeft });
         }
     }
 
