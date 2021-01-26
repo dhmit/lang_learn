@@ -285,6 +285,7 @@ export class AnagramView extends React.Component {
                     Loook at me !!!!
                     Don't forget me!!!!)
                 </ReactTooltipDefaultExport>
+                <h4 style= {{ 'padding-bottom': '5px' }}>Category: {this.props.partOfSpeech}</h4>
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
@@ -350,7 +351,7 @@ export class AnagramView extends React.Component {
                             <input className="form-control" type="text" name="userInput"
                                 placeholder="Type here" disabled={this.state.gameOver}
                                 onChange={this.handleChange} value={this.state.userInput} />
-                            <button className="btn btn-outline-dark mx-2"
+                            <button className="btn btn-outline-light mx-2"
                                 disabled={this.state.gameOver}
                                 type="submit">Enter</button>
                         </form>

@@ -28,6 +28,8 @@ $side-padding: 100px;
 .page {
     padding: $header-padding $side-padding 0;
     flex: 1 0 auto;
+    background-color: #2D2155;
+    color: white;
 }
 
 @media (max-width: 992px) {
@@ -61,4 +63,3 @@ $side-padding: 100px;
 
 #anagram-button {
 }
-

@@ -147,7 +147,7 @@ export class Navbar extends Component {
         const show = (this.state.showNav) ? 'show' : '';
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <div className="container-fluid">
                         <a className="navbar-brand" style={{ 'fontSize': '200%' }}
                             href="/"><b>Lang Learn</b></a>
