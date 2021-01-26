@@ -177,7 +177,11 @@ def get_word_definition(word_list, pos):
     defs = PyDictionary()
     word_def = {}
     for word in word_list:
-        word_def[word] = [re.sub("[()]", "", meaning) for meaning in defs.meaning(word)[pos]]
+        meanings = defs.meaning(word.lower())
+        if meanings is not None and pos in meanings:
+            word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]]
+        else:
+            word_def[word] = []
     return word_def
 
 

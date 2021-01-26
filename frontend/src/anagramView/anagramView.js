@@ -299,7 +299,7 @@ export class AnagramView extends React.Component {
                         <ol>
                             {
                                 this.state.targetWordDefs.map((defs, i) => {
-                                    if (defs === '') {
+                                    if (defs.length === 0) {
                                         return (
                                             <li key={i}>
                                                 <span>N/A</span>
