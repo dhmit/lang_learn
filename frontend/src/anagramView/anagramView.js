@@ -295,14 +295,21 @@ export class AnagramView extends React.Component {
             <Navbar />
 
             <div className="page">
-                <h1>
-                    Anagrams
-                    <button className="btn btn-outline-light btn-circle mx-3"
-                        style= {{ 'border': '3px solid', 'fontSize': '20px' }}
-                        onClick={this.showRules} data-tip data-for="anagram-rules">
-                        <b>?</b>
-                    </button>
-                </h1>
+                <div className="row">
+                    <div className="col">
+                        <h1>
+                            Anagrams
+                            <button className="btn btn-outline-light btn-circle mx-3"
+                                style= {{ 'border': '3px solid', 'fontSize': '20px' }}
+                                onClick={this.showRules} data-tip data-for="anagram-rules">
+                                <b>?</b>
+                            </button>
+                        </h1>
+                    </div>
+                    <div className="col text-right">
+                        <h4>Time Left: {this.state.timeLeft}</h4>
+                    </div>
+                </div>
                 <ReactTooltipDefaultExport id="anagram-rules" place="right"
                     style= {{ 'fontSize': '25px' }}>
                     <h3> INSTRUCTIONS </h3>
