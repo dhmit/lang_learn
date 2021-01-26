@@ -30,26 +30,21 @@ export class AnagramView extends React.Component {
             gameOver: false,
 
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleShuffle = this.handleShuffle.bind(this);
-        this.startNewGame = this.startNewGame.bind(this);
-        this.giveUp = this.giveUp.bind(this);
     }
 
     async componentDidMount() {
         await this.startNewGame();
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         const inputValue = event.target.value;
         const stateField = event.target.name;
         this.setState({
             [stateField]: inputValue,
         });
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault();
         const userInput = this.state.userInput.toLowerCase().trim();
         const targetWords = this.state.targetWords.map((word) => (word.toLowerCase()));
@@ -76,7 +71,7 @@ export class AnagramView extends React.Component {
         });
     }
 
-    handleShuffle(event) {
+    handleShuffle = (event) => {
         event.preventDefault();
         this.setState({
             letters: shuffleArray(this.state.letters),
@@ -98,7 +93,7 @@ export class AnagramView extends React.Component {
         });
     }
 
-    async startNewGame() {
+    startNewGame = async () => {
         this.reset();
         try {
             const apiURL = `/api/get_anagram/${this.props.textID}/${this.props.partOfSpeech}`;
@@ -136,13 +131,13 @@ export class AnagramView extends React.Component {
         }
     }
 
-    giveUp() {
+    giveUp = () => {
         this.setState({
             gameOver: true,
         });
     }
 
-    showRules() {
+    showRules = () => {
         this.setState({
             rules: true,
         });
@@ -151,7 +146,7 @@ export class AnagramView extends React.Component {
     render() {
         if (!this.state.targetWordDefs) {
             return (
-                <div className="spinner-border text-primary" role="status" >
+                <div className="spinner-border text-primary loading-spinner" role="status" >
                     <span className="sr-only">Loading...</span>
                 </div>
             );

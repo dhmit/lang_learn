@@ -60,7 +60,8 @@ def get_anagram(request, text_id, part_of_speech):
     the id of the text and the part of speech. The anagrams will be random.
     """
     text_obj = Text.objects.get(id=text_id)
-    words = list(set(word for word in get_part_of_speech_words(text_obj.text, part_of_speech)
+    words = list(set(word for word in get_part_of_speech_words(text_obj.text.lower(),
+                                                               part_of_speech)
                      if (not quote_in_word(word) and len(word) > 2)))
     random.shuffle(words)
     # TODO: Determine how many words from text we should use and which to use
@@ -78,12 +79,12 @@ def get_anagram(request, text_id, part_of_speech):
                 anagram_freq[letter] = cur_freq[letter]
             elif anagram_freq[letter] < cur_freq[letter]:
                 anagram_freq[letter] = cur_freq[letter]
-    target_words = [x.lower() for x in words]
+
     extra_words = get_anagrams(anagram_freq)
-    extra_words -= set(target_words)  # Remove words from text from extra words
+    extra_words -= set(words)  # Remove words from text from extra words
     extra_words = filter_pos(extra_words, part_of_speech)
 
-    word_data = [[word.lower(), {'definition': definitions[word], 'example': examples[word]}]
+    word_data = [[word, {'definition': definitions[word], 'example': examples[word]}]
                  for word in words]
 
     scrambled_letters = []

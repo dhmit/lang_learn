@@ -174,10 +174,10 @@ def filter_pos(word_list, part):
 
 def get_word_definition(word_list, pos):
     pos = pos.capitalize()
-    defs = PyDictionary()
+    defs = PyDictionary(*word_list)
+    meanings = defs.getMeanings()
     word_def = {}
-    for word in word_list:
-        meanings = defs.meaning(word.lower())
+    for word, meanings in meanings.items():
         if meanings is not None and pos in meanings:
             word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]]
         else:
