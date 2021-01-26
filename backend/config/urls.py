@@ -18,7 +18,11 @@ from django.contrib import admin
 from django.urls import path
 
 from app.common import render_react_view
-# from app.views import ()
+from app.views import (
+    text,
+    all_text,
+    get_anagram,
+)
 
 
 def react_view_path(route, component_name):
@@ -37,8 +41,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API endpoints
-    # None here yet -- write me!
+    path('api/text/<int:text_id>', text),
+    path('api/all_text', all_text),
+    path('api/get_anagram/<int:text_id>/<str:part_of_speech>', get_anagram),
 
     # View paths
     react_view_path('', 'IndexView'),
+    react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
 ]

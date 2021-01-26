@@ -3,6 +3,7 @@ Tests for the main app.
 """
 
 from django.test import TestCase
+from app.analysis import anagrams
 
 from app.quiz_creation import conjugation_quiz
 
@@ -15,9 +16,9 @@ class MainTests(TestCase):
     #     super().setUp()
     #     do any setup here
 
-    def test_sample(self):
+    def test_letter_freq(self):
         """
-        Remove me once we have real tests here.
+        Tests the function letter_freq from anagrams.py
         """
         two = 2
         another_two = 2
