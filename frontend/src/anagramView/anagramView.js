@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
-import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 /* Randomize array in-place using Durstenfeld shuffle algorithm */
 function shuffleArray(array) {
@@ -145,11 +145,7 @@ export class AnagramView extends React.Component {
 
     render() {
         if (!this.state.targetWordDefs) {
-            return (
-                <div className="spinner-border text-primary loading-spinner" role="status" >
-                    <span className="sr-only">Loading...</span>
-                </div>
-            );
+            return (<LoadingPage/>);
         }
 
         /*

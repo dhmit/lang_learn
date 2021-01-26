@@ -176,3 +176,18 @@ export class Navbar extends Component {
         );
     }
 }
+
+export class LoadingPage extends Component {
+    render() {
+        return (
+            <>
+                <Navbar/>
+                <div className="loading-text">Creating Anagram Quiz...</div>
+                <div className="spinner-border loading-spinner" role="status" >
+                    <span className="sr-only">Loading...</span>
+                </div>
+                <Footer/>
+            </>
+        );
+    }
+}

@@ -41,5 +41,11 @@ li span {
 }
 
 .loading-spinner {
-    margin: auto auto;
+    margin: 0 auto auto;
+}
+
+.loading-text {
+    margin: auto auto 30px;
+    font-size: 30px;
+    font-weight: bold;
 }
