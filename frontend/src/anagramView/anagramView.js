@@ -272,7 +272,7 @@ export class AnagramView extends React.Component {
             <div className="page">
                 <h1>
                     Anagrams
-                    <button className="btn btn-outline-dark btn-circle mx-3"
+                    <button className="btn btn-outline-light btn-circle mx-3"
                         style= {{ 'border': '3px solid', 'fontSize': '20px' }}
                         onClick={this.showRules} data-tip data-for="anagram-rules">
                         <b>?</b>
@@ -333,7 +333,7 @@ export class AnagramView extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-3" >
-                        <button className="btn btn-outline-dark float-right"
+                        <button className="btn btn-outline-light float-right"
                             onClick={this.handleShuffle}
                             disabled={this.state.gameOver}>
                             <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
