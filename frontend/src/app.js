@@ -8,8 +8,6 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
-import { AnagramView } from './anagramView/anagramView';
-
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -20,5 +18,4 @@ window.app_modules = {
 
     // Add all frontend views here
     IndexView,
-    AnagramView,
 };
