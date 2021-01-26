@@ -149,11 +149,11 @@ def get_parts_of_speech_tags(text):
 
 
 tags = {
-        'noun': ['NN', 'NNS', 'NNP', 'NNPS'],
-        'verb': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
-        'adverb': ['RB', 'RBR', 'RBS'],
-        'adjective': ['JJ', 'JJR', 'JJS']
-    }
+    'noun': ['NN', 'NNS', 'NNP', 'NNPS'],
+    'verb': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
+    'adverb': ['RB', 'RBR', 'RBS'],
+    'adjective': ['JJ', 'JJR', 'JJS']
+}
 
 
 def get_part_of_speech_words(text, part):
@@ -164,6 +164,7 @@ def get_part_of_speech_words(text, part):
         return []
 
     tokens = get_parts_of_speech_tags(text)
+    print(tokens)
     return [token[0] for token in tokens if token[1] in tags[part]]
 
 
@@ -179,19 +180,28 @@ def get_word_definition(word_list, pos):
     word_def = {}
     for word, meanings in meanings.items():
         if meanings is not None and pos in meanings:
-            word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]]
+            word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]
+                              if word not in meaning]
         else:
             word_def[word] = []
     return word_def
 
 
-def get_word_examples(word_list):
+def get_word_examples(word_list, part_of_speech):
+    pos_tags = {
+        'noun': 'n',
+        'verb': 'v',
+        'adjective': 'a',
+        'adverb': 'r'
+    }
     word_examples = {}
     for word in word_list:
         syns = wn.synsets(word)
         if len(syns) > 0:
             examples = []
             for net in syns:
+                if pos_tags[part_of_speech] != net.pos():
+                    continue
                 for example in net.examples():
                     if word.lower() in example.lower():
                         examples.append(example.lower())

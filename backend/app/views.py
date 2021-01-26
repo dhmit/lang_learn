@@ -68,7 +68,7 @@ def get_anagram(request, text_id, part_of_speech):
     words = words[:5]
 
     definitions = get_word_definition(words, part_of_speech)
-    examples = get_word_examples(words)
+    examples = get_word_examples(words, part_of_speech)
 
     # Gets the minimum possible numbers of each letter required to generate all the text
     anagram_freq = {}
