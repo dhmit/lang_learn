@@ -28,8 +28,11 @@ export class AnagramView extends React.Component {
             score: 0,
             letters: [],
             gameOver: false,
-
+            timeLeft: 90,
         };
+        this.timer = 0;
+        this.startTimer = this.startTimer.bind(this);
+        this.coutDown = this.countDown.bind(this);
     }
 
     async componentDidMount() {
@@ -90,7 +93,9 @@ export class AnagramView extends React.Component {
             score: 0,
             letters: [],
             gameOver: false,
+            timeLeft: 90,
         });
+        this.timer = 0;
     }
 
     startNewGame = async () => {
@@ -126,6 +131,7 @@ export class AnagramView extends React.Component {
                 letters: letters,
                 targetExamples: targetExamples,
             });
+            this.startTimer();
         } catch (e) {
             console.log(e);
         }
@@ -141,6 +147,25 @@ export class AnagramView extends React.Component {
         this.setState({
             rules: true,
         });
+    }
+
+    startTimer = () => {
+        if (this.timer === 0 && this.state.timeLeft > 0) {
+            this.timer = setInterval(this.countDown, 1000);
+        }
+    }
+
+    countDown = () => {
+        if (this.state.gameOver) {
+            clearInterval(this.timer);
+        } else {
+            const newTimeLeft = this.state.timeLeft - 1;
+            if (newTimeLeft === 0 || this.state.gameOver) {
+              clearInterval(this.timer);
+              this.setState({gameOver: true});
+            }
+            this.setState({timeLeft: newTimeLeft});
+        }
     }
 
     render() {
@@ -271,7 +296,7 @@ export class AnagramView extends React.Component {
 
             <div className="page">
                 <h1>
-                    Anagrams
+                    Anagrams {this.state.timeLeft}
                     <button className="btn btn-outline-dark btn-circle mx-3"
                         style= {{ 'border': '3px solid', 'fontSize': '20px' }}
                         onClick={this.showRules} data-tip data-for="anagram-rules">
