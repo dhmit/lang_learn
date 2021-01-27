@@ -39,7 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API endpoints
-    path('api/get_anagram/<int:text_id>/', get_quiz_data),
+    path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
 
     # View paths
     react_view_path('', 'IndexView'),
