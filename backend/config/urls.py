@@ -18,9 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from app.common import render_react_view
-from app.views import (
-    get_quiz_data
-)
+# from app.views import ()
 
 
 def react_view_path(route, component_name):
@@ -39,7 +37,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API endpoints
-    path('api/get_anagram/<int:text_id>/', get_quiz_data),
+    # None here yet -- write me!
 
     # View paths
     react_view_path('', 'IndexView'),
