@@ -78,14 +78,24 @@ export class FlashcardView extends Component {
     }
 
     getCurrentCard = () => {
-        return this.state.cardData[this.state.cardIndex];
+        const {
+            starOnly,
+            starredCards,
+            cardIndex,
+            cardData,
+        } = this.state;
+        return starOnly
+            ? cardData[starredCards[cardIndex]]
+            : cardData[cardIndex];
     }
 
     changeCard = (delta) => {
+        const { cardData, starredCards, cardIndex } = this.state;
+        const listLength = this.state.starOnly ? starredCards.length : cardData.length;
+        const newCardIndex = (cardIndex + delta + listLength) % listLength;
         this.setState({
             showBack: false,
-            cardIndex: (this.state.cardIndex + delta + this.state.cardData.length)
-                % this.state.cardData.length,
+            cardIndex: newCardIndex,
         });
     }
 
@@ -99,17 +109,21 @@ export class FlashcardView extends Component {
     }
 
     toggleStar = () => {
-        const { starredCards } = this.state;
-        if (this.isStarred(this.state.cardIndex)) {
-            starredCards.splice(starredCards.indexOf(this.state.cardIndex), 1);
+        const { starredCards, starOnly, cardIndex } = this.state;
+        let currentIndex = starOnly ? starredCards[cardIndex] : cardIndex;
+        if (this.isStarred(currentIndex)) {
+            starredCards.splice(starredCards.indexOf(currentIndex), 1);
+            if (starOnly) {
+                currentIndex %= starredCards.length;
+            }
         } else {
             starredCards.push(this.state.cardIndex);
         }
-        this.setState({ starredCards });
+        this.setState({ starredCards, cardIndex: currentIndex });
     }
 
     toggleStarOnly = () => {
-        this.setState({ starOnly: !this.state.starOnly });
+        this.setState({ cardIndex: 0, starOnly: !this.state.starOnly });
     }
 
     handleKeyDown = (e) => {
@@ -127,10 +141,63 @@ export class FlashcardView extends Component {
     }
 
     render() {
-        if (!this.state.cardData) {
+        const {
+            cardData,
+            showBack,
+            cardIndex,
+            starOnly,
+            starredCards,
+        } = this.state;
+        if (!cardData) {
             return (<LoadingPage text='Creating Flashcards...'/>);
         }
+
+        /* Generate Flashcard */
         const card = this.getCurrentCard();
+        const flashcard = card
+            ? (<div className='flashcard-div'>
+                <div className='flashcard-arrows' onClick={() => this.changeCard(-1)}>
+                    &#60;
+                </div>
+                <div className='flashcard'>
+                    {
+                        showBack
+                            ? (<>A PICTURE OF {card.word.toUpperCase()}</>)
+                            : (<>
+                                <h1 className='flashcard-word'>
+                                    {card.word.toUpperCase()}
+                                </h1>
+                                <h2 className='flashcard-info'>
+                                    <b><u>Definition:</u> </b>
+                                    {card.definition.length > 0
+                                        ? card.definition[0]
+                                        : 'N/A'}
+                                </h2>
+                                <h2 className='flashcard-info'>
+                                    <b><u>Example:</u> </b>
+                                    {card.example.length > 0
+                                        ? card.example[0]
+                                        : 'N/A'}
+                                </h2>
+                            </>)
+                    }
+                    <div className='flashcard-star' onClick={this.toggleStar}>
+                        {this.isStarred((starOnly ? starredCards[cardIndex] : cardIndex))
+                            ? filledStar('50', 'yellow')
+                            : star('50', 'white')
+                        }
+                    </div>
+                    <h3 className='flashcard-flip' onClick={this.flipCard}>
+                        Click to flip
+                    </h3>
+                </div>
+                <div className='flashcard-arrows' onClick={() => this.changeCard(1)}>
+                    &#62;
+                </div>
+            </div>)
+            : <div className="flashcard-error">You do not have any starred cards</div>;
+
+        /* Actual Return statement */
         return (
             <>
                 <Navbar/>
@@ -171,50 +238,11 @@ export class FlashcardView extends Component {
                         <div className='col-3'>
                             Starred Words Only:
                             <button onClick={this.toggleStarOnly}>
-                                Star Only: {this.state.starOnly ? 'YES' : 'NO'}
+                                Star Only: {starOnly ? 'YES' : 'NO'}
                             </button>
                         </div>
                     </div>
-                    <div className='flashcard-div'>
-                        <div className='flashcard-arrows' onClick={() => this.changeCard(-1)}>
-                            &#60;
-                        </div>
-                        <div className='flashcard'>
-                            {
-                                this.state.showBack
-                                    ? (<>A PICTURE OF {card.word.toUpperCase()}</>)
-                                    : (<>
-                                        <h1 className='flashcard-word'>
-                                            {card.word.toUpperCase()}
-                                        </h1>
-                                        <h2 className='flashcard-info'>
-                                            <b><u>Definition:</u> </b>
-                                            {card.definition.length > 0
-                                                ? card.definition[0]
-                                                : 'N/A'}
-                                        </h2>
-                                        <h2 className='flashcard-info'>
-                                            <b><u>Example:</u> </b>
-                                            {card.example.length > 0
-                                                ? card.example[0]
-                                                : 'N/A'}
-                                        </h2>
-                                    </>)
-                            }
-                            <div className='flashcard-star' onClick={this.toggleStar}>
-                                {this.isStarred(this.state.cardIndex)
-                                    ? filledStar('50', 'yellow')
-                                    : star('50', 'white')
-                                }
-                            </div>
-                            <h3 className='flashcard-flip' onClick={this.flipCard}>
-                                Click to flip
-                            </h3>
-                        </div>
-                        <div className='flashcard-arrows' onClick={() => this.changeCard(1)}>
-                            &#62;
-                        </div>
-                    </div>
+                    {flashcard}
                 </div>
                 <Footer/>
             </>
