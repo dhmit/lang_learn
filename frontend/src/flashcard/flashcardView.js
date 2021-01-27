@@ -101,8 +101,7 @@ export class FlashcardView extends Component {
     }
 
     flipCard = () => {
-        this.setState({showBack: !this.state.showBack});
-        console.log('angy');
+        this.setState({ showBack: !this.state.showBack });
     }
 
     isStarred = (cardIndex) => {
@@ -263,7 +262,8 @@ export class FlashcardView extends Component {
                         <div className='col-3'>
                             <div className='progress'>
                                 <div className="progress-bar progress-bar-striped bg-success"
-                                    role="progressbar" style={{ 'width': `${this.checkProgress()}%` }}
+                                    role="progressbar"
+                                    style={{ 'width': `${this.checkProgress()}%` }}
                                     aria-valuenow={this.checkProgress()} aria-valuemin="0"
                                     aria-valuemax="100"></div>
                             </div>
