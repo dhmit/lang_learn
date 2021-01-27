@@ -29,10 +29,13 @@ export class AnagramView extends React.Component {
             letters: [],
             gameOver: false,
             timeLeft: 90,
+            showModal: false,
         };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
-        this.coutDown = this.countDown.bind(this);
+        this.pauseTimer = this.pauseTimer.bind(this);
+        this.countDown = this.countDown.bind(this);
+        this.modalHandler = this.modalHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -78,6 +81,20 @@ export class AnagramView extends React.Component {
         event.preventDefault();
         this.setState({
             letters: shuffleArray(this.state.letters),
+        });
+    }
+
+    pauseTimer = () => {
+        clearInterval(this.timer);
+        this.timer = 0;
+    };
+
+    modalHandler = (event) => {
+        event.preventDefault();
+        if (this.state.showModal) this.startTimer();
+        else this.pauseTimer();
+        this.setState({
+            showModal: !this.state.showModal,
         });
     }
 
@@ -142,12 +159,6 @@ export class AnagramView extends React.Component {
     giveUp = () => {
         this.setState({
             gameOver: true,
-        });
-    }
-
-    showRules = () => {
-        this.setState({
-            rules: true,
         });
     }
 
@@ -303,23 +314,43 @@ export class AnagramView extends React.Component {
                             Anagrams
                             <button className="btn btn-outline-light btn-circle mx-3"
                                 style= {{ 'border': '3px solid', 'fontSize': '20px' }}
-                                onClick={this.showRules} data-tip data-for="anagram-rules">
+                                onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
                         </h1>
+                    </div>
+                    <div>
+                        {
+                            this.state.showModal
+                                ? <div className="backdrop" onClick={this.modalHandler}>
+                                </div>
+                                : null
+                        }
+                        <div className="Modal modal-content" style={{
+                            transform: this.state.showModal
+                                ? 'translateY(0)' : 'translateY(-100vh)',
+                            opacity: this.state.showModal ? 1 : 0,
+                        }}>
+                            <div className="modal-header">
+                                <h5 className="modal-title">Instructions</h5>
+                                <button type="button" className="close" onClick={this.modalHandler}>
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Instructions will go here.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary"
+                                    onClick={this.modalHandler}>Close</button>
+                            </div>
+                        </div>
                     </div>
                     <div className="col text-right">
                         <h4>Time Left: {this.state.timeLeft}</h4>
                     </div>
                 </div>
-                <ReactTooltipDefaultExport id="anagram-rules" place="right"
-                    style= {{ 'fontSize': '25px' }}>
-                    <h3> INSTRUCTIONS </h3>
-                    (Rules will be placed in here !!!!
-                    Loook at me !!!!
-                    Don't forget me!!!!)
-                </ReactTooltipDefaultExport>
-                <h4 style= {{ 'padding-bottom': '5px' }}>Category: {this.props.partOfSpeech}</h4>
+                <h4 style= {{ 'paddingBottom': '5px' }}>Category: {this.props.partOfSpeech}</h4>
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
