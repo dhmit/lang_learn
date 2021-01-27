@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
-import ReactTooltipDefaultExport from 'react-tooltip';
 
 import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
 
@@ -149,6 +148,19 @@ export class FlashcardView extends Component {
         });
     }
 
+    checkProgress = () => {
+        const numStarred = this.state.starredCards.length;
+        const numCards = this.state.cardData.length;
+        const currentCard = this.state.cardIndex + 1;
+        if (this.state.starOnly && numStarred !== 0) {
+            return parseInt((currentCard / numStarred) * 100);
+        }
+        if (!this.state.starOnly && numCards !== 0) {
+            return parseInt((currentCard / numCards) * 100);
+        }
+        return 0;
+    }
+
     render() {
         const {
             cardData,
@@ -235,7 +247,8 @@ export class FlashcardView extends Component {
                             }}>
                                 <div className="modal-header">
                                     <h5 className="modal-title">Instructions</h5>
-                                    <button type="button" className="close" onClick={this.modalHandler}>
+                                    <button type="button" className="close"
+                                        onClick={this.modalHandler}>
                                         <span>&times;</span>
                                     </button>
                                 </div>
@@ -254,7 +267,12 @@ export class FlashcardView extends Component {
                         </div>
 
                         <div className='col-3'>
-                            Progress
+                            <div className='progress'>
+                                <div className="progress-bar progress-bar-striped bg-success"
+                                    role="progressbar" style={{ 'width': `${this.checkProgress()}%` }}
+                                    aria-valuenow={this.checkProgress()} aria-valuemin="0"
+                                    aria-valuemax="100"></div>
+                            </div>
                         </div>
                     </div>
                     <div className='row'>
