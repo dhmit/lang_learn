@@ -4,9 +4,11 @@
     border-radius: 60px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    position: relative;
     min-height: 550px;
     margin: 0 auto;
-    padding: 50px 50px 0;
+    padding: 50px 50px 25px;
     text-align: center;
     width: 1050px;
 }
@@ -14,14 +16,12 @@
 .flashcard-word {
     color: #E8C2FF;
     font-size: 70px;
-    margin: 0 0 50px;
 }
 
 .flashcard-info {
     color: white;
     font-size: 28px;
     font-weight: normal;
-    margin-bottom: 50px;
 }
 
 .flashcard-div {
@@ -35,12 +35,29 @@
     font-weight: bold;
     color: white;
     cursor: pointer;
+    user-select: none;
 }
 
 .flashcard-arrows:hover{
     transform: scale(1.4);
     transition-duration: 0.3s;
     color: #E8C2FF;
+}
+
+.flashcard-flip {
+    color: #C4C4C4;
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0;
+    user-select: none;
+}
+
+.flashcard-star {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
 }
 
 /* Styles for the Top Part*/

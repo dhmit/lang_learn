@@ -8,6 +8,51 @@ const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
+const filledStar = (size, color) => {
+    return (
+        <svg
+            xmlns = "http://www.w3.org/2000/svg"
+            width = {size}
+            height = {size}
+            fill = {color}
+            className = "bi bi-star-fill"
+            viewBox = "0 0 16 16"
+        >
+            <path
+                d={'M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173'
+                + ' 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927'
+                + ' 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83'
+                + ' 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'}
+            />
+        </svg>
+    );
+};
+
+
+
+const star = (size, color) => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            fill={color}
+            className="bi bi-star"
+            viewBox="0 0 16 16">
+            <path
+                d={'M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389'
+                + ' 2.256c.386.198.824-.149.746-.592l-.83-4.73'
+                + ' 3.523-3.356c.329-.314.158-.888-.283-.95l-4.898-.696L8.465.792a.513.513'
+                + ' 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83'
+                + ' 4.73zm4.905-2.767l-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71'
+                + ' 6.745l4.052-.576a.525.525 0 0 0 .393-.288l1.847-3.658 1.846 3.658a.525.525'
+                + ' 0 0 0 .393.288l4.052.575-2.906 2.77a.564.564 0 0 0-.163.506l.694'
+                + ' 3.957-3.686-1.894a.503.503 0 0 0-.461 0z'}
+            />
+        </svg>
+    );
+};
+
 export class FlashcardView extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +60,7 @@ export class FlashcardView extends Component {
             cardData: null,
             cardIndex: 0,
             starredCards: [],
+            showBack: false,
         };
     }
 
@@ -23,6 +69,11 @@ export class FlashcardView extends Component {
         const response = await fetch(apiURL);
         const cardData = await response.json();
         this.setState({ cardData });
+        document.addEventListener('keydown', this.handleKeyDown, true);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown, false);
     }
 
     getCurrentCard = () => {
@@ -31,8 +82,43 @@ export class FlashcardView extends Component {
 
     changeCard = (delta) => {
         this.setState({
-            cardIndex: (this.state.cardIndex + delta) % this.state.cardData.length,
+            showBack: false,
+            cardIndex: (this.state.cardIndex + delta + this.state.cardData.length)
+                % this.state.cardData.length,
         });
+    }
+
+    flipCard = () => {
+        this.setState({ showBack: !this.state.showBack });
+    }
+
+    isStarred = (cardIndex) => {
+        const index = this.state.starredCards.indexOf(cardIndex);
+        return index !== -1;
+    }
+
+    toggleStar = () => {
+        const { starredCards } = this.state;
+        if (this.isStarred(this.state.cardIndex)) {
+            starredCards.splice(starredCards.indexOf(this.state.cardIndex), 1);
+        } else {
+            starredCards.push(this.state.cardIndex);
+        }
+        this.setState({ starredCards });
+    }
+
+    handleKeyDown = (e) => {
+        if (['ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+            e.preventDefault();
+            const { code } = e;
+            if (code === 'ArrowLeft') {
+                this.changeCard(-1);
+            } else if (code === 'ArrowRight') {
+                this.changeCard(1);
+            } else if (code === 'Space') {
+                this.flipCard();
+            }
+        }
     }
 
     render() {
@@ -40,11 +126,10 @@ export class FlashcardView extends Component {
             return (<LoadingPage text='Creating Flashcards...'/>);
         }
         const card = this.getCurrentCard();
-        console.log(card);
         return (
             <>
                 <Navbar/>
-                <div className='page'>
+                <div className='page' onKeyDown={this.handleKeyDown}>
                     <div className='row'>
                         <div className='col-9'>
                             <h1 className='flashcard-title'>Flashcard</h1>
@@ -61,7 +146,11 @@ export class FlashcardView extends Component {
                                 style= {{ 'fontSize': '25px' }}
                             >
                                 <h3> Instructions </h3>
-                                Put some flashcard instructions here.
+                                Use the flashcards to memorize words and concepts. You can <br/>
+                                click the "Click to flip" button to see the other side of the <br/>
+                                card and use the arrows on the side to move between cards. You <br/>
+                                can also use the arrow keys and space keys to navigate through <br/>
+                                the cards.
                             </ReactTooltipDefaultExport>
                         </div>
                         <div className='col-3'>
@@ -83,13 +172,30 @@ export class FlashcardView extends Component {
                             &#60;
                         </div>
                         <div className='flashcard'>
-                            <h1 className='flashcard-word'>{card.word.toUpperCase()}</h1>
-                            <h2 className='flashcard-info'>
-                                <b><u>Definition:</u></b> {card.definition[0]}
-                            </h2>
-                            <h2 className='flashcard-info'>
-                                <b><u>Example:</u></b> {card.example[0]}
-                            </h2>
+                            {
+                                this.state.showBack
+                                    ? (<>A PICTURE OF {card.word.toUpperCase()}</>)
+                                    : (<>
+                                        <h1 className='flashcard-word'>
+                                            {card.word.toUpperCase()}
+                                        </h1>
+                                        <h2 className='flashcard-info'>
+                                            <b><u>Definition:</u></b> {card.definition[0]}
+                                        </h2>
+                                        <h2 className='flashcard-info'>
+                                            <b><u>Example:</u></b> {card.example[0]}
+                                        </h2>
+                                    </>)
+                            }
+                            <div className='flashcard-star' onClick={this.toggleStar}>
+                                {this.isStarred(this.state.cardIndex)
+                                    ? filledStar('50', 'yellow')
+                                    : star('50', 'white')
+                                }
+                            </div>
+                            <h3 className='flashcard-flip' onClick={this.flipCard}>
+                                Click to flip
+                            </h3>
                         </div>
                         <div className='flashcard-arrows' onClick={() => this.changeCard(1)}>
                             &#62;
