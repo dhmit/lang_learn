@@ -1,0 +1,62 @@
+/* Styles for the actual flashcard */
+.flashcard {
+    background: #5941A9;
+    border-radius: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 550px;
+    margin: 0 auto;
+    padding: 50px 50px 0;
+    text-align: center;
+    width: 1050px;
+}
+
+.flashcard-word {
+    color: #E8C2FF;
+    font-size: 70px;
+    margin: 0 0 50px;
+}
+
+.flashcard-info {
+    color: white;
+    font-size: 28px;
+    font-weight: normal;
+    margin-bottom: 50px;
+}
+
+.flashcard-div {
+    display: flex;
+    margin: 50px 0 100px;
+    align-items: center;
+}
+
+.flashcard-arrows {
+    font-size: 60px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.flashcard-arrows:hover{
+    transform: scale(1.4);
+    transition-duration: 0.3s;
+    color: #E8C2FF;
+}
+
+/* Styles for the Top Part*/
+
+.flashcard-title {
+    font-size: 50px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.flashcard-instruction {
+    border: 3px solid;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    margin: -25px 10px 0;
+    padding: 0
+}

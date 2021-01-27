@@ -210,5 +210,5 @@ def get_word_examples(word_list, part_of_speech, text):
                     if word.lower() in example.lower():
                         word_examples[word].append(example.lower())
         else:
-            word_examples[word] = ''
+            word_examples[word] = []
     return word_examples

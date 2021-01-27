@@ -55,16 +55,13 @@ def get_flashcards(request, text_id, part_of_speech):
     words = list(set(word for word in get_part_of_speech_words(text_obj.text.lower(),
                                                                part_of_speech)
                      if (not quote_in_word(word) and len(word) > 2)))
-    words = words[:10]
+    words = words[:4]
     definitions = get_word_definition(words, part_of_speech)
     examples = get_word_examples(words, part_of_speech, text_obj.text.lower())
 
-    res = {
-        'word_data': [[word, {'definition': definitions[word], 'example': examples[word]}]
-                      for word in words],
-    }
+    res = [{'word': word, 'definition': definitions[word], 'example': examples[word]}
+           for word in words]
     return Response(res)
-
 
 
 def quote_in_word(word):
@@ -116,7 +113,7 @@ def get_anagram(request, text_id, part_of_speech):
 
     res = {
         'letters': scrambled_letters,
-        'word_data': [[word, {'definition': definitions[word], 'example': examples[word]}]
+        'word_data': [{'word': word, 'definition': definitions[word], 'example': examples[word]}
                       for word in words],
         'extra_words': extra_words
     }

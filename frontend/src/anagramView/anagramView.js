@@ -108,15 +108,17 @@ export class AnagramView extends React.Component {
             let letters = [];
             const targetWordDefs = [];
             const targetExamples = [];
-            for (let i = 0; i < (data['word_data']).length; i++) {
-                const word = data['word_data'][i];
-                const examples = word[1]['example'];
-                targetWords.push(word[0]);
-                targetWordDefs.push(word[1]['definition']);
+            const wordData = data['word_data'];
+            for (let i = 0; i < wordData.length; i++) {
+                const curData = wordData[i];
+                const word = curData['word'];
+                const examples = curData['example'];
+                targetWords.push(word);
+                targetWordDefs.push(curData['definition']);
                 if (examples.length === 0) {
                     targetExamples.push(['N/A']);
                 } else {
-                    targetExamples.push(word[1]['example']);
+                    targetExamples.push(curData['example']);
                 }
             }
             for (let i = 0; i < (data['letters']).length; i++) {
