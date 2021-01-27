@@ -104,7 +104,7 @@ def get_quiz_sentences(text):
                         + current_sentence['sentence'][-1]
                     )
                 else:
-                    current_sentence['sentence'] = ' '.join(current_sentence['sentence'][:-1]) + '.'
+                    current_sentence['sentence'] = ' '.join(current_sentence['sentence']) + '.'
 
                 quiz_sentences.append(current_sentence)
 
