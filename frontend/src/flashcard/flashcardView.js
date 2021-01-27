@@ -89,7 +89,8 @@ export class FlashcardView extends Component {
     }
 
     flipCard = () => {
-        this.setState({ showBack: !this.state.showBack });
+        this.setState({showBack: !this.state.showBack});
+        console.log('angy');
     }
 
     isStarred = (cardIndex) => {
@@ -105,6 +106,7 @@ export class FlashcardView extends Component {
             starredCards.push(this.state.cardIndex);
         }
         this.setState({ starredCards });
+        console.log(this.state.cardIndex);
     }
 
     handleKeyDown = (e) => {
@@ -171,22 +173,21 @@ export class FlashcardView extends Component {
                         <div className='flashcard-arrows' onClick={() => this.changeCard(-1)}>
                             &#60;
                         </div>
-                        <div className='flashcard'>
-                            {
-                                this.state.showBack
-                                    ? (<>A PICTURE OF {card.word.toUpperCase()}</>)
-                                    : (<>
-                                        <h1 className='flashcard-word'>
-                                            {card.word.toUpperCase()}
-                                        </h1>
-                                        <h2 className='flashcard-info'>
-                                            <b><u>Definition:</u></b> {card.definition[0]}
-                                        </h2>
-                                        <h2 className='flashcard-info'>
-                                            <b><u>Example:</u></b> {card.example[0]}
-                                        </h2>
-                                    </>)
-                            }
+                        <div className={`flashcard ${this.state.showBack ? 'showBack' : ''}`}>
+                            <div className='flashcard__front'>
+                                A PICTURE OF {card.word.toUpperCase()}
+                            </div>
+                            <div className='flashcard__back'>
+                                <h1 className='flashcard-word'>
+                                    {card.word.toUpperCase()}
+                                </h1>
+                                <h2 className='flashcard-info'>
+                                    <b><u>Definition:</u></b> {card.definition[0]}
+                                </h2>
+                                <h2 className='flashcard-info'>
+                                    <b><u>Example:</u></b> {card.example[0]}
+                                </h2>
+                            </div>
                             <div className='flashcard-star' onClick={this.toggleStar}>
                                 {this.isStarred(this.state.cardIndex)
                                     ? filledStar('50', 'yellow')
