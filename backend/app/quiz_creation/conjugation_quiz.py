@@ -95,7 +95,9 @@ def get_quiz_sentences(text):
         if pos == '.' or i == len(pos_tags) - 1:
             # Add the sentence if it has an answer.
             if current_sentence['answer']:
-                current_sentence['sentence'] = ' '.join(current_sentence['sentence'])
+                current_sentence['sentence'] = (
+                    ' '.join(current_sentence['sentence'][:-1]) + current_sentence['sentence'][-1]
+                )
                 quiz_sentences.append(current_sentence)
 
             current_sentence = {
