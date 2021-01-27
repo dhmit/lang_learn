@@ -193,12 +193,8 @@ def get_word_examples(word_list, part_of_speech, text):
         'adjective': 'a',
         'adverb': 'r'
     }
-    sentences = re.split("[?.!]", text)
+
     word_examples = {word: [] for word in word_list}
-    for sentence in sentences:
-        for word in word_list:
-            if word in sentence:
-                word_examples[word].append(sentence)
 
     for word in word_list:
         syns = wn.synsets(word)
@@ -209,6 +205,10 @@ def get_word_examples(word_list, part_of_speech, text):
                 for example in net.examples():
                     if word.lower() in example.lower():
                         word_examples[word].append(example.lower())
-        else:
-            word_examples[word] = []
+
+    sentences = re.split("[?.!]", text)
+    for sentence in sentences:
+        for word in word_list:
+            if word in sentence:
+                word_examples[word].append(sentence)
     return word_examples

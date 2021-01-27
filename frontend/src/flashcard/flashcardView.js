@@ -61,6 +61,7 @@ export class FlashcardView extends Component {
             cardIndex: 0,
             starredCards: [],
             showBack: false,
+            starOnly: false,
         };
     }
 
@@ -105,6 +106,10 @@ export class FlashcardView extends Component {
             starredCards.push(this.state.cardIndex);
         }
         this.setState({ starredCards });
+    }
+
+    toggleStarOnly = () => {
+        this.setState({ starOnly: !this.state.starOnly });
     }
 
     handleKeyDown = (e) => {
@@ -165,6 +170,9 @@ export class FlashcardView extends Component {
                         </div>
                         <div className='col-3'>
                             Starred Words Only:
+                            <button onClick={this.toggleStarOnly}>
+                                Star Only: {this.state.starOnly ? 'YES' : 'NO'}
+                            </button>
                         </div>
                     </div>
                     <div className='flashcard-div'>
@@ -180,10 +188,16 @@ export class FlashcardView extends Component {
                                             {card.word.toUpperCase()}
                                         </h1>
                                         <h2 className='flashcard-info'>
-                                            <b><u>Definition:</u></b> {card.definition[0]}
+                                            <b><u>Definition:</u> </b>
+                                            {card.definition.length > 0
+                                                ? card.definition[0]
+                                                : 'N/A'}
                                         </h2>
                                         <h2 className='flashcard-info'>
-                                            <b><u>Example:</u></b> {card.example[0]}
+                                            <b><u>Example:</u> </b>
+                                            {card.example.length > 0
+                                                ? card.example[0]
+                                                : 'N/A'}
                                         </h2>
                                     </>)
                             }
