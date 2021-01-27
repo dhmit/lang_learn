@@ -2,7 +2,9 @@
 This file controls the administrative interface for lang_learn app
 """
 
-# from django.contrib import admin
-# from .models import ADD ME!
+from django.contrib import admin
+from .models import (
+    Text
+)
 
-# admin.site.register( ADD ME! )
+admin.site.register(Text)
