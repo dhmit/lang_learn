@@ -62,7 +62,9 @@ export class FlashcardView extends Component {
             starredCards: [],
             showBack: false,
             starOnly: false,
+            showModal: false,
         };
+        this.modalHandler = this.modalHandler.bind(this);
     }
 
     componentDidMount = async () => {
@@ -140,6 +142,13 @@ export class FlashcardView extends Component {
         }
     }
 
+    modalHandler = (event) => {
+        event.preventDefault();
+        this.setState({
+            showModal: !this.state.showModal,
+        });
+    }
+
     render() {
         const {
             cardData,
@@ -207,33 +216,52 @@ export class FlashcardView extends Component {
                             <h1 className='flashcard-title'>Flashcard</h1>
                             <button
                                 className="btn btn-outline-light btn-circle flashcard-instruction"
-                                data-tip
-                                data-for="anagram-rules"
-                            >
+                                onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
-                            <ReactTooltipDefaultExport
-                                id="anagram-rules"
-                                place="right"
-                                style= {{ 'fontSize': '25px' }}
-                            >
-                                <h3> Instructions </h3>
-                                Use the flashcards to memorize words and concepts. You can <br/>
-                                click the "Click to flip" button to see the other side of the <br/>
-                                card and use the arrows on the side to move between cards. You <br/>
-                                can also use the arrow keys and space keys to navigate through <br/>
-                                the cards.
-                            </ReactTooltipDefaultExport>
+
                         </div>
+                        <div>
+                            {
+                                this.state.showModal
+                                    ? <div className="backdrop" onClick={this.modalHandler}>
+                                    </div>
+                                    : null
+                            }
+                            <div className="Modal modal-content" style={{
+                                transform: this.state.showModal
+                                    ? 'translateY(0)' : 'translateY(-100vh)',
+                                opacity: this.state.showModal ? 1 : 0,
+                            }}>
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Instructions</h5>
+                                    <button type="button" className="close" onClick={this.modalHandler}>
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <p>Use the flashcards to memorize words and concepts. You can
+                                    click the "Click to flip" button to see the other side of the
+                                    card and use the arrows on the side to move between cards. You
+                                    can also use the arrow keys and space keys to navigate through
+                                    the cards.</p>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary"
+                                        onClick={this.modalHandler}>Close</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className='col-3'>
                             Progress
                         </div>
                     </div>
                     <div className='row'>
                         <div className='col-9'>
-                            <h2 className='flashcard-category'>
+                            <h4 className='flashcard-category'>
                                 Category: {capitalize(this.props.partOfSpeech) + 's'}
-                            </h2>
+                            </h4>
                         </div>
                         <div className='col-3'>
                             Starred Words Only:
