@@ -11,6 +11,31 @@
     padding: 50px 50px 25px;
     text-align: center;
     width: 1050px;
+    -webkit-transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard.showBack {
+    transform: rotateX(180deg);
+    -webkit-transform: rotateX(180deg);
+}
+
+.flashcard__front,
+.flashcard__back {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.flashcard__front {
+    transform: rotateX(0deg);
+    -webkit-transform: rotateX(0deg);
+}
+
+.flashcard__back {
+    transform: rotateX(180deg);
+    -webkit-transform: rotateX(180deg);
 }
 
 .flashcard-word {
