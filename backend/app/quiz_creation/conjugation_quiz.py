@@ -76,23 +76,36 @@ def get_quiz_sentences(text):
         'options': [],
         'answer': None
     }
-    verb_in_current_sentence = False
+
+    # Keep track of the absolute and relative indexes of each word
+    verb_index_data = [0, []]
     for i, [word, pos] in enumerate(pos_tags):
 
         # If the 'fill-in' verb is not yet designated and the current word is a verb, make the
         # current verb a fill-in and create answer choices. Otherwise, just add the word to the
         # sentence.
-        if not verb_in_current_sentence and pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
-            current_sentence['sentence'].append('___')
-            current_sentence['options'] = get_sentence_options(word)
-            current_sentence['answer'] = word
-            verb_in_current_sentence = True
-        else:
-            current_sentence['sentence'].append(word)
+        if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+            verb_index_data[1].append(i)
+
+        # Add a new word to the current sentence.
+        current_sentence['sentence'].append(word)
 
         # If a punctuation is found or there are no more words left, start a new sentence/end
         # formatting.
         if pos == '.' or i == len(pos_tags) - 1:
+
+            # If there are verbs in the sentence, randomly select one of any type and make it a
+            # fill-in.
+            if len(verb_index_data[1]) > 0:
+                verb_index = random.choice(verb_index_data[1]) - verb_index_data[0]
+                sentence = current_sentence['sentence']
+                word = sentence[verb_index]
+                current_sentence['sentence'] = (
+                    sentence[:verb_index] + ['___'] + sentence[verb_index + 1:]
+                )
+                current_sentence['options'] = get_sentence_options(word)
+                current_sentence['answer'] = word
+
             # Add the sentence if it has an answer.
             if current_sentence['answer']:
 
@@ -113,6 +126,6 @@ def get_quiz_sentences(text):
                 'options': [],
                 'answer': None
             }
-            verb_in_current_sentence = False
+            verb_index_data = [i + 1, []]
 
     return quiz_sentences
