@@ -1,45 +1,5 @@
 /* Styles for the actual flashcard */
-.flashcard {
-    background-color: transparent;
-    border-radius: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    perspective: 1000px;
-    min-height: 550px;
-    margin: 0 auto;
-    padding: 50px 50px 50px;
-    text-align: center;
-    width: 1050px;
-    -webkit-transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
 
-.flashcard.showBack {
-    transform: rotateX(180deg);
-    -webkit-transform: rotateX(180deg);
-}
-
-.flashcard__front,
-.flashcard__back {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    height: 100%;
-}
-
-.flashcard__front {
-    transform: rotateX(0deg);
-    -webkit-transform: rotateX(0deg);
-    height: 100% !important;
-    background-color: #5941A9;
-}
-
-.flashcard__back {
-    transform: rotateX(180deg);
-    -webkit-transform: rotateX(180deg);
-    background-color: #5941A9;
-}
 
 .flashcard-word {
     color: #E8C2FF;
@@ -53,8 +13,7 @@
 }
 
 .flashcard-div {
-    display: flex;
-    margin: 50px 0 100px;
+    margin: 50px;
     align-items: center;
 }
 
@@ -72,20 +31,8 @@
     color: #E8C2FF;
 }
 
-.flashcard-flip {
-    color: #C4C4C4;
-    cursor: pointer;
-    font-size: 25px;
-    font-weight: bold;
-    margin: 0;
-    user-select: none;
-    margin: auto;
-    bottom: 0;
-}
-
 .flashcard-star {
-    position: absolute;
-    top: 0px;
+    top: 20px;
     right: 30px;
     cursor: pointer;
 }
@@ -129,7 +76,7 @@
 
 /* Modifications to the Toggle Switch */
 .toggle-label {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
 }
 
@@ -168,4 +115,58 @@
 .custom-control-input:checked ~ .custom-control-label::after {
     background: #278E73 !important;
     transform: translateX(45px) !important;
+}
+
+.flip-card {
+  background-color: #2D2155;
+  width: 1000px;
+  height: 550px;
+  margin: 0;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.showBack .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #5941A9;
+  border-radius: 60px;
+  padding: 20px;
+  color: white;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flashcard-star-front, .flashcard-star-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  cursor: pointer;
+}
+
+.flip-card-back {
+  transform: rotateX(180deg);
+}
+
+.click-to-flip {
+    height: 100%;
+}
+
+.flashcard-star-buffer {
+    height: 100%;
 }
