@@ -185,13 +185,19 @@ export class FlashcardView extends Component {
                         <div className= "front-content">
                             A PICTURE OF {card.word.toUpperCase()}
                         </div>
-                        <div className={`flashcard-star ${this.state.showBack ? 'showBack' : ''}`} onClick={this.toggleStar}>
+                        <div
+                            className={`flashcard-star ${this.state.showBack ? 'showBack' : ''}`}
+                            onClick={this.toggleStar}
+                        >
                             {this.isStarred(this.state.cardIndex)
                                 ? filledStar('50', 'yellow')
                                 : star('50', 'white')
                             }
                         </div>
-                        <h3 className={`flashcard-flip ${this.state.showBack ? 'showBack' : ''}`} onClick={this.flipCard}>
+                        <h3
+                            className={`flashcard-flip ${this.state.showBack ? 'showBack' : ''}`}
+                            onClick={this.flipCard}
+                        >
                             Click to flip
                         </h3>
                     </div>
@@ -271,12 +277,17 @@ export class FlashcardView extends Component {
                         </div>
 
                         <div className='col-3'>
+                            <div className='progress-text'>
+                                {cardIndex + 1}/{starOnly ? starredCards.length : cardData.length}
+                                &nbsp;Words
+                            </div>
                             <div className='progress'>
                                 <div className="progress-bar progress-bar-striped bg-success"
                                     role="progressbar"
                                     style={{ 'width': `${this.checkProgress()}%` }}
                                     aria-valuenow={this.checkProgress()} aria-valuemin="0"
-                                    aria-valuemax="100"></div>
+                                    aria-valuemax="100"
+                                />
                             </div>
                         </div>
                     </div>
