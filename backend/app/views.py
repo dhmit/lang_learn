@@ -52,6 +52,7 @@ def get_flashcards(request, text_id, part_of_speech):
     the id of the text and the part of speech.
     """
     text_obj = Text.objects.get(id=text_id)
+    image_urls = text_obj.images
     words = list(set(word for word in get_part_of_speech_words(text_obj.text.lower(),
                                                                part_of_speech)
                      if (not quote_in_word(word) and len(word) > 2)))
@@ -59,7 +60,10 @@ def get_flashcards(request, text_id, part_of_speech):
     definitions = get_word_definition(words, part_of_speech)
     examples = get_word_examples(words, part_of_speech, text_obj.text.lower())
 
-    res = [{'word': word, 'definition': definitions[word], 'example': examples[word]}
+    res = [{'word': word,
+            'definition': definitions[word],
+            'example': examples[word],
+            'url': image_urls.get(word, '')}
            for word in words]
     return Response(res)
 
