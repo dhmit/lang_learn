@@ -116,3 +116,46 @@
     height: 1.23rem;
     border-radius: 10px;
 }
+
+/* Modifications to the Toggle Switch */
+.toggle-label {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.custom-control {
+    display: inline-block;
+    margin-left: auto;
+}
+
+.custom-control-label {
+    cursor: pointer;
+}
+
+// The background of the toggle
+.custom-control-label::before,
+.custom-control-input:checked ~ .custom-control-label::before{
+    width: 70px !important;
+    left: -70px !important;
+    height: 25px !important;
+    border-radius: 13px !important;
+    background: #e5e5e5 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+// The small circle
+.custom-control-label::after {
+    width: 25px !important;
+    height: 25px !important;
+    top: 4px !important;
+    left: -70px !important;
+    border-radius: 20px !important;
+    background: rgba(23, 94, 75, 0.4) !important;
+}
+
+// The small circle after being turned on
+.custom-control-input:checked ~ .custom-control-label::after {
+    background: #278E73 !important;
+    transform: translateX(45px) !important;
+}

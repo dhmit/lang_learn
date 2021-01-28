@@ -115,7 +115,11 @@ export class FlashcardView extends Component {
         if (this.isStarred(currentIndex)) {
             starredCards.splice(starredCards.indexOf(currentIndex), 1);
             if (starOnly) {
-                currentIndex %= starredCards.length;
+                if (starredCards.length > 0) {
+                    currentIndex %= starredCards.length;
+                } else {
+                    currentIndex = 0;
+                }
             }
         } else {
             starredCards.push(this.state.cardIndex);
@@ -169,9 +173,16 @@ export class FlashcardView extends Component {
             starOnly,
             starredCards,
         } = this.state;
+
         if (!cardData) {
             return (<LoadingPage text='Creating Flashcards...'/>);
         }
+
+        /* Generate Text On Top of Progress Bar */
+        const cardLength = starOnly ? starredCards.length : cardData.length;
+        const progressText = cardLength === 0
+            ? 'No Words Available'
+            : `${cardIndex + 1}/${cardLength} Words`;
 
         /* Generate Flashcard */
         const card = this.getCurrentCard();
@@ -278,8 +289,7 @@ export class FlashcardView extends Component {
 
                         <div className='col-3'>
                             <div className='progress-text'>
-                                {cardIndex + 1}/{starOnly ? starredCards.length : cardData.length}
-                                &nbsp;Words
+                                {progressText}
                             </div>
                             <div className='progress'>
                                 <div className="progress-bar progress-bar-striped bg-success"
@@ -297,11 +307,21 @@ export class FlashcardView extends Component {
                                 Category: {capitalize(this.props.partOfSpeech) + 's'}
                             </h4>
                         </div>
-                        <div className='col-3'>
-                            Starred Words Only:
-                            <button onClick={this.toggleStarOnly}>
-                                Star Only: {starOnly ? 'YES' : 'NO'}
-                            </button>
+                        <div className='col-3 d-flex'>
+                            <label className='toggle-label'>Starred Words Only:</label>
+                            <div className="custom-control custom-switch">
+                                <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id="customSwitch1"
+                                    onChange={this.toggleStarOnly}
+                                    checked={starOnly}
+                                />
+                                <label
+                                    className="custom-control-label"
+                                    htmlFor="customSwitch1"
+                                />
+                            </div>
                         </div>
                     </div>
                     {flashcard}
