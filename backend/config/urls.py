@@ -43,4 +43,5 @@ urlpatterns = [
 
     # View paths
     react_view_path('', 'IndexView'),
+    react_view_path('quiz/', 'QuizView'),
 ]

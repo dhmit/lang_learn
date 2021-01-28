@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
+import { QuizView } from './quizView/quizView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -18,4 +19,5 @@ window.app_modules = {
 
     // Add all frontend views here
     IndexView,
+    QuizView,
 };
