@@ -1,6 +1,6 @@
 /* Styles for the actual flashcard */
 .flashcard {
-    background: #5941A9;
+    background-color: transparent;
     border-radius: 60px;
     display: flex;
     flex-direction: column;
@@ -32,11 +32,13 @@
     transform: rotateX(0deg);
     -webkit-transform: rotateX(0deg);
     height: 100% !important;
+    background-color: #5941A9;
 }
 
 .flashcard__back {
     transform: rotateX(180deg);
     -webkit-transform: rotateX(180deg);
+    background-color: #5941A9;
 }
 
 .flashcard-word {
