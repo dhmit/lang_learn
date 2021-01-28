@@ -191,22 +191,22 @@ export class FlashcardView extends Component {
                 <div className='flashcard-arrows' onClick={() => this.changeCard(-1)}>
                     &#60;
                 </div>
-                <div className={`flashcard ${this.state.showBack ? 'showBack' : ''}`}>
+                <div className={`flashcard ${showBack ? 'showBack' : ''}`}>
                     <div className='flashcard__front'>
                         <div className= "front-content">
                             A PICTURE OF {card.word.toUpperCase()}
                         </div>
                         <div
-                            className={`flashcard-star ${this.state.showBack ? 'showBack' : ''}`}
+                            className={`flashcard-star ${showBack ? 'showBack' : ''}`}
                             onClick={this.toggleStar}
                         >
-                            {this.isStarred(this.state.cardIndex)
+                            {this.isStarred(starOnly ? starredCards[cardIndex] : cardIndex)
                                 ? filledStar('50', 'yellow')
                                 : star('50', 'white')
                             }
                         </div>
                         <h3
-                            className={`flashcard-flip ${this.state.showBack ? 'showBack' : ''}`}
+                            className={`flashcard-flip ${showBack ? 'showBack' : ''}`}
                             onClick={this.flipCard}
                         >
                             Click to flip
@@ -223,7 +223,7 @@ export class FlashcardView extends Component {
                             <b><u>Example:</u></b> <i>"{card.example[0]}"</i>
                         </h2>
                         <div className='flashcard-star' onClick={this.toggleStar}>
-                            {this.isStarred(this.state.cardIndex)
+                            {this.isStarred(starOnly ? starredCards[cardIndex] : cardIndex)
                                 ? filledStar('50', 'yellow')
                                 : star('50', 'white')
                             }
