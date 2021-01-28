@@ -182,7 +182,18 @@ export class FlashcardView extends Component {
                 </div>
                 <div className={`flashcard ${this.state.showBack ? 'showBack' : ''}`}>
                     <div className='flashcard__front'>
-                        A PICTURE OF {card.word.toUpperCase()}
+                        <div className= "front-content">
+                            A PICTURE OF {card.word.toUpperCase()}
+                        </div>
+                        <div className={`flashcard-star ${this.state.showBack ? 'showBack' : ''}`} onClick={this.toggleStar}>
+                            {this.isStarred(this.state.cardIndex)
+                                ? filledStar('50', 'yellow')
+                                : star('50', 'white')
+                            }
+                        </div>
+                        <h3 className={`flashcard-flip ${this.state.showBack ? 'showBack' : ''}`} onClick={this.flipCard}>
+                            Click to flip
+                        </h3>
                     </div>
                     <div className='flashcard__back'>
                         <h1 className='flashcard-word'>
@@ -192,18 +203,18 @@ export class FlashcardView extends Component {
                             <b><u>Definition:</u></b> {card.definition[0]}
                         </h2>
                         <h2 className='flashcard-info'>
-                            <b><u>Example:</u></b> {card.example[0]}
+                            <b><u>Example:</u></b> <i>"{card.example[0]}"</i>
                         </h2>
+                        <div className='flashcard-star' onClick={this.toggleStar}>
+                            {this.isStarred(this.state.cardIndex)
+                                ? filledStar('50', 'yellow')
+                                : star('50', 'white')
+                            }
+                        </div>
+                        <h3 className='flashcard-flip' onClick={this.flipCard}>
+                            Click to flip
+                        </h3>
                     </div>
-                    <div className='flashcard-star' onClick={this.toggleStar}>
-                        {this.isStarred(this.state.cardIndex)
-                            ? filledStar('50', 'yellow')
-                            : star('50', 'white')
-                        }
-                    </div>
-                    <h3 className='flashcard-flip' onClick={this.flipCard}>
-                        Click to flip
-                    </h3>
                 </div>
                 <div className='flashcard-arrows' onClick={() => this.changeCard(1)}>
                     &#62;
