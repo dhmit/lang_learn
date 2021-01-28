@@ -1,39 +1,22 @@
 import React, { useState } from 'react';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 // import * as PropTypes from 'prop-types';
+import './quizView.scss';
 import {
-    ButtonGroup,
     ToggleButton,
+    ToggleButtonGroup,
+    Button,
 } from 'react-bootstrap';
 // import { Navbar, Footer } from '../UILibrary/components';
 
 function ButtonChoices() {
-    const [radioValue, setRadioValue] = useState('1');
-
-    const radios = [
-        { name: 'Choice 1', value: '1' },
-        { name: 'Choice 2', value: '2' },
-        { name: 'Choice 3', value: '3' },
-        { name: 'Choice 4', value: '4' },
-    ];
-
     return (<>
-        <ButtonGroup toggle>
-            {
-                radios.map((radio, idx) => (
-                    <ToggleButton
-                        key={idx}
-                        type="radio"
-                        variant="secondary"
-                        name="radio"
-                        value={radio.value}
-                        checked={radioValue === radio.value}
-                        onChange={(e) => setRadioValue(e.currentTarget.value)}
-                    >
-                        {radio.name}
-                    </ToggleButton>
-                ))}
-        </ButtonGroup>
+        <ToggleButtonGroup className="text-center" type="radio" name="options">
+            <ToggleButton variant="outline-light" value={1}>Choice 1</ToggleButton>
+            <ToggleButton variant="outline-light" value={2}>Choice 2</ToggleButton>
+            <ToggleButton variant="outline-light" value={3}>Choice 3</ToggleButton>
+            <ToggleButton variant="outline-light" value={4}>Choice 4</ToggleButton>
+        </ToggleButtonGroup>
     </>);
 }
 
@@ -58,19 +41,26 @@ export class QuizView extends React.Component {
             <React.Fragment>
                 {/* <Navbar /> */}
                 <div className="page">
-                    <h1>Verb Conjugation Quiz</h1>
-                    <p>by Takako Aikawa</p>
-                    <div className="col shaded-box">
-                        <ul>
-                            {/* list of questions for this quiz */}
-                        </ul>
+                    <div className="row" id="top">
+                        <div className="col">
+                            <h1>Verb Conjugation Quiz</h1>
+                            <p><i>by Takako Aikawa</i></p>
+                        </div>
+                        <div className="col text-right">
+                            <Button id="submit">Submit</Button>
+                        </div>
                     </div>
-                    <div className="col-6 shaded-box">
-                        <h3>Question</h3>
-                        <p>Select the correct conjugation for </p>
-                        {/* insert word */}
-                        {/* sentence with blank */}
-                        <ButtonChoices />
+                    <div className="row">
+                        <div className="col-3">
+                            {/* list of questions for this quiz */}
+                        </div>
+                        <div className="col-7 shaded-box">
+                            <h3>Question</h3>
+                            <p>Select the correct conjugation for </p>
+                            {/* insert word */}
+                            {/* sentence with blank */}
+                            <ButtonChoices />
+                        </div>
                     </div>
                 </div>
                 {/* <Footer /> */}
