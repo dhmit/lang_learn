@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-// import ReactTooltipDefaultExport from 'react-tooltip';
-// import * as PropTypes from 'prop-types';
+import React from 'react';
 import './quizView.scss';
+// import ReactTooltipDefaultExport from 'react-tooltip';
+import * as PropTypes from 'prop-types';
 import {
     ToggleButton,
     ToggleButtonGroup,
@@ -9,16 +9,25 @@ import {
 } from 'react-bootstrap';
 // import { Navbar, Footer } from '../UILibrary/components';
 
-function ButtonChoices() {
+function ButtonChoices(props) {
+    const { choices } = props;
+
+    const radios = choices.map((choice, i) => {
+        return (
+            <ToggleButton key={i + 1} variant="outline-light" value={i + 1}>{choice}</ToggleButton>
+        );
+    });
+
     return (<>
         <ToggleButtonGroup className="text-center" type="radio" name="options">
-            <ToggleButton variant="outline-light" value={1}>Choice 1</ToggleButton>
-            <ToggleButton variant="outline-light" value={2}>Choice 2</ToggleButton>
-            <ToggleButton variant="outline-light" value={3}>Choice 3</ToggleButton>
-            <ToggleButton variant="outline-light" value={4}>Choice 4</ToggleButton>
+            {radios}
         </ToggleButtonGroup>
     </>);
 }
+
+ButtonChoices.propTypes = {
+    choices: PropTypes.arrayOf(PropTypes.string),
+};
 
 export class QuizView extends React.Component {
     constructor(props) {
@@ -28,7 +37,7 @@ export class QuizView extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch('/api/get_quiz_data/');
+            const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
             const data = await response.json();
             this.setState({ data });
         } catch (e) {
@@ -37,6 +46,9 @@ export class QuizView extends React.Component {
     }
 
     render() {
+        if (!this.state.data) {
+            return (<p>Loading...</p>);
+        }
         return (
             <React.Fragment>
                 {/* <Navbar /> */}
@@ -57,15 +69,21 @@ export class QuizView extends React.Component {
                         <div className="col-7 shaded-box">
                             <h3>Question</h3>
                             <p>Select the correct conjugation for </p>
-                            {/* insert word */}
-                            {/* sentence with blank */}
-                            <ButtonChoices />
+                            {this.state.data[0].sentence}
+                            <br />
+                            <ButtonChoices choices={this.state.data[0].options}/>
                         </div>
                     </div>
                 </div>
                 {/* <Footer /> */}
-            </React.Fragment>);
+            </React.Fragment>
+        );
     }
 }
+
+QuizView.propTypes = {
+    textId: PropTypes.number,
+    sentence: PropTypes.string,
+};
 
 export default QuizView;
