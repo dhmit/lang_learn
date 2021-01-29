@@ -201,7 +201,8 @@ export class FlashcardView extends Component {
                     >
                         &#60;
                     </div>
-                    <div className={`flip-card col ${showBack ? 'showBack' : ''} ${showNext ? 'showNext' : ''}`}>
+                    <div className={`flip-card col ${showBack ? 'showBack' : ''}
+                        ${showNext ? 'showNext' : ''}`}>
                         <div
                             className="flip-card-inner">
                             <div className="flip-card-front">
