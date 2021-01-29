@@ -67,7 +67,7 @@ export class QuizView extends React.Component {
             <React.Fragment>
                 {/* <Navbar /> */}
                 <div className="page">
-                    <div className="row" id="top">
+                    <div className="row justify-content-between" id="top">
                         <div className="exit-button">
                             <p>&lt;</p>
                             {/* Eventually, this button will let you leave the quiz */}
@@ -76,25 +76,28 @@ export class QuizView extends React.Component {
                             <h1 className="quiz-title">Verb Conjugation Quiz</h1>
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>
                         </div>
-                        <div className="col text-right">
+                        <div className="col text-right submit-button">
                             <Button id="submit" onClick={() => this.nextQuestion()}>
                                 Submit
                             </Button>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-3">
+                    <div className="row justify-content-between">
+                        <div className="col-2">
                             {/* list of questions for this quiz */}
                         </div>
-                        <div className="col-7 shaded-box">
+                        <div className="col-8 shaded-box">
                             <h3>Question</h3>
                             <p>Select the correct conjugation for </p>
+                            {console.log(this.state.data)}
                             {this.state.data[this.state.question - 1].sentence}
                             <br />
                             <ButtonChoices
                                 choices={this.state.data[this.state.question - 1].options}
                             />
                         </div>
+                    </div>
+                    <div className="row">
                     </div>
                 </div>
                 {/* <Footer /> */}
