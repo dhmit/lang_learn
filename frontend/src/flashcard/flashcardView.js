@@ -62,6 +62,7 @@ export class FlashcardView extends Component {
             showBack: false,
             starOnly: false,
             showModal: false,
+            nextCard: false,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -97,11 +98,15 @@ export class FlashcardView extends Component {
         this.setState({
             showBack: false,
             cardIndex: newCardIndex,
+            showNext: true,
         });
     }
 
     flipCard = () => {
-        this.setState({ showBack: !this.state.showBack });
+        this.setState({
+            showBack: !this.state.showBack,
+            showNext: false,
+        });
     }
 
     isStarred = (cardIndex) => {
@@ -169,6 +174,7 @@ export class FlashcardView extends Component {
         const {
             cardData,
             showBack,
+            showNext,
             cardIndex,
             starOnly,
             starredCards,
@@ -195,7 +201,7 @@ export class FlashcardView extends Component {
                     >
                         &#60;
                     </div>
-                    <div className={`flip-card col ${showBack ? 'showBack' : ''}`}>
+                    <div className={`flip-card col ${showBack ? 'showBack' : ''} ${showNext ? 'showNext' : ''}`}>
                         <div
                             className="flip-card-inner">
                             <div className="flip-card-front">

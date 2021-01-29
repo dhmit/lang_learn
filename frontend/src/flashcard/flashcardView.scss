@@ -139,6 +139,11 @@
 
 .flip-card.showBack .flip-card-inner {
     transform: rotateX(180deg);
+    transition: transform 0.6s;
+}
+
+.flip-card.showNext .flip-card-inner {
+    transition: transform 0s;
 }
 
 .flip-card-front, .flip-card-back {
