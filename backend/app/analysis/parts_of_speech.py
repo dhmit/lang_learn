@@ -212,3 +212,19 @@ def get_word_examples(word_list, part_of_speech, text):
             if word in sentence:
                 word_examples[word].append(sentence)
     return word_examples
+
+
+def quote_in_word(word):
+    """
+    Checks if there are quotes in the word
+    """
+    quotes = ["“", '"', "'", "’"]
+    for quote in quotes:
+        if quote in word:
+            return True
+    return False
+
+
+def get_valid_words(text, pos):
+    return list(set(word for word in get_part_of_speech_words(text.lower(), pos)
+                    if (not quote_in_word(word) and len(word) > 2)))

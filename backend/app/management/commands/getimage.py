@@ -9,10 +9,13 @@ from django.core.management.base import BaseCommand
 
 # Ours
 from app.models import Text
-from app.analysis.parts_of_speech import get_part_of_speech_words
+from app.analysis.parts_of_speech import (
+    get_part_of_speech_words,
+    get_word_definition,
+    get_word_examples,
+)
 
-
-# Modified Code rom Bing library
+# Modified Code from Bing library
 def get_bing_image_url(query):
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
@@ -47,14 +50,34 @@ class Command(BaseCommand):
         for text_obj in Text.objects.all():
             # Reused the old image url dictionary if we are not getting all of the urls
             word_urls = {} if get_all else text_obj.images
+            word_definitions = {} if get_all else text_obj.definitions
+            word_examples = {} if get_all else text_obj.examples
 
             for pos in part_of_speech:
+                print("Getting definitions and examples for " + pos + " in the text " +
+                      text_obj.title + "... (This might take a while)")
                 words = get_part_of_speech_words(text_obj.text, pos)
-                print("Getting image urls for " + pos + " in the text " + text_obj.title)
+                definitions = get_word_definition(words, pos)
+                examples = get_word_examples(words, pos, text_obj.text.lower())
+
+                print("Updating database for " + pos + " in the text " + text_obj.title)
                 for word in tqdm.tqdm(words):
                     if word not in word_urls:
                         image_url = get_bing_image_url(word)
                         if image_url is not None:
                             word_urls[word.lower()] = image_url
+
+                    if word not in word_definitions:
+                        word_definitions[word] = {pos: definitions[word]}
+                    else:
+                        word_definitions[word][pos] = definitions[word]
+
+                    if word not in word_examples:
+                        word_examples[word] = {pos: examples[word]}
+                    else:
+                        word_examples[word][pos] = examples[word]
+
             text_obj.images = word_urls
+            text_obj.definitions = word_definitions
+            text_obj.examples = word_examples
             text_obj.save()
