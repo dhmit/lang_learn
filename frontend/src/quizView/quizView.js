@@ -52,7 +52,7 @@ export class QuizView extends React.Component {
         const nextQuestionNumber = this.state.question + 1;
         if (nextQuestionNumber <= this.state.data.length) {
             this.setState({
-                question: nextQuestionNumber
+                question: nextQuestionNumber,
             });
         } else {
             console.log();
@@ -87,7 +87,9 @@ export class QuizView extends React.Component {
                             <p>Select the correct conjugation for </p>
                             {this.state.data[this.state.question - 1].sentence}
                             <br />
-                            <ButtonChoices choices={this.state.data[this.state.question - 1].options} />
+                            <ButtonChoices
+                                choices={this.state.data[this.state.question - 1].options}
+                            />
                         </div>
                     </div>
                 </div>
