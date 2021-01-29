@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+html, body {
+    background-color: #2D2155;
+}
+
 .page {
     font-family: "Lato", "Verdana", sans-serif;
     background-color: #2D2155;
     color: white;
+    height: 100%;
+    width: 100%;
 }
 
 .shaded-box {
@@ -20,4 +26,21 @@
     background-color: #278E73;
     padding: 5px 30px;
     border: none;
+}
+
+.quiz-title {
+    font-size: 28px;
+    font-weight: bold;
+    //left: 250px;
+    //top: 111px;
+}
+
+.quiz-author {
+    font-size: 16.8px;
+    //left: 250px;
+    //top: 159px;
+}
+.exit-button {
+    font-size: 44.8px;
+    font-weight: bold;
 }
