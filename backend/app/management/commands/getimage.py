@@ -1,5 +1,8 @@
-import requests
+import re
 import tqdm
+import urllib
+import urllib.request
+import urllib.parse
 
 # Django
 from django.core.management.base import BaseCommand
@@ -9,14 +12,19 @@ from app.models import Text
 from app.analysis.parts_of_speech import get_part_of_speech_words
 
 
-def get_svg_url(word):
-    url_base = "https://freesvgclipart.com/wp-json/clipart/api?num=1&query="
-    res = requests.get(url_base + word + "&tags=" + word)
-    items = res.json().get("items")
-    if items is not None and len(items) > 0:
-        return items[0].get("svgurl")
-    else:
-        return None
+# Modified Code rom Bing library
+def get_bing_image_url(query):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
+    }
+    # Parse the page source and download pics
+    request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
+                  + '&first=0&count=1&adlt=off'
+    request = urllib.request.Request(request_url, None, headers=headers)
+    response = urllib.request.urlopen(request)
+    html = response.read().decode('utf8')
+    links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
+    return links[0]
 
 
 class Command(BaseCommand):
@@ -45,8 +53,8 @@ class Command(BaseCommand):
                 print("Getting image urls for " + pos + " in the text " + text_obj.title)
                 for word in tqdm.tqdm(words):
                     if word not in word_urls:
-                        svg_url = get_svg_url(word)
-                        if svg_url is not None:
-                            word_urls[word.lower()] = svg_url
+                        image_url = get_bing_image_url(word)
+                        if image_url is not None:
+                            word_urls[word.lower()] = image_url
             text_obj.images = word_urls
             text_obj.save()
