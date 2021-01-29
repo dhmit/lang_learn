@@ -44,6 +44,20 @@ def get_sentence_options(word):
     return options
 
 
+def process_text(text):
+    """
+    Removes contractions and replaces direct quotation marks with their python escape sequence
+    equivalents
+    :param text: A body of text as a string
+    :return: text: A body of text as a string with no contractions
+    """
+    remove_contractions(text)
+    # need to test on input text from frontend
+    text = text.replace('’', "\'")
+    text.replace('"', '\"')
+    return text
+
+
 def get_quiz_sentences(text):
     """
     Given a piece of text, create a dictionary of lists. The lists contain a single sentence
@@ -52,7 +66,7 @@ def get_quiz_sentences(text):
     :return: List of sentences (Sentences are formatted as dictionaries with a sentence string,
     list of options, and an answer string).
     """
-    text = remove_contractions(text)
+    text = process_text(text)
     pos_tags = get_parts_of_speech_tags(text)
     quiz_sentences = []
     current_sentence = {
