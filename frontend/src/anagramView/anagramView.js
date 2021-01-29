@@ -281,11 +281,11 @@ export class AnagramView extends React.Component {
             }
             return (
                 <>
-                    <li data-tip data-for={defs[0]} key={i}>
+                    <li data-tip data-for={`${i}`} key={i}>
                         <span>{defs[0]}</span>
                     </li>
                     <ReactTooltipDefaultExport
-                        id={defs[0]}
+                        id={`${i}`}
                         place="top"
                         effect="solid"
                     >
