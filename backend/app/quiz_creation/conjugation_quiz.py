@@ -49,7 +49,8 @@ def get_quiz_sentences(text):
     Given a piece of text, create a dictionary of lists. The lists contain a single sentence
     missing a verb, 4 options for the quiz (including the missing verb), and the missing verb.
     :param text: A body of text as a string
-    :return: List of sentences
+    :return: List of sentences (Sentences are formatted as dictionaries with a sentence string,
+    list of options, and an answer string).
     """
     pos_tags = get_parts_of_speech_tags(text)
     quiz_sentences = []
@@ -63,9 +64,7 @@ def get_quiz_sentences(text):
     verb_index_data = [0, []]
     for i, [word, pos] in enumerate(pos_tags):
 
-        # If the 'fill-in' verb is not yet designated and the current word is a verb, make the
-        # current verb a fill-in and create answer choices. Otherwise, just add the word to the
-        # sentence.
+        # If the current word is a type of verb, record its index.
         if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
             verb_index_data[1].append(i)
 
