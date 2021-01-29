@@ -57,8 +57,6 @@ def get_flashcards(request, text_id, part_of_speech):
     definitions = text_obj.definitions
     examples = text_obj.examples
 
-    print(definitions, examples)
-
     words = get_valid_words(text_obj.text, part_of_speech)
     words = words[:4]
 
