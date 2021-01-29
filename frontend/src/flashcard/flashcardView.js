@@ -209,7 +209,7 @@ export class FlashcardView extends Component {
                                 <div className="row">
                                     <div className="col-1" onClick={this.flipCard}>
                                     </div>
-                                    <div className="col text-center" onClick={this.flipCard}>
+                                    <div className="col text-center-front" onClick={this.flipCard}>
                                         <img className="flashcard-image"
                                             src={card.url} alt={card.word.toUpperCase()}/>
                                     </div>
