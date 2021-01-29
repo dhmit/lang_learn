@@ -68,9 +68,13 @@ export class QuizView extends React.Component {
                 {/* <Navbar /> */}
                 <div className="page">
                     <div className="row" id="top">
+                        <div className="exit-button">
+                            <p>&lt;</p>
+                            {/* Eventually, this button will let you leave the quiz */}
+                        </div>
                         <div className="col">
-                            <h1>Verb Conjugation Quiz</h1>
-                            <p><i>by Takako Aikawa</i></p>
+                            <h1 className="quiz-title">Verb Conjugation Quiz</h1>
+                            <p className="quiz-author"><i>by Takako Aikawa</i></p>
                         </div>
                         <div className="col text-right">
                             <Button id="submit" onClick={() => this.nextQuestion()}>
