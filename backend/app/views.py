@@ -103,8 +103,8 @@ def get_anagram(request, text_id, part_of_speech):
     res = {
         'letters': scrambled_letters,
         'word_data': [{'word': word,
-                       'definition': definitions[word][part_of_speech],
-                       'example': examples[word][part_of_speech]}
+                       'definition': definitions[word].get(part_of_speech, []),
+                       'example': examples[word].get(part_of_speech, [])}
                       for word in words],
         'extra_words': extra_words
     }
