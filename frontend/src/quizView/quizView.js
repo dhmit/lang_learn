@@ -14,14 +14,18 @@ function ButtonChoices(props) {
 
     const radios = choices.map((choice, i) => {
         return (
-            <ToggleButton key={i + 1} variant="outline-light" value={i + 1}>{choice}</ToggleButton>
+            <ToggleButton key={i + 1} variant="outline-light" value={i + 1} className="c-button">
+                {choice}
+            </ToggleButton>
         );
     });
 
     return (<>
-        <ToggleButtonGroup className="text-center" type="radio" name="options">
-            {radios}
-        </ToggleButtonGroup>
+        <div className="row justify-content-center">
+            <ToggleButtonGroup className="text-center" type="radio" name="options">
+                {radios}
+            </ToggleButtonGroup>
+        </div>
     </>);
 }
 
@@ -83,14 +87,19 @@ export class QuizView extends React.Component {
                         </div>
                     </div>
                     <div className="row justify-content-between">
-                        <div className="col-2">
+                        <div className="col">
                             {/* list of questions for this quiz */}
                         </div>
-                        <div className="col-8 shaded-box">
-                            <h3>Question</h3>
-                            <p>Select the correct conjugation for </p>
+                        <div className="col-9 shaded-box">
+                            <h3 className="question-title">Question #{this.state.question}</h3>
+                            <p className="question-primary-text">
+                                Select the correct conjugation for the missing word.
+                            </p>
+                            <br />
                             {console.log(this.state.data)}
-                            {this.state.data[this.state.question - 1].sentence}
+                            <p className="question-secondary-text">
+                                {this.state.data[this.state.question - 1].sentence}
+                            </p>
                             <br />
                             <ButtonChoices
                                 choices={this.state.data[this.state.question - 1].options}

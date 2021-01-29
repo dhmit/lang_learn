@@ -14,8 +14,8 @@ html, body {
 
 .shaded-box {
     background-color: #5941A9;
-    padding: 20px;
-    border-radius: 5px;
+    padding: 30px !important;
+    border-radius: 10px;
 }
 
 #top {
@@ -50,4 +50,25 @@ html, body {
 
 .submit-button {
     padding-right: 0 !important;
+}
+
+.question-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.question-primary-text {
+    font-size: 25.2px;
+    margin-bottom: 0;
+}
+
+.question-secondary-text {
+    font-size: 22.4px;
+    text-align: center;
+}
+
+.c-button {
+    border-radius: 10px;
+    font-size: 22.4px !important;
 }
