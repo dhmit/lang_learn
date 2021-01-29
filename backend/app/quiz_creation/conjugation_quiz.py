@@ -1,5 +1,5 @@
 import random
-from app.analysis.parts_of_speech import get_parts_of_speech_tags
+from app.analysis.parts_of_speech import get_parts_of_speech_tags, remove_contractions
 from app.quiz_creation.verb_conjugation import (
     verb_tenses,
     verb_tense,
@@ -52,6 +52,7 @@ def get_quiz_sentences(text):
     :return: List of sentences (Sentences are formatted as dictionaries with a sentence string,
     list of options, and an answer string).
     """
+    text = remove_contractions(text)
     pos_tags = get_parts_of_speech_tags(text)
     quiz_sentences = []
     current_sentence = {
