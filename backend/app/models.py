@@ -11,4 +11,4 @@ class Text(models.Model):
     """
     text = models.TextField(max_length=5000, null=True)
     title = models.CharField(max_length=252, null=True)
-    images = models.JSONField(null=True, blank=True)
+    images = models.JSONField(null=True, blank=True, default=dict)
