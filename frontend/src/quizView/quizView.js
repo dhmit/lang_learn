@@ -32,16 +32,30 @@ ButtonChoices.propTypes = {
 export class QuizView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            data: null,
+            question: 1,
+        };
     }
 
     async componentDidMount() {
         try {
             const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
             const data = await response.json();
-            this.setState({ data });
+            this.setState({ data: data });
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    nextQuestion() {
+        const nextQuestionNumber = this.state.question + 1;
+        if (nextQuestionNumber <= this.state.data.length) {
+            this.setState({
+                question: nextQuestionNumber
+            });
+        } else {
+            console.log();
         }
     }
 
@@ -59,7 +73,9 @@ export class QuizView extends React.Component {
                             <p><i>by Takako Aikawa</i></p>
                         </div>
                         <div className="col text-right">
-                            <Button id="submit">Submit</Button>
+                            <Button id="submit" onClick={() => this.nextQuestion()}>
+                                Submit
+                            </Button>
                         </div>
                     </div>
                     <div className="row">
@@ -69,9 +85,9 @@ export class QuizView extends React.Component {
                         <div className="col-7 shaded-box">
                             <h3>Question</h3>
                             <p>Select the correct conjugation for </p>
-                            {this.state.data[0].sentence}
+                            {this.state.data[this.state.question - 1].sentence}
                             <br />
-                            <ButtonChoices choices={this.state.data[0].options}/>
+                            <ButtonChoices choices={this.state.data[this.state.question - 1].options} />
                         </div>
                     </div>
                 </div>
@@ -84,6 +100,7 @@ export class QuizView extends React.Component {
 QuizView.propTypes = {
     textId: PropTypes.number,
     sentence: PropTypes.string,
+    answer: PropTypes.string,
 };
 
 export default QuizView;
