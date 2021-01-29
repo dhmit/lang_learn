@@ -30,6 +30,7 @@ html, body {
     font-weight: bold;
 }
 
+// Exit Button Section
 .quiz-title {
     font-size: 28px;
     font-weight: bold;
@@ -48,10 +49,12 @@ html, body {
     font-weight: bold;
 }
 
+// Submit Button Section
 .submit-button {
     padding-right: 0 !important;
 }
 
+// Quiz Box Section
 .question-title {
     font-size: 28px;
     font-weight: bold;
@@ -71,4 +74,14 @@ html, body {
 .c-button {
     border-radius: 10px;
     font-size: 22.4px !important;
+}
+
+// Navigation Arrows Section
+#arrow {
+    background-color: #278E73;
+    padding: 5px 30px;
+    border: none;
+    font-size: 25.2px;
+    font-weight: bold;
+    margin-top: 10px;
 }

@@ -106,7 +106,19 @@ export class QuizView extends React.Component {
                             />
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row justify-content-end">
+                        {/* Haha, we're gonna probably need some arrow images */}
+                        {/* Also, this is off-centered */}
+                        <div className="col-xs">
+                            <Button id="arrow" onClick={() => this.nextQuestion()}>
+                                &lt;--
+                            </Button>
+                        </div>
+                        <div className="col-5">
+                            <Button id="arrow" onClick={() => this.nextQuestion()}>
+                                --&gt;
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 {/* <Footer /> */}
