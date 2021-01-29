@@ -13,9 +13,6 @@ from .serializers import (
     TextSerializer
 )
 from .analysis.parts_of_speech import (
-    get_part_of_speech_words,
-    get_word_examples,
-    get_word_definition,
     filter_pos,
     get_valid_words,
 )

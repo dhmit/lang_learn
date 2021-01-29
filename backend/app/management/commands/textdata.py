@@ -13,6 +13,7 @@ from app.analysis.parts_of_speech import (
     get_part_of_speech_words,
     get_word_definition,
     get_word_examples,
+    get_valid_words,
 )
 
 # Modified Code from Bing library
@@ -56,12 +57,13 @@ class Command(BaseCommand):
             for pos in part_of_speech:
                 print("Getting definitions and examples for " + pos + " in the text " +
                       text_obj.title + "... (This might take a while)")
-                words = get_part_of_speech_words(text_obj.text, pos)
+                words = get_valid_words(text_obj.text.lower(), pos)
                 definitions = get_word_definition(words, pos)
                 examples = get_word_examples(words, pos, text_obj.text.lower())
 
                 print("Updating database for " + pos + " in the text " + text_obj.title)
                 for word in tqdm.tqdm(words):
+                    word = word.lower()
                     if word not in word_urls:
                         image_url = get_bing_image_url(word)
                         if image_url is not None:

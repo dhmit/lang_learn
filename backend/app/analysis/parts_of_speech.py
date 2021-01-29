@@ -226,5 +226,5 @@ def quote_in_word(word):
 
 
 def get_valid_words(text, pos):
-    return list(set(word for word in get_part_of_speech_words(text.lower(), pos)
+    return list(set(word.lower() for word in get_part_of_speech_words(text.lower(), pos)
                     if (not quote_in_word(word) and len(word) > 2)))
