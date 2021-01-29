@@ -26,11 +26,14 @@ html, body {
     background-color: #278E73;
     padding: 5px 30px;
     border: none;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .quiz-title {
     font-size: 28px;
     font-weight: bold;
+    margin-bottom: 0;
     //left: 250px;
     //top: 111px;
 }
@@ -43,4 +46,8 @@ html, body {
 .exit-button {
     font-size: 44.8px;
     font-weight: bold;
+}
+
+.submit-button {
+    padding-right: 0 !important;
 }
