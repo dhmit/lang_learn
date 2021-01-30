@@ -2,36 +2,9 @@ import React from 'react';
 import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
-import {
-    ToggleButton,
-    ToggleButtonGroup,
-    Button,
-} from 'react-bootstrap';
+import {Button, ToggleButton, ToggleButtonGroup, } from 'react-bootstrap';
+
 // import { Navbar, Footer } from '../UILibrary/components';
-
-function ButtonChoices(props) {
-    const { choices } = props;
-
-    const radios = choices.map((choice, i) => {
-        return (
-            <ToggleButton key={i + 1} variant="outline-light" value={i + 1} className="c-button">
-                {choice}
-            </ToggleButton>
-        );
-    });
-
-    return (<>
-        <div className="row justify-content-center">
-            <ToggleButtonGroup className="text-center" type="radio" name="options">
-                {radios}
-            </ToggleButtonGroup>
-        </div>
-    </>);
-}
-
-ButtonChoices.propTypes = {
-    choices: PropTypes.arrayOf(PropTypes.string),
-};
 
 export class QuizView extends React.Component {
     constructor(props) {
@@ -39,6 +12,7 @@ export class QuizView extends React.Component {
         this.state = {
             data: null,
             question: 1,
+            userAnswers: {},
         };
     }
 
@@ -80,10 +54,38 @@ export class QuizView extends React.Component {
         });
     }
 
+    onAnswerChoiceClick = (event) => {
+        if ((typeof event.target.value) === 'undefined') {
+            console.log();
+        } else {
+            const answers = this.state.userAnswers;
+            answers[this.state.question] = this.state.data[this.state.question - 1].options[event.target.value - 1];
+            console.log(answers);
+        }
+    }
+
     render() {
         if (!this.state.data) {
             return (<p>Loading...</p>);
         }
+
+        // Previously a ButtonChoices function
+        const choices = this.state.data[this.state.question - 1].options;
+
+        const radios = choices.map((choice, i) => {
+            return (
+                <ToggleButton
+                    key={i + 1}
+                    variant="outline-light"
+                    value={i + 1}
+                    className="c-button"
+                    onClick={this.onAnswerChoiceClick}
+                >
+                    {choice}
+                </ToggleButton>
+            );
+        });
+
         return (
             <React.Fragment>
                 {/* <Navbar /> */}
@@ -136,9 +138,15 @@ export class QuizView extends React.Component {
                                 {this.state.data[this.state.question - 1].sentence}
                             </p>
                             <br />
-                            <ButtonChoices
-                                choices={this.state.data[this.state.question - 1].options}
-                            />
+                            <div className="row justify-content-center">
+                                <ToggleButtonGroup
+                                    className="text-center"
+                                    type="radio"
+                                    name="options"
+                                >
+                                    {radios}
+                                </ToggleButtonGroup>
+                            </div>
                         </div>
                     </div>
                     <div className="row justify-content-end">
