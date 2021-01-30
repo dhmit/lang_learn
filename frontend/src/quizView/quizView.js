@@ -109,7 +109,7 @@ export class QuizView extends React.Component {
                             {
                                 this.state.data.map((questionData, key) => {
                                     const qNumber = key + 1;
-                                    return (
+                                    return (<>
                                         <button
                                             type="button"
                                             value={key + 1}
@@ -119,6 +119,9 @@ export class QuizView extends React.Component {
                                         >
                                             Question #{qNumber}
                                         </button>
+                                        <br />
+                                        <br />
+                                        </>
                                     );
                                 })
                             }
