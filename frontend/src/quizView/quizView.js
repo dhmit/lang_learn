@@ -63,6 +63,17 @@ export class QuizView extends React.Component {
         }
     }
 
+    prevQuestion() {
+        const prevQuestionNumber = this.state.question - 1;
+        if (prevQuestionNumber > 0) {
+            this.setState({
+                question: prevQuestionNumber,
+            });
+        } else {
+            console.log();
+        }
+    }
+
     render() {
         if (!this.state.data) {
             return (<p>Loading...</p>);
@@ -110,14 +121,24 @@ export class QuizView extends React.Component {
                         {/* Haha, we're gonna probably need some arrow images */}
                         {/* Also, this is off-centered */}
                         <div className="col-xs">
-                            <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                &lt;--
-                            </Button>
+                            {((this.state.question - 1) === 0)
+                                ? <Button id="arrow" disabled>
+                                    &lt;--
+                                </Button>
+                                : <Button id="arrow" onClick={() => this.prevQuestion()}>
+                                    &lt;--
+                                </Button>
+                            }
                         </div>
                         <div className="col-5">
-                            <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                --&gt;
-                            </Button>
+                            {((this.state.question + 1) > this.state.data.length)
+                                ? <Button id="arrow" disabled>
+                                    --&gt;
+                                </Button>
+                                : <Button id="arrow" onClick={() => this.nextQuestion()}>
+                                    --&gt;
+                                </Button>
+                            }
                         </div>
                     </div>
                 </div>
