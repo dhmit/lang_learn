@@ -74,6 +74,12 @@ export class QuizView extends React.Component {
         }
     }
 
+    onProgressBarClick = (event) => {
+        this.setState({
+            question: event.target.value,
+        });
+    }
+
     render() {
         if (!this.state.data) {
             return (<p>Loading...</p>);
@@ -104,7 +110,15 @@ export class QuizView extends React.Component {
                                 this.state.data.map((questionData, key) => {
                                     const qNumber = key + 1;
                                     return (
-                                        <p key={key + 1}>Question #{qNumber}</p>
+                                        <button
+                                            type="button"
+                                            value={key + 1}
+                                            key={key + 1}
+                                            className="pb-question"
+                                            onClick={this.onProgressBarClick}
+                                        >
+                                            Question #{qNumber}
+                                        </button>
                                     );
                                 })
                             }
