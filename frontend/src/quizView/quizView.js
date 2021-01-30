@@ -121,8 +121,7 @@ export class QuizView extends React.Component {
                                         </button>
                                         <br />
                                         <br />
-                                        </>
-                                    );
+                                    </>);
                                 })
                             }
                         </div>
