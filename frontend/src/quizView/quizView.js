@@ -97,9 +97,17 @@ export class QuizView extends React.Component {
                             </Button>
                         </div>
                     </div>
-                    <div className="row justify-content-between">
-                        <div className="col">
+                    <div className="row justify-content-between" id="middle">
+                        <div className="col" id="scrolling">
                             {/* list of questions for this quiz */}
+                            {
+                                this.state.data.map((questionData, key) => {
+                                    const qNumber = key + 1;
+                                    return (
+                                        <p key={key + 1}>Question #{qNumber}</p>
+                                    );
+                                })
+                            }
                         </div>
                         <div className="col-9 shaded-box">
                             <h3 className="question-title">Question #{this.state.question}</h3>

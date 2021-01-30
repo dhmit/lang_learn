@@ -18,16 +18,21 @@ html, body {
     border-radius: 10px;
 }
 
-#top {
-    margin-bottom: 20px;
-}
-
 #submit {
     background-color: #278E73;
     padding: 5px 30px;
     border: none;
     font-size: 28px;
     font-weight: bold;
+}
+
+// Row Properties
+#top {
+    margin-bottom: 20px;
+}
+
+#middle {
+    max-height: 53vh !important;
 }
 
 // Exit Button Section
@@ -93,4 +98,10 @@ html, body {
     font-size: 25.2px;
     font-weight: bold;
     margin-top: 10px;
+}
+
+// Progress Bar Section
+#scrolling {
+    overflow-y: scroll;
+    max-height: inherit;
 }
