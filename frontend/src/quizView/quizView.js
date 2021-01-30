@@ -107,7 +107,7 @@ export class QuizView extends React.Component {
                         </div>
                     </div>
                     <div className="row justify-content-between" id="middle">
-                        <div className="col" id="scrolling">
+                        <div className="col pb-scroll" id="scrolling">
                             {/* list of questions for this quiz */}
                             {
                                 this.state.data.map((questionData, key) => {
