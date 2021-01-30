@@ -12,12 +12,6 @@ html, body {
     width: 100%;
 }
 
-.shaded-box {
-    background-color: #5941A9;
-    padding: 30px !important;
-    border-radius: 10px;
-}
-
 #submit {
     background-color: #278E73;
     padding: 5px 30px;
@@ -81,6 +75,14 @@ html, body {
     font-size: 22.4px !important;
 }
 
+.shaded-box {
+    background-color: #5941A9;
+    padding: 30px !important;
+    border-radius: 10px;
+    overflow-y: scroll;
+    max-height: inherit;
+}
+
 // Navigation Arrows Section
 #arrow {
     background-color: #278E73;
@@ -112,4 +114,9 @@ html, body {
     border: none;
     font-size: 18.2px;
     font-weight: bold;
+    padding: 0;
+}
+
+.pb-status {
+    margin-bottom: 30px;
 }

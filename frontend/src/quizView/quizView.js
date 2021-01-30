@@ -2,7 +2,7 @@ import React from 'react';
 import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
-import {Button, ToggleButton, ToggleButtonGroup, } from 'react-bootstrap';
+import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 // import { Navbar, Footer } from '../UILibrary/components';
 
@@ -50,17 +50,18 @@ export class QuizView extends React.Component {
 
     onProgressBarClick = (event) => {
         this.setState({
-            question: event.target.value,
+            ...this.state,
+            question: parseInt(event.target.value),
         });
     }
 
     onAnswerChoiceClick = (event) => {
+        const currentQ = this.state.question;
         if ((typeof event.target.value) === 'undefined') {
             console.log();
         } else {
             const answers = this.state.userAnswers;
-            answers[this.state.question] = this.state.data[this.state.question - 1].options[event.target.value - 1];
-            console.log(answers);
+            answers[currentQ] = this.state.data[currentQ - 1].options[event.target.value - 1];
         }
     }
 
@@ -111,6 +112,20 @@ export class QuizView extends React.Component {
                             {
                                 this.state.data.map((questionData, key) => {
                                     const qNumber = key + 1;
+                                    let qStatus = 'Unanswered';
+                                    const answers = this.state.userAnswers;
+
+                                    for (const i in answers) {
+                                        if (Object.prototype.hasOwnProperty.call(answers, i)) {
+                                            if (qNumber.toString() === i) {
+                                                qStatus = 'Answered';
+                                            }
+                                        }
+                                    }
+                                    if (this.state.question === qNumber) {
+                                        qStatus = 'Current';
+                                    }
+
                                     return (<>
                                         <button
                                             type="button"
@@ -121,8 +136,7 @@ export class QuizView extends React.Component {
                                         >
                                             Question #{qNumber}
                                         </button>
-                                        <br />
-                                        <br />
+                                        <p className="pb-status"><i>{qStatus}</i></p>
                                     </>);
                                 })
                             }
@@ -133,7 +147,6 @@ export class QuizView extends React.Component {
                                 Select the correct conjugation for the missing word.
                             </p>
                             <br />
-                            {console.log(this.state.data)}
                             <p className="question-secondary-text">
                                 {this.state.data[this.state.question - 1].sentence}
                             </p>
