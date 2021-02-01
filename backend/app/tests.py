@@ -3,6 +3,7 @@ Tests for the main app.
 """
 
 from django.test import TestCase
+from app.models import Text
 
 from app.quiz_creation import conjugation_quiz
 
@@ -13,25 +14,36 @@ class MainTests(TestCase):
     """
     # def setUp(self):
     #     super().setUp()
-    #     do any setup here
 
-    def test_sample(self):
+    def test_get_sentence_options(self):
         """
-        Remove me once we have real tests here.
+        Tests the function get_sentence_options from conjugation_quiz.py
         """
-        two = 2
-        another_two = 2
-        self.assertEqual(two + another_two, 4)
+        word_1 = "testing"
+        options_1 = conjugation_quiz.get_sentence_options(word_1)
+        expected_1 = ["testing", "test", "tested", "ran"]
+        word_2 = "Expect"
+        options_2 = conjugation_quiz.get_sentence_options(word_2)
+        expected_2 = ["Expect", "Expected", "Expecting", "Expects"]
+        self.assertEqual(len(options_1), 4)
+        self.assertIn(word_1, options_1)
+        for i in range(4):
+            self.assertEqual(options_1[i][0].isupper(), expected_1[i][0].isupper())
+        self.assertEqual(len(options_2), 4)
+        self.assertIn(word_2, options_2)
+        for i in range(4):
+            self.assertEqual(options_2[i][0].isupper(), expected_2[i][0].isupper())
 
-    def test_verb_conjugations(self):
-        """
-        Testing if the correct verbs are derived from the infinitive form.
-        """
-        verb1 = conjugation_quiz.find_infinitive_form("running")
-        verb2 = conjugation_quiz.find_infinitive_form("swam")
-        verb3 = conjugation_quiz.find_present_tense("painted")
-        verb4 = conjugation_quiz.find_present_tense("dancing")
-        self.assertEqual("run", verb1)
-        self.assertEqual("swim", verb2)
-        self.assertEqual("paint", verb3)
-        self.assertEqual("dance", verb4)
+    # def test_is_anagram(self):
+    #     """
+    #     Tests the function is_anagram from anagrams.py
+    #     """
+    #     has_anagrams = ["synthesize", "sent", "hints"]
+    #     not_anagrams = ["about", "sysnets", "from"]
+    #     letters = {'s': 2, 'y': 1, 'n': 1, 't': 1, 'h': 1, 'e': 2, 'i': 1, 'z': 1}
+    #     for word in has_anagrams:
+    #         word_freq = anagrams.get_letter_freq(word)
+    #         self.assertTrue(anagrams.is_anagram(word_freq, letters))
+    #     for word in not_anagrams:
+    #         word_freq = anagrams.get_letter_freq(word)
+    #         self.assertFalse(anagrams.is_anagram(word_freq, letters))
