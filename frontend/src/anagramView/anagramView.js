@@ -309,7 +309,6 @@ export class AnagramView extends React.Component {
                     <ReactTooltipDefaultExport
                         id={defs[0]}
                         place="top"
-                        effect="solid"
                     >
                         Definitions:
                         <ol>
