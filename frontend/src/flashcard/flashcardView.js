@@ -137,7 +137,7 @@ export class FlashcardView extends Component {
     }
 
     handleKeyDown = (e) => {
-        if (['ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+        if (['ArrowLeft', 'ArrowRight', 'Space', 'KeyS', 'KeyO'].includes(e.code)) {
             e.preventDefault();
             const { code } = e;
             if (code === 'ArrowLeft') {
@@ -146,6 +146,10 @@ export class FlashcardView extends Component {
                 this.changeCard(1);
             } else if (code === 'Space') {
                 this.flipCard();
+            } else if (code === 'KeyS') {
+                this.toggleStar();
+            } else if (code === 'KeyO') {
+                this.toggleStarOnly();
             }
         }
     }
@@ -309,11 +313,18 @@ export class FlashcardView extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Use the flashcards to memorize words and concepts. You can
-                                    click the "Click to flip" button to see the other side of the
-                                    card and use the arrows on the side to move between cards. You
-                                    can also use the arrow keys and space keys to navigate through
-                                    the cards.</p>
+                                    <p>
+                                        Use the flashcards to memorize words and concepts. Use
+                                        the "Click to flip" button to see the other side of
+                                        the card and use the arrows on the side to move between
+                                        cards. You can star cards that and look at only those cards
+                                        by toggling the "Starred Words Only" button.
+                                    </p>
+                                    <p>
+                                        Press the arrow keys and space keys
+                                        to navigate and flip the cards. You can star cards with the
+                                        's' key and toggle Starred Only Mode with the 'o' key.
+                                    </p>
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary"

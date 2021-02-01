@@ -10,11 +10,11 @@ from django.core.management.base import BaseCommand
 # Ours
 from app.models import Text
 from app.analysis.parts_of_speech import (
-    get_part_of_speech_words,
     get_word_definition,
     get_word_examples,
     get_valid_words,
 )
+
 
 # Modified Code from Bing library
 def get_bing_image_url(query):
