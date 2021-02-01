@@ -13,6 +13,8 @@ export class QuizView extends React.Component {
             data: null,
             question: 1,
             userAnswers: {},
+            score: 0,
+            graded: false,
         };
     }
 
@@ -46,6 +48,18 @@ export class QuizView extends React.Component {
         } else {
             console.log();
         }
+    }
+
+    gradeQuiz() {
+        this.setState({ graded: true });
+        let score = 0;
+        const answers = this.state.userAnswers;
+        for (let i = 0; i < this.state.data.length; i++) {
+            if (answers[i + 1] === this.state.data[i].answer) {
+                score += 1;
+            }
+        }
+        this.setState({ score: score });
     }
 
     onProgressBarClick = (event) => {
@@ -102,9 +116,16 @@ export class QuizView extends React.Component {
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>
                         </div>
                         <div className="col text-right submit-button">
-                            <Button id="submit" onClick={() => this.nextQuestion()}>
-                                Submit
-                            </Button>
+                            {(this.state.graded)
+                                ? <p>
+                                    Score:&nbsp;
+                                    {this.state.score}
+                                    /{this.state.data.length}
+                                </p>
+                                : <Button id="submit" onClick={() => this.gradeQuiz()}>
+                                    Submit
+                                </Button>
+                            }
                         </div>
                     </div>
                     <div className="row justify-content-between" id="middle">
