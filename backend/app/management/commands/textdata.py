@@ -1,8 +1,11 @@
+"""
+Custom command to populate text model with definition, examples, and images
+"""
 import re
-import tqdm
 import urllib
 import urllib.request
 import urllib.parse
+import tqdm
 
 # Django
 from django.core.management.base import BaseCommand
@@ -18,6 +21,9 @@ from app.analysis.parts_of_speech import (
 
 # Modified Code from Bing library
 def get_bing_image_url(query):
+    """
+    Custom command to get image url from Bing
+    """
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
     }
