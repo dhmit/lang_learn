@@ -61,7 +61,8 @@ export class QuizView extends React.Component {
             console.log();
         } else {
             const answers = this.state.userAnswers;
-            answers[currentQ] = this.state.data[currentQ - 1].options[event.target.value - 1];
+            answers[currentQ] = event.target.value;
+            this.setState({ userAnswers: answers });
         }
     }
 
@@ -78,7 +79,7 @@ export class QuizView extends React.Component {
                 <ToggleButton
                     key={i + 1}
                     variant="outline-light"
-                    value={i + 1}
+                    value={choice}
                     className="c-button"
                     onClick={this.onAnswerChoiceClick}
                 >
@@ -156,6 +157,7 @@ export class QuizView extends React.Component {
                                     className="text-center"
                                     type="radio"
                                     name="options"
+                                    value={this.state.userAnswers[this.state.question]}
                                 >
                                     {radios}
                                 </ToggleButtonGroup>
