@@ -7,12 +7,10 @@ const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-const filledStar = (size, color) => {
+const filledStar = (color) => {
     return (
         <svg
             xmlns = "http://www.w3.org/2000/svg"
-            width = {size}
-            height = {size}
             fill = {color}
             className = "bi bi-star-fill"
             viewBox = "0 0 16 16"
@@ -29,12 +27,10 @@ const filledStar = (size, color) => {
 
 
 
-const star = (size, color) => {
+const star = (color) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
             fill={color}
             className="bi bi-star"
             viewBox="0 0 16 16">
@@ -222,8 +218,8 @@ export class FlashcardView extends Component {
                                             onClick={this.toggleStar}>
                                             {this.isStarred(starOnly
                                                 ? starredCards[cardIndex] : cardIndex)
-                                                ? filledStar('50', 'yellow')
-                                                : star('50', 'white')
+                                                ? filledStar('yellow')
+                                                : star('white')
                                             }
                                         </div>
                                         <div className="flashcard-star-buffer"
@@ -257,8 +253,8 @@ export class FlashcardView extends Component {
                                             onClick={this.toggleStar}>
                                             {this.isStarred(starOnly
                                                 ? starredCards[cardIndex] : cardIndex)
-                                                ? filledStar('50', 'yellow')
-                                                : star('50', 'white')
+                                                ? filledStar('yellow')
+                                                : star('white')
                                             }
                                         </div>
                                         <div className="flashcard-star-buffer"

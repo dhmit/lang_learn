@@ -31,12 +31,6 @@
     color: #E8C2FF;
 }
 
-.flashcard-star {
-    top: 20px;
-    right: 30px;
-    cursor: pointer;
-}
-
 /* Styles for the Top Part*/
 
 .flashcard-title {
@@ -163,6 +157,14 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     cursor: pointer;
+}
+
+svg {
+    height: 7vh;
+    min-width: 20%;
+    max-width:100%;
+    max-height:100%;
+
 }
 
 .flip-card-back {
