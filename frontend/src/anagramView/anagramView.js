@@ -14,6 +14,19 @@ function shuffleArray(array) {
     return array;
 }
 
+const generateFreq = (word) => {
+    const freq = {};
+    for (let i = 0; i < word.length; i++) {
+        const curLetter = word[i].toLowerCase();
+        if (curLetter in freq) {
+            freq[curLetter]++;
+        } else {
+            freq[curLetter] = 1;
+        }
+    }
+    return freq;
+};
+
 export class AnagramView extends React.Component {
     constructor(props) {
         super(props);
@@ -42,11 +55,22 @@ export class AnagramView extends React.Component {
         await this.startNewGame();
     }
 
-    handleChange = (event) => {
+    handleInput = (event) => {
         const inputValue = event.target.value;
-        const stateField = event.target.name;
+        const letterFreq = generateFreq(this.state.letters);
+        const curFreq = generateFreq(inputValue);
+
+        console.log(letterFreq, curFreq);
+
+        // eslint-disable-next-line guard-for-in
+        for (const key of Object.keys(curFreq)) {
+            if (!(key in letterFreq && curFreq[key] <= letterFreq[key])) {
+                return;
+            }
+        }
+
         this.setState({
-            [stateField]: inputValue,
+            userInput: inputValue,
         });
     };
 
@@ -190,8 +214,8 @@ export class AnagramView extends React.Component {
         const wordsFound = this.state.targetWords.map((word, i) => {
             if (this.state.gameOver) {
                 return (
-                    <>
-                        <li key={i}>
+                    <div key={i}>
+                        <li>
                             <span data-tip data-for={word}>
                                 {word.toUpperCase()}
                             </span>
@@ -209,13 +233,13 @@ export class AnagramView extends React.Component {
                                 }
                             </ol>
                         </ReactTooltipDefaultExport>
-                    </>
+                    </div>
                 );
             }
             if (this.state.targetWordsFound.includes(word.toLowerCase())) {
                 return (
-                    <>
-                        <li key={i}>
+                    <div key={i}>
+                        <li>
                             <span data-tip data-for={word}>
                                 {word.toUpperCase()}
                             </span>
@@ -235,7 +259,7 @@ export class AnagramView extends React.Component {
                                 }
                             </ol>
                         </ReactTooltipDefaultExport>
-                    </>
+                    </div>
                 );
             }
             let buffer = '';
@@ -243,8 +267,8 @@ export class AnagramView extends React.Component {
                 buffer += '_ ';
             }
             return (
-                <>
-                    <li key={i}>
+                <div key={i}>
+                    <li>
                         <span data-tip data-for={word}>{buffer}</span>
                     </li>
                     <ReactTooltipDefaultExport id={word} place="right">
@@ -262,7 +286,7 @@ export class AnagramView extends React.Component {
                             }
                         </ol>
                     </ReactTooltipDefaultExport>
-                </>
+                </div>
             );
         });
 
@@ -278,8 +302,8 @@ export class AnagramView extends React.Component {
                 );
             }
             return (
-                <>
-                    <li data-tip data-for={defs[0]} key={i}>
+                <div key={i}>
+                    <li data-tip data-for={defs[0]}>
                         <span>{defs[0]}</span>
                     </li>
                     <ReactTooltipDefaultExport
@@ -298,10 +322,15 @@ export class AnagramView extends React.Component {
                             }
                         </ol>
                     </ReactTooltipDefaultExport>
-                </>
+                </div>
             );
         });
 
+        const enteredFreq = generateFreq(this.state.userInput);
+        const curFreq = {};
+        for (const key of Object.keys(enteredFreq)) {
+            curFreq[key] = 0;
+        }
         return (<React.Fragment>
             <Navbar />
 
@@ -403,7 +432,22 @@ export class AnagramView extends React.Component {
                         </button>
                     </div>
                     <div className="col-9 letters">
-                        {this.state.letters}
+                        {
+                            this.state.letters.map((letter, k) => {
+                                let letterClass = 'light-letter';
+                                const letterKey = letter.toLowerCase();
+                                if (letterKey in enteredFreq
+                                    && curFreq[letterKey] < enteredFreq[letterKey]) {
+                                    letterClass = 'dark-letter';
+                                    curFreq[letterKey]++;
+                                }
+                                return (
+                                    <span className={letterClass} key={k}>
+                                        {letter}
+                                    </span>
+                                );
+                            })
+                        }
                     </div>
                 </div>
                 <br/>
@@ -411,10 +455,15 @@ export class AnagramView extends React.Component {
                     <div className="col-3" >
                     </div>
                     <div className="col-9">
-                        <form className="form-inline" onSubmit={this.handleSubmit}>
+                        <form
+                            className="form-inline"
+                            onSubmit={this.handleSubmit}
+                        >
                             <input className="form-control" type="text" name="userInput"
                                 placeholder="Type here" disabled={this.state.gameOver}
-                                onChange={this.handleChange} value={this.state.userInput} />
+                                onChange={this.handleInput} value={this.state.userInput}
+                                autoComplete='off'
+                            />
                             <button className="btn btn-outline-light mx-2"
                                 disabled={this.state.gameOver}
                                 type="submit">Enter</button>
