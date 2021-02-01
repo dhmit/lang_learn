@@ -280,14 +280,16 @@ export class FlashcardView extends Component {
                 <Navbar/>
                 <div className='page' onKeyDown={this.handleKeyDown}>
                     <div className='row'>
-                        <div className='col-9'>
+                        <div className='col-xl-8 col-md-6 col-12 text-center text-md-left'>
                             <h1 className='flashcard-title'>Flashcard</h1>
                             <button
                                 className="btn btn-outline-light btn-circle flashcard-instruction"
                                 onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
-
+                            <h4 className='flashcard-category'>
+                                Category: {capitalize(this.props.partOfSpeech) + 's'}
+                            </h4>
                         </div>
                         <div>
                             {
@@ -329,7 +331,7 @@ export class FlashcardView extends Component {
                             </div>
                         </div>
 
-                        <div className='col-3'>
+                        <div className='col-xl-4 col-md-6 col-12'>
                             <div className='progress-text'>
                                 {progressText}
                             </div>
@@ -341,29 +343,23 @@ export class FlashcardView extends Component {
                                     aria-valuemax="100"
                                 />
                             </div>
-                        </div>
-                    </div>
-                    <div className='row'>
-                        <div className='col-9'>
-                            <h4 className='flashcard-category'>
-                                Category: {capitalize(this.props.partOfSpeech) + 's'}
-                            </h4>
-                        </div>
-                        <div className='col-3 d-flex'>
-                            <label className='toggle-label'>Starred Words Only:</label>
-                            <div className="custom-control custom-switch">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="customSwitch1"
-                                    onChange={this.toggleStarOnly}
-                                    checked={starOnly}
-                                />
-                                <label
-                                    className="custom-control-label"
-                                    htmlFor="customSwitch1"
-                                />
+                            <div className='d-flex'>
+                                <label className='toggle-label'>Starred Words Only:</label>
+                                <div className="custom-control custom-switch">
+                                    <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id="customSwitch1"
+                                        onChange={this.toggleStarOnly}
+                                        checked={starOnly}
+                                    />
+                                    <label
+                                        className="custom-control-label"
+                                        htmlFor="customSwitch1"
+                                    />
+                                </div>
                             </div>
+
                         </div>
                     </div>
                     {flipcard}

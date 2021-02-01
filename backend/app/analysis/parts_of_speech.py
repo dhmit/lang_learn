@@ -183,6 +183,7 @@ def get_word_definition(word_list, pos):
                               if word not in meaning]
         else:
             word_def[word] = []
+    print(word_def)
     return word_def
 
 
