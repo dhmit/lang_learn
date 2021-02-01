@@ -170,20 +170,20 @@ export class QuizView extends React.Component {
                         <div className="col-xs">
                             {((this.state.question - 1) === 0)
                                 ? <Button id="arrow" disabled>
-                                    &lt;--
+                                    &larr;
                                 </Button>
                                 : <Button id="arrow" onClick={() => this.prevQuestion()}>
-                                    &lt;--
+                                    &larr;
                                 </Button>
                             }
                         </div>
                         <div className="col-5">
                             {((this.state.question + 1) > this.state.data.length)
                                 ? <Button id="arrow" disabled>
-                                    --&gt;
+                                    &rarr;
                                 </Button>
                                 : <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                    --&gt;
+                                    &rarr;
                                 </Button>
                             }
                         </div>
