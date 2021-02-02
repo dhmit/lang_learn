@@ -157,7 +157,6 @@ export class QuizView extends React.Component {
                     </div>
                     <div className="row justify-content-between" id="middle">
                         <div className="col pb-scroll" id="scrolling">
-                            {/* list of questions for this quiz */}
                             {
                                 this.state.data.map((questionData, key) => {
                                     const qNumber = key + 1;
@@ -201,19 +200,32 @@ export class QuizView extends React.Component {
                             </p>
                             <br />
                             <div className="row justify-content-center">
-                                <ToggleButtonGroup
-                                    className="text-center"
-                                    type="radio"
-                                    name="options"
-                                    value={this.state.userAnswers[this.state.question]}
-                                >
-                                    {radios}
-                                </ToggleButtonGroup>
+                                {(this.state.graded)
+                                    ? <p className="results">
+                                        Your answer: {(Object.prototype.hasOwnProperty.call(
+                                            this.state.userAnswers,
+                                            this.state.question,
+                                        ))
+                                            ? <>{this.state.userAnswers[this.state.question]}</>
+                                            : <i>Unanswered</i>}
+                                        <br />
+                                        Correct answer: {
+                                            this.state.data[this.state.question - 1].answer
+                                        }
+                                    </p>
+                                    : <ToggleButtonGroup
+                                        className="text-center"
+                                        type="radio"
+                                        name="options"
+                                        value={this.state.userAnswers[this.state.question]}
+                                    >
+                                        {radios}
+                                    </ToggleButtonGroup>
+                                }
                             </div>
                         </div>
                     </div>
                     <div className="row justify-content-end">
-                        {/* Haha, we're gonna probably need some arrow images */}
                         {/* Also, this is off-centered */}
                         <div className="col-xs">
                             {((this.state.question - 1) === 0)
