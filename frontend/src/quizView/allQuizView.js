@@ -15,7 +15,7 @@ export class AllQuizView extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch('/api/get_all_texts/');
+            const response = await fetch('/api/all_text/');
             const data = await response.json();
             this.setState({ data: data });
         } catch (e) {
