@@ -403,9 +403,17 @@ export class AnagramView extends React.Component {
                             </div>
                             <div className="modal-body">
                                 <p>With the list of given letters, rearrange them (or some of them)
-                                to form words from the text you selected. You may look at the
-                                "Definitions" column as a hint. If you find a word that was not
-                                part of the text, it will appear on the "Extra Words" column. </p>
+                                to form words from the text you selected. To enter the words, type in the slot
+                                that says "Type Here" then press enter, and your score is shown on the top right
+                                corner in the green box labeled "Score". To shuffle the letters, click on the button
+                                to the left of the list of letters. You may also look at the "Definitions"
+                                column as a hint. If you find a word that was not part of the text,
+                                it will appear on the "Extra Words" column. When you hover over the words
+                                in "Target Words", you can view example sentences that may help with better
+                                understanding the vocabulary.</p>
+                                <p>To give up and view all the target words, click on the "Give Up" button. To
+                                restart the game again, click on the "Restart" button. The game will end if either
+                                the timer runs out or if you have found all the target words.</p>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary"
