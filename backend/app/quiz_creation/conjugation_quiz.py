@@ -15,6 +15,7 @@ def get_sentence_options(word):
     :return: A list of 4 words to serve as the answer choices
     """
     options = [word]
+    word_is_capitalized = word[0].isupper()
     # Check if tense is found in the tenses dictionary
     tenses = verb_tenses.get(verb_infinitive(word), '')
     if tenses:
@@ -40,7 +41,18 @@ def get_sentence_options(word):
         # If the verb is not in the verb_tenses dictionary, get three random verb infinitives
         # (keys) from the dictionary
         options += random.sample(list(verb_tenses), 3)
+
+    # Capitalize other options if the original word was capitalized
+    if word_is_capitalized:
+        for i in range(4):
+            options[i] = options[i].capitalize()
+
     random.shuffle(options)
+
+    # Capitalize the options if verb is at the beginning of the sentence
+    if word[0].isupper():
+        return [w.capitalize() for w in options]
+
     return options
 
 
@@ -86,6 +98,14 @@ def get_quiz_sentences(text):
         if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
             verb_index_data[1].append(i)
 
+        # Removes the space between words and commas or letters and apostrophes
+        if pos == ',':
+            current_sentence['sentence'][-1] += pos # check this ahhh
+            continue
+        if pos == "POS":
+            current_sentence['sentence'][-1] += "'s"  # check this ahhh
+            continue
+
         # Add a new word to the current sentence.
         current_sentence['sentence'].append(word)
 
@@ -113,6 +133,7 @@ def get_quiz_sentences(text):
                     )
                     current_sentence['options'] = get_sentence_options(word)
                     current_sentence['answer'] = word
+
             # Add the sentence if it has an answer.
             if current_sentence['answer']:
 
