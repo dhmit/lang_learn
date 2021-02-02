@@ -249,7 +249,7 @@ export class AnagramView extends React.Component {
                             </span>
                         </li>
                         <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
+                            <h3>Examples of Word Usage:</h3>
                             <ol>
                                 {
                                     this.state.targetExamples[i]
@@ -273,7 +273,7 @@ export class AnagramView extends React.Component {
                             </span>
                         </li>
                         <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
+                            <h3>Examples of Word Usage:</h3>
                             <ol>
                                 {
                                     this.state.targetExamples[i]
@@ -300,7 +300,7 @@ export class AnagramView extends React.Component {
                         <span data-tip data-for={word}>{buffer}</span>
                     </li>
                     <ReactTooltipDefaultExport id={word} place="right">
-                        Examples:
+                        <h3>Examples of Word Usage:</h3>
                         <ol>
                             {
                                 this.state.targetExamples[i]
@@ -338,7 +338,7 @@ export class AnagramView extends React.Component {
                         id={defs[0]}
                         place="top"
                     >
-                        Definitions:
+                        <h3>Extra Definitions:</h3>
                         <ol>
                             {
                                 defs.map((def, j) => (
