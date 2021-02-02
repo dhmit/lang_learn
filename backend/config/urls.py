@@ -23,6 +23,7 @@ from app.views import (
     all_text,
     get_anagram,
     check_word,
+    get_flashcards,
 )
 
 
@@ -46,8 +47,10 @@ urlpatterns = [
     path('api/all_text', all_text),
     path('api/get_anagram/<int:text_id>/<str:part_of_speech>', get_anagram),
     path('api/check_word/<str:word>/<str:pos>', check_word),
+    path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
 
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
+    react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
 ]

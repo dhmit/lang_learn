@@ -1,0 +1,192 @@
+/* Styles for the actual flashcard */
+
+
+.flashcard-word {
+    color: #E8C2FF;
+    font-size: 70px;
+}
+
+.flashcard-info {
+    color: white;
+    font-size: 28px;
+    font-weight: normal;
+}
+
+.flashcard-div {
+    margin: 50px;
+    align-items: center;
+}
+
+.flashcard-arrows {
+    font-size: 60px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+.flashcard-arrows:hover{
+    transform: scale(1.4);
+    transition-duration: 0.3s;
+    color: #E8C2FF;
+}
+
+/* Styles for the Top Part*/
+
+.flashcard-title {
+    font-size: 50px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.flashcard-instruction {
+    border: 3px solid;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    margin: -25px 10px 0;
+    padding: 0
+}
+
+.progress-text {
+    text-align: right;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.progress {
+    height: 1.23rem;
+    border-radius: 10px;
+}
+
+.flashcard-error {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Modifications to the Toggle Switch */
+.toggle-label {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.custom-control {
+    display: inline-block;
+    margin-left: auto;
+}
+
+.custom-control-label {
+    cursor: pointer;
+}
+
+// The background of the toggle
+.custom-control-label::before,
+.custom-control-input:checked ~ .custom-control-label::before{
+    width: 70px !important;
+    left: -70px !important;
+    height: 25px !important;
+    border-radius: 13px !important;
+    background: #e5e5e5 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+// The small circle
+.custom-control-label::after {
+    width: 25px !important;
+    height: 25px !important;
+    top: 4px !important;
+    left: -70px !important;
+    border-radius: 20px !important;
+    background: rgba(23, 94, 75, 0.4) !important;
+}
+
+// The small circle after being turned on
+.custom-control-input:checked ~ .custom-control-label::after {
+    background: #278E73 !important;
+    transform: translateX(45px) !important;
+}
+
+.flip-card {
+    background-color: #2D2155;
+    width: 1000px;
+    height: 60vh;
+    margin: 0;
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.showBack .flip-card-inner {
+    transform: rotateX(180deg);
+    transition: transform 0.6s;
+}
+
+.flip-card.showNext .flip-card-inner {
+    transition: transform 0s;
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #5941A9;
+    border-radius: 60px;
+    padding: 20px;
+    color: white;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.25);
+}
+
+.flashcard-star-front, .flashcard-star-back {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    cursor: pointer;
+    min-width: 15px;
+}
+
+svg {
+    height: 7vh;
+    min-width: 20%;
+    max-width:100%;
+    max-height:100%;
+
+}
+
+.flip-card-back {
+    transform: rotateX(180deg);
+}
+
+.flashcard-image {
+    padding: 10px;
+    max-height: 50vh;
+    // height: 50vh;
+    max-width: 100%
+    // width: auto;
+}
+
+.flashcard-star-buffer {
+    height: 100%;
+}
+
+.text-center-front {
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

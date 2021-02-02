@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
 import { AnagramView } from './anagramView/anagramView';
+import { FlashcardView } from './flashcard/flashcardView';
 
 
 // Import all styles
@@ -21,4 +22,5 @@ window.app_modules = {
     // Add all frontend views here
     IndexView,
     AnagramView,
+    FlashcardView,
 };

@@ -14,12 +14,9 @@ from .serializers import (
 )
 from .analysis.parts_of_speech import (
     get_part_of_speech_words,
-    get_word_examples,
-    get_word_definition,
-    filter_pos,
+    get_valid_words,
 )
 from .analysis.anagrams import (
-    get_anagrams,
     get_letter_freq,
     get_word_set,
 )
@@ -46,15 +43,25 @@ def text(request, text_id):
     return Response(serializer.data)
 
 
-def punct_in_word(word):
+@api_view(['GET'])
+def get_flashcards(request, text_id, part_of_speech):
     """
-    Checks if there are quotes in the word
+    API endpoint for getting the necessary information for the flashcards given
+    the id of the text and the part of speech.
     """
-    quotes = ["“", '"', "'", "’", ".", "?", "!"]
-    for quote in quotes:
-        if quote in word:
-            return True
-    return False
+    text_obj = Text.objects.get(id=text_id)
+    image_urls = text_obj.images
+    definitions = text_obj.definitions
+    examples = text_obj.examples
+
+    words = get_valid_words(text_obj.text, part_of_speech)
+
+    res = [{'word': word,
+            'definition': definitions[word].get(part_of_speech, []),
+            'example': examples[word].get(part_of_speech, []),
+            'url': image_urls.get(word, '')}
+           for word in words]
+    return Response(res)
 
 
 @api_view(['GET'])
@@ -64,15 +71,11 @@ def get_anagram(request, text_id, part_of_speech):
     the id of the text and the part of speech. The anagrams will be random.
     """
     text_obj = Text.objects.get(id=text_id)
-    words = list(set(word for word in get_part_of_speech_words(text_obj.text.lower(),
-                                                               part_of_speech)
-                     if (not punct_in_word(word) and len(word) > 2)))
+    definitions = text_obj.definitions
+    examples = text_obj.examples
+    words = get_valid_words(text_obj.text, part_of_speech)
     random.shuffle(words)
-    # TODO: Determine how many words from text we should use and which to use
     words = words[:5]
-
-    definitions = get_word_definition(words, part_of_speech)
-    examples = get_word_examples(words, part_of_speech, text_obj.text.lower())
 
     # Gets the minimum possible numbers of each letter required to generate all the text
     anagram_freq = {}
@@ -91,7 +94,9 @@ def get_anagram(request, text_id, part_of_speech):
 
     res = {
         'letters': scrambled_letters,
-        'word_data': [[word, {'definition': definitions[word], 'example': examples[word]}]
+        'word_data': [{'word': word,
+                       'definition': definitions[word].get(part_of_speech, []),
+                       'example': examples[word].get(part_of_speech, [])}
                       for word in words]
     }
     return Response(res)

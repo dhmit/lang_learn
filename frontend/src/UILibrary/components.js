@@ -183,7 +183,7 @@ export class LoadingPage extends Component {
             <>
                 <Navbar/>
                 <div className="loading">
-                    <div className="loading-text">Creating Anagram Quiz...</div>
+                    <div className="loading-text">{this.props.text}</div>
                     <div className="spinner-border loading-spinner" role="status" >
                         <span className="sr-only">Loading...</span>
                     </div>
@@ -193,3 +193,6 @@ export class LoadingPage extends Component {
         );
     }
 }
+LoadingPage.propTypes = {
+    text: PropTypes.string,
+};
