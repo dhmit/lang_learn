@@ -6,11 +6,10 @@ import {
     Button,
     ToggleButton,
     ToggleButtonGroup,
-    Tooltip,
-    OverlayTrigger,
 } from 'react-bootstrap';
 
 // import { Navbar, Footer } from '../UILibrary/components';
+
 
 export class QuizView extends React.Component {
     constructor(props) {
@@ -70,11 +69,11 @@ export class QuizView extends React.Component {
     gradeQuiz() {
         let cSubmit;
         if (this.getUnanswered() === 0) {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your' +
-                ' answers are final.');
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
+                + ' answers are final.');
         } else {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You' +
-                ' have ' + this.getUnanswered() + ' unanswered questions(s).');
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
+                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
         }
         if (cSubmit === true) {
             this.setState({ graded: true });
