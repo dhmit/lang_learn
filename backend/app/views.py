@@ -16,11 +16,12 @@ from .analysis.parts_of_speech import (
     get_part_of_speech_words,
     get_word_examples,
     get_word_definition,
-    filter_pos
+    filter_pos,
 )
 from .analysis.anagrams import (
     get_anagrams,
     get_letter_freq,
+    get_word_set,
 )
 
 
@@ -83,10 +84,6 @@ def get_anagram(request, text_id, part_of_speech):
             elif anagram_freq[letter] < cur_freq[letter]:
                 anagram_freq[letter] = cur_freq[letter]
 
-    extra_words = get_anagrams(anagram_freq)
-    extra_words -= set(words)  # Remove words from text from extra words
-    extra_words = filter_pos(extra_words, part_of_speech)
-
     scrambled_letters = []
     for letter in anagram_freq:
         for i in range(anagram_freq[letter]):
@@ -95,7 +92,15 @@ def get_anagram(request, text_id, part_of_speech):
     res = {
         'letters': scrambled_letters,
         'word_data': [[word, {'definition': definitions[word], 'example': examples[word]}]
-                      for word in words],
-        'extra_words': extra_words
+                      for word in words]
     }
     return Response(res)
+
+
+word_set = get_word_set()
+
+
+@api_view(['GET'])
+def check_word(request, word, pos):
+    words = get_part_of_speech_words(word, pos)  # Used to check for part of speech in extra words
+    return Response(len(word) >= 3 and len(words) > 0 and word in word_set)

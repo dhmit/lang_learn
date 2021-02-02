@@ -49,7 +49,6 @@ export class AnagramView extends React.Component {
         this.state = {
             targetWordDefs: null,
             targetWords: [],
-            extraWords: [],
             targetExamples: [],
             userInput: '',
             targetWordsFound: [],
@@ -92,12 +91,17 @@ export class AnagramView extends React.Component {
         });
     };
 
-    handleSubmit = (event) => {
+    checkExtraWord = async (word) => {
+        const apiURL = `/api/check_word/${word}/${this.props.partOfSpeech}`;
+        const response = await fetch(apiURL);
+        return response.json();
+    }
+
+    handleSubmit = async (event) => {
         event.preventDefault();
         const userInput = this.state.userInput.toLowerCase().trim();
         const targetWords = this.state.targetWords.map((word) => (word.toLowerCase()));
         const targetWordsFound = this.state.targetWordsFound;
-        const extraWords = this.state.extraWords;
         if (targetWords.includes(userInput) && !targetWordsFound.includes(userInput)) {
             this.setState({
                 showConfetti: true,
@@ -109,12 +113,18 @@ export class AnagramView extends React.Component {
                     gameOver: true,
                 });
             }
-        } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
-            this.setState({
-                showConfetti: true,
-                extraWordsFound: this.state.extraWordsFound.concat(userInput),
-                score: this.state.score + userInput.length,
-            });
+        } else if (!targetWords.includes(userInput)
+                   && !this.state.extraWordsFound.includes(userInput)) {
+            const isWord = await this.checkExtraWord(userInput);
+            if (isWord) {
+                this.setState({
+                    showConfetti: true,
+                    extraWordsFound: this.state.extraWordsFound.concat(userInput),
+                    score: this.state.score + userInput.length,
+                });
+            } else {
+                this.setState({ shake: true });
+            }
         } else {
             this.setState({ shake: true });
         }
@@ -148,7 +158,6 @@ export class AnagramView extends React.Component {
         this.setState({
             targetWordDefs: null,
             targetWords: [],
-            extraWords: [],
             targetExamples: [],
             userInput: '',
             targetWordsFound: [],
@@ -187,11 +196,9 @@ export class AnagramView extends React.Component {
             for (let i = 0; i < (data['letters']).length; i++) {
                 letters.push(data['letters'][i].toUpperCase());
             }
-            const extraWordsSet = new Set(data['extra_words']);
             letters = shuffleArray(letters);
             this.setState({
                 targetWordDefs: targetWordDefs,
-                extraWords: extraWordsSet,
                 targetWords: targetWords,
                 letters: letters,
                 targetExamples: targetExamples,
