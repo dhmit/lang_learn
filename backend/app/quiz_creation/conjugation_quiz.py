@@ -94,17 +94,23 @@ def get_quiz_sentences(text):
     verb_index_data = [0, []]
     for i, [word, pos] in enumerate(pos_tags):
 
+        # Removes the space between words and commas, letters and apostrophes and parts of
+        # contractions
+        # "~~" is a filler to preserve length of list when indexing for the verb
+        if pos == ',' or pos == "POS":
+            current_sentence['sentence'][-1] += word
+            current_sentence['sentence'].append("~~")
+            continue
+        if word == "n't":
+            current_sentence['sentence'].append("~~")
+            continue
+
         # If the current word is a type of verb, record its index.
         if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+            if pos_tags[i+1][0] == "n't":
+                word = word + "n't"
             verb_index_data[1].append(i)
 
-        # Removes the space between words and commas or letters and apostrophes
-        if pos == ',':
-            current_sentence['sentence'][-1] += pos # check this ahhh
-            continue
-        if pos == "POS":
-            current_sentence['sentence'][-1] += "'s"  # check this ahhh
-            continue
 
         # Add a new word to the current sentence.
         current_sentence['sentence'].append(word)
@@ -139,6 +145,10 @@ def get_quiz_sentences(text):
 
                 # If the final 'word' in a sentence is a punctuation, connect the punctuation and
                 # the last normal word.
+
+                while "~~" in current_sentence['sentence']:
+                    current_sentence['sentence'].remove("~~")
+
                 if pos_tags[i][1] == '.':
                     current_sentence['sentence'] = (
                         ' '.join(current_sentence['sentence'][:-1])
