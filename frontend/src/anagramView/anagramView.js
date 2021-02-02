@@ -1,7 +1,23 @@
 import React from 'react';
 import ReactTooltipDefaultExport from 'react-tooltip';
+import Confetti from 'react-dom-confetti';
+
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+
+const CONFETTI_CONFIG = {
+    angle: 90,
+    spread: 70,
+    startVelocity: 30,
+    elementCount: 70,
+    dragFriction: 0.12,
+    duration: 2500,
+    stagger: 3,
+    width: '10px',
+    height: '10px',
+    perspective: '500px',
+    colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
+};
 
 /* Randomize array in-place using Durstenfeld shuffle algorithm */
 function shuffleArray(array) {
@@ -43,6 +59,8 @@ export class AnagramView extends React.Component {
             gameOver: false,
             timeLeft: 90,
             showModal: false,
+            shake: false,
+            showConfetti: false,
         };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
@@ -60,16 +78,16 @@ export class AnagramView extends React.Component {
         const letterFreq = generateFreq(this.state.letters);
         const curFreq = generateFreq(inputValue);
 
-        console.log(letterFreq, curFreq);
-
-        // eslint-disable-next-line guard-for-in
         for (const key of Object.keys(curFreq)) {
             if (!(key in letterFreq && curFreq[key] <= letterFreq[key])) {
+                this.setState({ shake: true, showConfetti: false });
                 return;
             }
         }
 
         this.setState({
+            shake: false,
+            showConfetti: false,
             userInput: inputValue,
         });
     };
@@ -82,6 +100,7 @@ export class AnagramView extends React.Component {
         const extraWords = this.state.extraWords;
         if (targetWords.includes(userInput) && !targetWordsFound.includes(userInput)) {
             this.setState({
+                showConfetti: true,
                 targetWordsFound: this.state.targetWordsFound.concat(userInput),
                 score: this.state.score + (userInput.length * 2),
             });
@@ -92,9 +111,12 @@ export class AnagramView extends React.Component {
             }
         } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
             this.setState({
+                showConfetti: true,
                 extraWordsFound: this.state.extraWordsFound.concat(userInput),
                 score: this.state.score + userInput.length,
             });
+        } else {
+            this.setState({ shake: true });
         }
         this.setState({
             userInput: '',
@@ -135,6 +157,8 @@ export class AnagramView extends React.Component {
             letters: [],
             gameOver: false,
             timeLeft: 90,
+            shake: false,
+            showConfetti: false,
         });
         this.timer = 0;
     }
@@ -332,7 +356,6 @@ export class AnagramView extends React.Component {
         }
         return (<React.Fragment>
             <Navbar />
-
             <div className="page">
                 <div className="row">
                     <div className="col">
@@ -419,6 +442,7 @@ export class AnagramView extends React.Component {
                     </div>
                     <div className="col-6 shaded-box">
                         <h3>Definitions</h3>
+                        <Confetti active={this.state.showConfetti} config={CONFETTI_CONFIG}/>
                         <ol>{definitions}</ol>
                     </div>
                 </div>
@@ -450,7 +474,7 @@ export class AnagramView extends React.Component {
                     </div>
                 </div>
                 <br/>
-                <div className="row">
+                <div className="row mb-5">
                     <div className="col-3" >
                     </div>
                     <div className="col-9">
@@ -458,10 +482,16 @@ export class AnagramView extends React.Component {
                             className="form-inline"
                             onSubmit={this.handleSubmit}
                         >
-                            <input className="form-control" type="text" name="userInput"
-                                placeholder="Type here" disabled={this.state.gameOver}
-                                onChange={this.handleInput} value={this.state.userInput}
+                            <input
+                                className={`form-control ${this.state.shake ? 'shake-input' : ''}`}
+                                type="text"
+                                name="userInput"
+                                placeholder="Type here"
+                                disabled={this.state.gameOver}
+                                onChange={this.handleInput}
+                                value={this.state.userInput}
                                 autoComplete='off'
+                                onAnimationEnd={() => { this.setState({ shake: false }); }}
                             />
                             <button className="btn btn-outline-light mx-2"
                                 disabled={this.state.gameOver}
