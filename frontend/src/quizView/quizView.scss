@@ -136,3 +136,20 @@ html, body {
     border-left-width: 2px !important;
     border-left-style: solid !important;
 }
+
+#score {
+    font-size: 23px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    opacity: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E5D4ED;
+    border-radius: 10px;
+}
