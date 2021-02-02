@@ -163,14 +163,27 @@ export class QuizView extends React.Component {
                                     let qStatus = 'Unanswered';
                                     const answers = this.state.userAnswers;
 
-                                    for (const i in answers) {
-                                        if (Object.prototype.hasOwnProperty.call(answers, i)) {
-                                            if (qNumber.toString() === i) {
-                                                qStatus = 'Answered';
+                                    if (this.state.graded) {
+                                        if (Object.prototype.hasOwnProperty.call(answers, qNumber)) {
+                                            const userAnswer = answers[qNumber];
+                                            const correctAnswer = this.state.data[key].answer;
+                                            if (userAnswer === correctAnswer) {
+                                                qStatus = 'Correct';
+                                            } else {
+                                                qStatus = 'Incorrect';
+                                            }
+                                        }
+                                    } else {
+                                        for (const i in answers) {
+                                            if (Object.prototype.hasOwnProperty.call(answers, i)) {
+                                                if (qNumber.toString() === i) {
+                                                    qStatus = 'Answered';
+                                                }
                                             }
                                         }
                                     }
-                                    if (this.state.question === qNumber) {
+
+                                    if (!this.state.graded && this.state.question === qNumber) {
                                         qStatus = 'Current';
                                     }
 
