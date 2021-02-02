@@ -2,7 +2,13 @@ import React from 'react';
 import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
-import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import {
+    Button,
+    ToggleButton,
+    ToggleButtonGroup,
+    Tooltip,
+    OverlayTrigger,
+} from 'react-bootstrap';
 
 // import { Navbar, Footer } from '../UILibrary/components';
 
@@ -13,6 +19,8 @@ export class QuizView extends React.Component {
             data: null,
             question: 1,
             userAnswers: {},
+            score: 0,
+            graded: false,
         };
     }
 
@@ -48,6 +56,29 @@ export class QuizView extends React.Component {
         }
     }
 
+    getUnanswered() {
+        let numUnanswered = 0;
+        const answers = this.state.userAnswers;
+        for (let i = 1; i <= this.state.data.length; i++) {
+            if (answers[i] === undefined) {
+                numUnanswered++;
+            }
+        }
+        return numUnanswered;
+    }
+
+    gradeQuiz() {
+        this.setState({ graded: true });
+        let score = 0;
+        const answers = this.state.userAnswers;
+        for (let i = 0; i < this.state.data.length; i++) {
+            if (answers[i + 1] === this.state.data[i].answer) {
+                score += 1;
+            }
+        }
+        this.setState({ score: score });
+    }
+
     onProgressBarClick = (event) => {
         this.setState({
             ...this.state,
@@ -59,7 +90,7 @@ export class QuizView extends React.Component {
         const currentQ = this.state.question;
         if ((typeof event.target.value) === 'undefined') {
             console.log();
-        } else {
+        } else if (!this.state.graded) {
             const answers = this.state.userAnswers;
             answers[currentQ] = event.target.value;
             this.setState({ userAnswers: answers });
@@ -102,9 +133,26 @@ export class QuizView extends React.Component {
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>
                         </div>
                         <div className="col text-right submit-button">
-                            <Button id="submit" onClick={() => this.nextQuestion()}>
-                                Submit
-                            </Button>
+                            {(this.state.graded)
+                                ? <p id="score">
+                                    Score:&nbsp;
+                                    {this.state.score}/{this.state.data.length}
+                                </p>
+                                : <OverlayTrigger
+                                    key={'left'}
+                                    placement={'left'}
+                                    overlay={
+                                        <Tooltip>
+                                            Are you sure?
+                                            You have {this.getUnanswered()} unanswered questions.
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Button id="submit" onClick={() => this.gradeQuiz()}>
+                                        Submit
+                                    </Button>
+                                </OverlayTrigger>
+                            }
                         </div>
                     </div>
                     <div className="row justify-content-between" id="middle">
@@ -170,20 +218,20 @@ export class QuizView extends React.Component {
                         <div className="col-xs">
                             {((this.state.question - 1) === 0)
                                 ? <Button id="arrow" disabled>
-                                    &lt;--
+                                    &larr;
                                 </Button>
                                 : <Button id="arrow" onClick={() => this.prevQuestion()}>
-                                    &lt;--
+                                    &larr;
                                 </Button>
                             }
                         </div>
                         <div className="col-5">
                             {((this.state.question + 1) > this.state.data.length)
                                 ? <Button id="arrow" disabled>
-                                    --&gt;
+                                    &rarr;
                                 </Button>
                                 : <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                    --&gt;
+                                    &rarr;
                                 </Button>
                             }
                         </div>

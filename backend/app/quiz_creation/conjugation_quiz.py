@@ -15,6 +15,7 @@ def get_sentence_options(word):
     :return: A list of 4 words to serve as the answer choices
     """
     options = [word]
+    word_is_capitalized = word[0].isupper()
     # Check if tense is found in the tenses dictionary
     tenses = verb_tenses.get(verb_infinitive(word), '')
     if tenses:
@@ -40,6 +41,12 @@ def get_sentence_options(word):
         # If the verb is not in the verb_tenses dictionary, get three random verb infinitives
         # (keys) from the dictionary
         options += random.sample(list(verb_tenses), 3)
+
+    # Capitalize other options if the original word was capitalized
+    if word_is_capitalized:
+        for i in range(4):
+            options[i] = options[i].capitalize()
+
     random.shuffle(options)
 
     # Capitalize the options if verb is at the beginning of the sentence
@@ -56,11 +63,11 @@ def process_text(text):
     :param text: A body of text as a string
     :return: text: A body of text as a string with no contractions
     """
-    remove_contractions(text)
+    processed = remove_contractions(text)
     # need to test on input text from frontend
-    text = text.replace('’', "\'")
-    text.replace('"', '\"')
-    return text
+    processed = processed.replace('"', '\"')
+    processed = processed.replace('’', "\'")
+    return processed
 
 
 def get_quiz_sentences(text):
@@ -109,11 +116,20 @@ def get_quiz_sentences(text):
                 verb_index = random.choice(verb_index_data[1]) - verb_index_data[0]
                 sentence = current_sentence['sentence']
                 word = sentence[verb_index]
-                current_sentence['sentence'] = (
-                    sentence[:verb_index] + ['___'] + sentence[verb_index + 1:]
-                )
-                current_sentence['options'] = get_sentence_options(word)
-                current_sentence['answer'] = word
+
+                if word[0] == ("'" or '"'):
+                    quote_type = [word[0]]
+                    current_sentence['sentence'] = (
+                        sentence[:verb_index] + quote_type + ['___'] + sentence[verb_index + 1:]
+                    )
+                    current_sentence['options'] = get_sentence_options(word[1:])
+                    current_sentence['answer'] = word[1:]
+                else:
+                    current_sentence['sentence'] = (
+                        sentence[:verb_index] + ['___'] + sentence[verb_index + 1:]
+                    )
+                    current_sentence['options'] = get_sentence_options(word)
+                    current_sentence['answer'] = word
 
             # Add the sentence if it has an answer.
             if current_sentence['answer']:

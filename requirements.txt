@@ -5,3 +5,6 @@ django-webpack-loader==0.7.0
 djangorestframework==3.12.2
 pytz==2020.5
 sqlparse==0.4.1
+
+nltk~=3.5
+PyDictionary~=2.0.1
