@@ -48,6 +48,11 @@ def get_sentence_options(word):
             options[i] = options[i].capitalize()
 
     random.shuffle(options)
+
+    # Capitalize the options if verb is at the beginning of the sentence
+    if word[0].isupper():
+        return [w.capitalize() for w in options]
+
     return options
 
 
@@ -58,10 +63,13 @@ def process_text(text):
     :param text: A body of text as a string
     :return: text: A body of text as a string with no contractions
     """
-    processed = remove_contractions(text)
+
+    # remove_contractions is buggy
+    #processed = remove_contractions(text)
     # need to test on input text from frontend
-    processed = processed.replace('"', '\"')
+    processed = text.replace('"', '\"')
     processed = processed.replace('’', "\'")
+
     return processed
 
 
@@ -89,6 +97,14 @@ def get_quiz_sentences(text):
         # If the current word is a type of verb, record its index.
         if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
             verb_index_data[1].append(i)
+
+        # Removes the space between words and commas or letters and apostrophes
+        if pos == ',':
+            current_sentence['sentence'][-1] += pos # check this ahhh
+            continue
+        if pos == "POS":
+            current_sentence['sentence'][-1] += "'s"  # check this ahhh
+            continue
 
         # Add a new word to the current sentence.
         current_sentence['sentence'].append(word)
