@@ -51,10 +51,13 @@ def process_text(text):
     :param text: A body of text as a string
     :return: text: A body of text as a string with no contractions
     """
-    processed = remove_contractions(text)
+
+    # remove_contractions is buggy
+    #processed = remove_contractions(text)
     # need to test on input text from frontend
-    processed = processed.replace('"', '\"')
+    processed = text.replace('"', '\"')
     processed = processed.replace('’', "\'")
+
     return processed
 
 
