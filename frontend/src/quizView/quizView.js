@@ -144,7 +144,7 @@ export class QuizView extends React.Component {
                                     overlay={
                                         <Tooltip>
                                             Are you sure?
-                                            You have {this.getUnanswered()} unanswered questions.
+                                            You have {this.getUnanswered()} unanswered question(s).
                                         </Tooltip>
                                     }
                                 >
@@ -212,28 +212,29 @@ export class QuizView extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="row justify-content-end">
-                        {/* Haha, we're gonna probably need some arrow images */}
-                        {/* Also, this is off-centered */}
-                        <div className="col-xs">
-                            {((this.state.question - 1) === 0)
-                                ? <Button id="arrow" disabled>
-                                    &larr;
-                                </Button>
-                                : <Button id="arrow" onClick={() => this.prevQuestion()}>
-                                    &larr;
-                                </Button>
-                            }
+                    <div className="row justify-content-between">
+                        <div className="col">
                         </div>
-                        <div className="col-5">
-                            {((this.state.question + 1) > this.state.data.length)
-                                ? <Button id="arrow" disabled>
-                                    &rarr;
-                                </Button>
-                                : <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                    &rarr;
-                                </Button>
-                            }
+                        <div className="col-9">
+                            <div className="row justify-content-center">
+                                {((this.state.question - 1) === 0)
+                                    ? <Button id="arrow" disabled>
+                                        &larr;
+                                    </Button>
+                                    : <Button id="arrow" onClick={() => this.prevQuestion()}>
+                                        &larr;
+                                    </Button>
+                                }
+                                &nbsp;&nbsp;&nbsp;
+                                {((this.state.question + 1) > this.state.data.length)
+                                    ? <Button id="arrow" disabled>
+                                        &rarr;
+                                    </Button>
+                                    : <Button id="arrow" onClick={() => this.nextQuestion()}>
+                                        &rarr;
+                                    </Button>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
