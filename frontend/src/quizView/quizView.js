@@ -144,7 +144,7 @@ export class QuizView extends React.Component {
                                     overlay={
                                         <Tooltip>
                                             Are you sure?
-                                            You have {this.getUnanswered()} unanswered questions.
+                                            You have {this.getUnanswered()} unanswered question(s).
                                         </Tooltip>
                                     }
                                 >
@@ -157,21 +157,33 @@ export class QuizView extends React.Component {
                     </div>
                     <div className="row justify-content-between" id="middle">
                         <div className="col pb-scroll" id="scrolling">
-                            {/* list of questions for this quiz */}
                             {
                                 this.state.data.map((questionData, key) => {
                                     const qNumber = key + 1;
                                     let qStatus = 'Unanswered';
                                     const answers = this.state.userAnswers;
 
-                                    for (const i in answers) {
-                                        if (Object.prototype.hasOwnProperty.call(answers, i)) {
-                                            if (qNumber.toString() === i) {
-                                                qStatus = 'Answered';
+                                    if (this.state.graded) {
+                                        if (Object.prototype.hasOwnProperty.call(answers, qNumber)) {
+                                            const userAnswer = answers[qNumber];
+                                            const correctAnswer = this.state.data[key].answer;
+                                            if (userAnswer === correctAnswer) {
+                                                qStatus = 'Correct';
+                                            } else {
+                                                qStatus = 'Incorrect';
+                                            }
+                                        }
+                                    } else {
+                                        for (const i in answers) {
+                                            if (Object.prototype.hasOwnProperty.call(answers, i)) {
+                                                if (qNumber.toString() === i) {
+                                                    qStatus = 'Answered';
+                                                }
                                             }
                                         }
                                     }
-                                    if (this.state.question === qNumber) {
+
+                                    if (!this.state.graded && this.state.question === qNumber) {
                                         qStatus = 'Current';
                                     }
 
@@ -201,39 +213,54 @@ export class QuizView extends React.Component {
                             </p>
                             <br />
                             <div className="row justify-content-center">
-                                <ToggleButtonGroup
-                                    className="text-center"
-                                    type="radio"
-                                    name="options"
-                                    value={this.state.userAnswers[this.state.question]}
-                                >
-                                    {radios}
-                                </ToggleButtonGroup>
+                                {(this.state.graded)
+                                    ? <p className="results">
+                                        Your answer: {(Object.prototype.hasOwnProperty.call(
+                                            this.state.userAnswers,
+                                            this.state.question,
+                                        ))
+                                            ? <>{this.state.userAnswers[this.state.question]}</>
+                                            : <i>Unanswered</i>}
+                                        <br />
+                                        Correct answer: {
+                                            this.state.data[this.state.question - 1].answer
+                                        }
+                                    </p>
+                                    : <ToggleButtonGroup
+                                        className="text-center"
+                                        type="radio"
+                                        name="options"
+                                        value={this.state.userAnswers[this.state.question]}
+                                    >
+                                        {radios}
+                                    </ToggleButtonGroup>
+                                }
                             </div>
                         </div>
                     </div>
-                    <div className="row justify-content-end">
-                        {/* Haha, we're gonna probably need some arrow images */}
-                        {/* Also, this is off-centered */}
-                        <div className="col-xs">
-                            {((this.state.question - 1) === 0)
-                                ? <Button id="arrow" disabled>
-                                    &larr;
-                                </Button>
-                                : <Button id="arrow" onClick={() => this.prevQuestion()}>
-                                    &larr;
-                                </Button>
-                            }
+                    <div className="row justify-content-between">
+                        <div className="col">
                         </div>
-                        <div className="col-5">
-                            {((this.state.question + 1) > this.state.data.length)
-                                ? <Button id="arrow" disabled>
-                                    &rarr;
-                                </Button>
-                                : <Button id="arrow" onClick={() => this.nextQuestion()}>
-                                    &rarr;
-                                </Button>
-                            }
+                        <div className="col-9">
+                            <div className="row justify-content-center">
+                                {((this.state.question - 1) === 0)
+                                    ? <Button id="arrow" disabled>
+                                        &larr;
+                                    </Button>
+                                    : <Button id="arrow" onClick={() => this.prevQuestion()}>
+                                        &larr;
+                                    </Button>
+                                }
+                                &nbsp;&nbsp;&nbsp;
+                                {((this.state.question + 1) > this.state.data.length)
+                                    ? <Button id="arrow" disabled>
+                                        &rarr;
+                                    </Button>
+                                    : <Button id="arrow" onClick={() => this.nextQuestion()}>
+                                        &rarr;
+                                    </Button>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

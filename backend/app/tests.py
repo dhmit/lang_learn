@@ -28,12 +28,28 @@ class MainTests(TestCase):
         options_2 = conjugation_quiz.get_sentence_options(word_2)
         self.assertEqual(type(options_2), list)
         expected_2 = ["Expect", "Expected", "Expecting", "Expects"]
+
+        # Check that there are duplicate choices
+        seen_options_1 = []
+        for option in options_1:
+            self.assertNotIn(option, seen_options_1)
+            seen_options_1.append(option)
+        seen_options_2 = []
+        for option in options_2:
+            self.assertNotIn(option, seen_options_2)
+            seen_options_2.append(option)
+
+        # Check that there are 4 choices
         self.assertEqual(len(options_1), 4)
+        self.assertEqual(len(options_2), 4)
+
+        # Check that the original word is a choice
         self.assertIn(word_1, options_1)
+        self.assertIn(word_2, options_2)
+
+        # Check that the capitalization of the choices is consistent
         for i in range(4):
             self.assertEqual(options_1[i][0].isupper(), expected_1[i][0].isupper())
-        self.assertEqual(len(options_2), 4)
-        self.assertIn(word_2, options_2)
         for i in range(4):
             self.assertEqual(options_2[i][0].isupper(), expected_2[i][0].isupper())
 

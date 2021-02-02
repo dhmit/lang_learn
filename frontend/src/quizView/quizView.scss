@@ -53,6 +53,11 @@ html, body {
     padding-right: 0 !important;
 }
 
+#score {
+    font-size: 28px;
+    font-weight: bold;
+}
+
 // Quiz Box Section
 .question-title {
     font-size: 28px;
@@ -81,6 +86,11 @@ html, body {
     border-radius: 10px;
     overflow-y: scroll;
     max-height: inherit;
+}
+
+.results {
+    font-size: 25.2px;
+    text-align: center;
 }
 
 // Navigation Arrows Section
@@ -129,4 +139,17 @@ html, body {
 
 #score {
     font-size: 23px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    opacity: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E5D4ED;
+    border-radius: 10px;
 }
