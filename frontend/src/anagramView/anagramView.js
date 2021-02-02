@@ -57,7 +57,7 @@ export class AnagramView extends React.Component {
             letters: [],
             gameOver: false,
             timeLeft: 90,
-            showModal: false,
+            showModal: true,
             shake: false,
             showConfetti: false,
         };
@@ -118,7 +118,7 @@ export class AnagramView extends React.Component {
             const isWord = await this.checkExtraWord(userInput);
             if (isWord) {
                 this.setState({
-                    showConfetti: true,
+                    showConfetti: false,
                     extraWordsFound: this.state.extraWordsFound.concat(userInput),
                     score: this.state.score + userInput.length,
                 });
@@ -145,8 +145,7 @@ export class AnagramView extends React.Component {
         this.timer = 0;
     };
 
-    modalHandler = (event) => {
-        event.preventDefault();
+    modalHandler = () => {
         if (this.state.showModal) this.startTimer();
         else this.pauseTimer();
         this.setState({
@@ -203,7 +202,6 @@ export class AnagramView extends React.Component {
                 letters: letters,
                 targetExamples: targetExamples,
             });
-            this.startTimer();
         } catch (e) {
             console.log(e);
         }
@@ -247,12 +245,20 @@ export class AnagramView extends React.Component {
                 return (
                     <div key={i}>
                         <li>
-                            <span data-tip data-for={word}>
+                            <span
+                                data-tip
+                                data-for={word}
+                                style= {
+                                    this.state.targetWordsFound.includes(word.toLowerCase())
+                                        ? null
+                                        : { 'color': '#FB9AA0' }
+                                }
+                            >
                                 {word.toUpperCase()}
                             </span>
                         </li>
                         <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
+                            <h3>Examples of Word Usage:</h3>
                             <ol>
                                 {
                                     this.state.targetExamples[i]
@@ -276,7 +282,7 @@ export class AnagramView extends React.Component {
                             </span>
                         </li>
                         <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
+                            <h3>Examples of Word Usage:</h3>
                             <ol>
                                 {
                                     this.state.targetExamples[i]
@@ -303,7 +309,7 @@ export class AnagramView extends React.Component {
                         <span data-tip data-for={word}>{buffer}</span>
                     </li>
                     <ReactTooltipDefaultExport id={word} place="right">
-                        Examples:
+                        <h3>Examples of Word Usage:</h3>
                         <ol>
                             {
                                 this.state.targetExamples[i]
@@ -341,7 +347,7 @@ export class AnagramView extends React.Component {
                         id={defs[0]}
                         place="top"
                     >
-                        Definitions:
+                        <h3>Extra Definitions:</h3>
                         <ol>
                             {
                                 defs.map((def, j) => (
@@ -394,7 +400,10 @@ export class AnagramView extends React.Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p>Instructions will go here.</p>
+                                <p>With the list of given letters, rearrange them (or some of them)
+                                to form words from the text you selected. You may look at the
+                                "Definitions" column as a hint. If you find a word that was not
+                                part of the text, it will appear on the "Extra Words" column. </p>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary"
@@ -458,7 +467,11 @@ export class AnagramView extends React.Component {
                         <button className="btn btn-outline-light float-right shuffle-btn"
                             onClick={this.handleShuffle}
                             disabled={this.state.gameOver}>
-                            <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
+                            <img
+                                alt='shuffle'
+                                className="shuffle-icon"
+                                src='../../static/img/shuffle.png'
+                            />
                         </button>
                     </div>
                     <div className="col-9 letters">
