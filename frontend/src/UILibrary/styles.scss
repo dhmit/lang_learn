@@ -32,3 +32,12 @@ footer {
     max-width: 20vw;
     object-fit: contain;
 }
+
+.loading {
+    background-color: #2D2155;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 86%;
+}
