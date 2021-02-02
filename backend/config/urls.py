@@ -19,7 +19,8 @@ from django.urls import path
 
 from app.common import render_react_view
 from app.views import (
-    get_quiz_data
+    get_quiz_data,
+    get_all_texts,
 )
 
 
@@ -40,8 +41,10 @@ urlpatterns = [
 
     # API endpoints
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
+    path('api/get_all_texts/', get_all_texts),
 
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
+    react_view_path('quiz/', 'AllQuizView'),
 ]

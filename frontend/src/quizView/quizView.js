@@ -135,10 +135,10 @@ export class QuizView extends React.Component {
                 {/* <Navbar /> */}
                 <div className="page">
                     <div className="row justify-content-between" id="top">
-                        <div className="exit-button">
+                        <a className="exit-button" href={'/quiz'}>
                             <p>&lt;</p>
                             {/* Eventually, this button will let you leave the quiz */}
-                        </div>
+                        </a>
                         <div className="col">
                             <h1 className="quiz-title">Verb Conjugation Quiz</h1>
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>

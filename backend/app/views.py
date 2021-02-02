@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from .models import (
     Text
 )
+from .serializers import (
+    TextSerializer
+)
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
@@ -21,3 +24,13 @@ def get_quiz_data(request, text_id):
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.text)
     return Response(res)
+
+
+@api_view(['GET'])
+def get_all_texts(request):
+    """
+    API endpoint to get all texts in the database
+    """
+    text_obj = Text.objects.all()
+    serializer = TextSerializer(text_obj, many=True)
+    return Response(serializer.data)
