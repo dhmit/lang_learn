@@ -2,7 +2,13 @@ import React from 'react';
 import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
-import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import {
+    Button,
+    ToggleButton,
+    ToggleButtonGroup,
+    Tooltip,
+    OverlayTrigger,
+} from 'react-bootstrap';
 
 // import { Navbar, Footer } from '../UILibrary/components';
 
@@ -50,6 +56,17 @@ export class QuizView extends React.Component {
         }
     }
 
+    getUnanswered() {
+        let numUnanswered = 0;
+        const answers = this.state.userAnswers;
+        for (let i = 1; i <= this.state.data.length; i++) {
+            if (answers[i] === undefined) {
+                numUnanswered++;
+            }
+        }
+        return numUnanswered;
+    }
+
     gradeQuiz() {
         this.setState({ graded: true });
         let score = 0;
@@ -73,7 +90,7 @@ export class QuizView extends React.Component {
         const currentQ = this.state.question;
         if ((typeof event.target.value) === 'undefined') {
             console.log();
-        } else {
+        } else if (!this.state.graded) {
             const answers = this.state.userAnswers;
             answers[currentQ] = event.target.value;
             this.setState({ userAnswers: answers });
@@ -117,14 +134,24 @@ export class QuizView extends React.Component {
                         </div>
                         <div className="col text-right submit-button">
                             {(this.state.graded)
-                                ? <p>
+                                ? <p id="score">
                                     Score:&nbsp;
-                                    {this.state.score}
-                                    /{this.state.data.length}
+                                    {this.state.score}/{this.state.data.length}
                                 </p>
-                                : <Button id="submit" onClick={() => this.gradeQuiz()}>
-                                    Submit
-                                </Button>
+                                : <OverlayTrigger
+                                    key={'left'}
+                                    placement={'left'}
+                                    overlay={
+                                        <Tooltip>
+                                            Are you sure?
+                                            You have {this.getUnanswered()} unanswered questions.
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Button id="submit" onClick={() => this.gradeQuiz()}>
+                                        Submit
+                                    </Button>
+                                </OverlayTrigger>
                             }
                         </div>
                     </div>
