@@ -448,7 +448,7 @@ export class AnagramView extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-3" >
-                        <button className="btn btn-outline-light float-right"
+                        <button className="btn btn-outline-light float-right shuffle-btn"
                             onClick={this.handleShuffle}
                             disabled={this.state.gameOver}>
                             <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
