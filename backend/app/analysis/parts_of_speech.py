@@ -215,11 +215,11 @@ def get_word_examples(word_list, part_of_speech, text):
     return word_examples
 
 
-def quote_in_word(word):
+def punct_in_word(word):
     """
-    Checks if there are quotes in the word
+    Checks if there are punctuations in the word
     """
-    quotes = ["“", '"', "'", "’"]
+    quotes = ["“", '"', "'", "’", ".", "?", "!"]
     for quote in quotes:
         if quote in word:
             return True
@@ -228,4 +228,4 @@ def quote_in_word(word):
 
 def get_valid_words(text, pos):
     return list(set(word.lower() for word in get_part_of_speech_words(text.lower(), pos)
-                    if (not quote_in_word(word) and len(word) > 2)))
+                    if (not punct_in_word(word) and len(word) > 2)))
