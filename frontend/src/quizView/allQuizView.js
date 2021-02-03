@@ -3,7 +3,7 @@ import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 // import * as PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 export class AllQuizView extends React.Component {
     constructor(props) {
@@ -25,7 +25,7 @@ export class AllQuizView extends React.Component {
 
     render() {
         if (!this.state.data) {
-            return (<p>Loading...</p>);
+            return (<LoadingPage />);
         }
 
         const textList = this.state.data.map((text, i) => {

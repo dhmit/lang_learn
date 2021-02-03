@@ -8,7 +8,7 @@ import {
     ToggleButtonGroup,
 } from 'react-bootstrap';
 
-import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 
 export class QuizView extends React.Component {
@@ -110,7 +110,7 @@ export class QuizView extends React.Component {
 
     render() {
         if (!this.state.data) {
-            return (<p>Loading...</p>);
+            return (<LoadingPage />);
         }
 
         // Previously a ButtonChoices function

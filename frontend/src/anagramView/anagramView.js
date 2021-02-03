@@ -229,7 +229,7 @@ export class AnagramView extends React.Component {
 
     render() {
         if (!this.state.targetWordDefs) {
-            return (<LoadingPage/>);
+            return (<LoadingPage loadingText='Creating Anagram Quiz...' />);
         }
 
         /*
