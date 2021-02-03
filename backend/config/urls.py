@@ -48,4 +48,5 @@ urlpatterns = [
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
+    react_view_path('instructor', 'InstructorView'),
 ]
