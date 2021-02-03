@@ -65,7 +65,7 @@ def process_text(text):
     """
 
     # remove_contractions is buggy
-    #processed = remove_contractions(text)
+    # processed = remove_contractions(text)
     # need to test on input text from frontend
     processed = text.replace('"', '\"')
     processed = processed.replace('’', "\'")

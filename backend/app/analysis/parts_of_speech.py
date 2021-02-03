@@ -11,7 +11,6 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
-
 CONTRACTIONS = {
     "ain't": "am not",  # / are not",
     "aren't": "are not",  # / am not",
