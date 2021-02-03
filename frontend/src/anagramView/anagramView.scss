@@ -1,26 +1,20 @@
-.shuffle-icon {
-    height: 25px;
-    width: 25px;
-}
-
-.letters {
-    font-size: 30px;
-}
-
+/* Styles for Anagram */
 .score {
     background-color: #278E73;
-    padding: 8px;
+    display: inline-block;
+    padding: 7px 12px;
     border-radius: 5px;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .shaded-box {
     background: #5941A9;
-    margin: 10px 0 20px 0;
-    padding-top: 10px;
     border-radius: 5px;
+    height: 100%;
+    padding: 15px;
+    margin: 0;
 }
 
 ol {
@@ -40,23 +34,7 @@ li span {
     line-height: 1.33;
 }
 
-.loading-spinner {
-    margin: 0 auto auto;
-}
-
-.loading-text {
-    margin: auto auto 30px;
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.Modal {
-    color: #2D2155;
-    position: fixed;
-    z-index: 500;
-    transition: all 0.4s ease-out;
-}
-
+/* Modal Styles */
 
 .backdrop {
     width: 100%;
@@ -68,12 +46,23 @@ li span {
     background-color: rgba(0,0,0,0.5);
 }
 
-@media (min-width: 600px) {
+.Modal {
+    color: #2D2155;
+    position: fixed;
+    z-index: 500;
+    transition: all 0.4s ease-out;
+    width: 90%;
+    left: 5%;
+}
+
+@media (min-width: 992px) {
     .Modal {
-        width: 500px;
-        left: calc(50% - 250px);
+        width: 60%;
+        left: 20%;
     }
 }
+
+/* Styles for User Input */
 
 .light-letter {
     color: white;
@@ -110,3 +99,40 @@ li span {
 .shuffle-btn:hover {
     background-color: black;
 }
+
+.submit-button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-control {
+    width: 100% !important;
+}
+
+@media (min-width: 768px) {
+    .submit-button {
+        width: 80px;
+        margin: 0 20px 0;
+    }
+
+    .form-control {
+        width: 350px !important;
+    }
+}
+
+.shuffle-icon {
+    height: 25px;
+    width: 25px;
+}
+
+.letters {
+    font-size: 22px;
+    word-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+    .letters {
+        font-size: 30px;
+    }
+}
+

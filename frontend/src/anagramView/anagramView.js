@@ -62,10 +62,6 @@ export class AnagramView extends React.Component {
             showConfetti: false,
         };
         this.timer = 0;
-        this.startTimer = this.startTimer.bind(this);
-        this.pauseTimer = this.pauseTimer.bind(this);
-        this.countDown = this.countDown.bind(this);
-        this.modalHandler = this.modalHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -153,7 +149,7 @@ export class AnagramView extends React.Component {
         });
     }
 
-    reset() {
+    reset = () => {
         this.setState({
             targetWordDefs: null,
             targetWords: [],
@@ -373,7 +369,7 @@ export class AnagramView extends React.Component {
             <Navbar />
             <div className="page">
                 <div className="row">
-                    <div className="col">
+                    <div className="col-md-6 col-12">
                         <h1>
                             Anagrams
                             <button className="btn btn-outline-light btn-circle mx-3"
@@ -381,6 +377,9 @@ export class AnagramView extends React.Component {
                                 onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
+                            <h4 style= {{ 'paddingBottom': '10px' }}>
+                                Category: {this.props.partOfSpeech}
+                            </h4>
                         </h1>
                     </div>
                     <div>
@@ -391,8 +390,7 @@ export class AnagramView extends React.Component {
                                 : null
                         }
                         <div className="Modal modal-content" style={{
-                            transform: this.state.showModal
-                                ? 'translateY(0)' : 'translateY(-100vh)',
+                            display: this.state.showModal ? 'block' : 'none',
                             opacity: this.state.showModal ? 1 : 0,
                         }}>
                             <div className="modal-header">
@@ -424,11 +422,13 @@ export class AnagramView extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col text-right">
+                    <div
+                        className="col-lg-6 col-12 text-lg-right text-left"
+                        style= {{ 'paddingBottom': '18px' }}
+                    >
                         <h4>Time Left: {this.state.timeLeft}</h4>
                     </div>
                 </div>
-                <h4 style= {{ 'paddingBottom': '5px' }}>Category: {this.props.partOfSpeech}</h4>
                 {
                     this.state.gameOver
                         ? <div className="alert alert-success" role="alert">
@@ -439,8 +439,8 @@ export class AnagramView extends React.Component {
                         </div>
                         : null
                 }
-                <div className="row">
-                    <div className="col-6 text-left">
+                <div className="row mb-4">
+                    <div className="col-8 text-left">
                         <button type="button" className="btn btn-primary"
                             disabled={!this.state.gameOver}
                             onClick={this.startNewGame}>Restart</button>
@@ -448,38 +448,46 @@ export class AnagramView extends React.Component {
                             onClick={this.giveUp}
                             disabled={this.state.gameOver}>Give Up</button>
                     </div>
-                    <div className="col text-right">
+                    <div className="col-4 text-right">
                         <span className="score">Score: {this.state.score}</span>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col shaded-box" >
-                        <h3>Extra Words</h3>
-                        <ul>
-                            {
-                                this.state.extraWordsFound.map((word, i) => (
-                                    <li key={i}>
-                                        {word.toUpperCase()}
-                                    </li>
-                                ))
-                            }
-                        </ul>
+                    <div className="col-lg-3 col-6 pr-lg-4 pr-2 mb-4" >
+                        <div className="shaded-box">
+                            <h3>Extra Words</h3>
+                            <ul>
+                                {
+                                    this.state.extraWordsFound.map((word, i) => (
+                                        <li key={i}>
+                                            {word.toUpperCase()}
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
                     </div>
-                    <div className="col shaded-box mx-4">
-                        <h3>Words Found</h3>
-                        <ol>{wordsFound}</ol>
+                    <div className="col-lg-3 col-6 pr-lg-4 pr-0 mb-4">
+                        <div className='shaded-box'>
+                            <h3>Words Found</h3>
+                            <ol>{wordsFound}</ol>
+                        </div>
                     </div>
-                    <div className="col-6 shaded-box">
-                        <h3>Definitions</h3>
-                        <Confetti active={this.state.showConfetti} config={CONFETTI_CONFIG}/>
-                        <ol>{definitions}</ol>
+                    <div className="col-lg-6 col-12 mb-4">
+                        <div className='shaded-box'>
+                            <h3>Definitions</h3>
+                            <Confetti active={this.state.showConfetti} config={CONFETTI_CONFIG}/>
+                            <ol style={{ margin: 0 }}>{definitions}</ol>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-3" >
-                        <button className="btn btn-outline-light float-right shuffle-btn"
+                    <div className="col-2 col-md-3 d-flex align-items-center" >
+                        <button
+                            className="btn btn-outline-light d-block ml-auto shuffle-btn"
                             onClick={this.handleShuffle}
-                            disabled={this.state.gameOver}>
+                            disabled={this.state.gameOver}
+                        >
                             <img
                                 alt='shuffle'
                                 className="shuffle-icon"
@@ -487,7 +495,7 @@ export class AnagramView extends React.Component {
                             />
                         </button>
                     </div>
-                    <div className="col-9 letters">
+                    <div className="col-10 col-md-9 letters">
                         {
                             this.state.letters.map((letter, k) => {
                                 let letterClass = 'light-letter';
@@ -508,9 +516,9 @@ export class AnagramView extends React.Component {
                 </div>
                 <br/>
                 <div className="row mb-5">
-                    <div className="col-3" >
+                    <div className="col-0 col-md-3" >
                     </div>
-                    <div className="col-9">
+                    <div className="col-12 col-md-9">
                         <form
                             className="form-inline"
                             onSubmit={this.handleSubmit}
@@ -526,7 +534,7 @@ export class AnagramView extends React.Component {
                                 autoComplete='off'
                                 onAnimationEnd={() => { this.setState({ shake: false }); }}
                             />
-                            <button className="btn btn-outline-light mx-2"
+                            <button className="btn btn-outline-light submit-button"
                                 disabled={this.state.gameOver}
                                 type="submit">Enter</button>
                         </form>
