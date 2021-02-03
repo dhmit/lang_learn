@@ -52,6 +52,7 @@
     "react-dom": "^16.8.6",
     "react-dom-confetti": "^0.2.0",
     "react-leaflet": "^2.8.0",
+    "react-tooltip": "^4.2.13",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",

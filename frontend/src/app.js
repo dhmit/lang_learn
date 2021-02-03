@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
 import { QuizView } from './quizView/quizView';
+import { AnagramView } from './anagramView/anagramView';
 import { AllQuizView } from './quizView/allQuizView';
 
 // Import all styles
@@ -21,5 +22,6 @@ window.app_modules = {
     // Add all frontend views here
     IndexView,
     QuizView,
+    AnagramView,
     AllQuizView,
 };
