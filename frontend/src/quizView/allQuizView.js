@@ -3,7 +3,7 @@ import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 // import * as PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-// import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer } from '../UILibrary/components';
 
 export class AllQuizView extends React.Component {
     constructor(props) {
@@ -37,6 +37,7 @@ export class AllQuizView extends React.Component {
         });
 
         return (<>
+            <Navbar />
             <div className="page">
                 <div className="row justify-content-between" id="top">
                     <div className="col">
@@ -53,6 +54,7 @@ export class AllQuizView extends React.Component {
                     {textList}
                 </div>
             </div>
+            <Footer />
         </>);
     }
 }

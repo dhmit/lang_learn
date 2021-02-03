@@ -8,7 +8,7 @@ import {
     ToggleButtonGroup,
 } from 'react-bootstrap';
 
-// import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer } from '../UILibrary/components';
 
 
 export class QuizView extends React.Component {
@@ -132,7 +132,7 @@ export class QuizView extends React.Component {
 
         return (
             <React.Fragment>
-                {/* <Navbar /> */}
+                <Navbar />
                 <div className="page">
                     <div className="row justify-content-between" id="top">
                         <a className="exit-button" href={'/quiz'}>
@@ -267,7 +267,7 @@ export class QuizView extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <Footer /> */}
+                <Footer />
             </React.Fragment>
         );
     }
