@@ -108,6 +108,10 @@ class TextInfo extends React.Component {
                             <label className='title-collapse'>
                                 {collapse ? 'Show More' : 'Show Less'}
                             </label>
+                            <div className={`collapse-arrow ${collapse ? '' : 'arrow-flip'}`}>
+                                <div className='rect-1'/>
+                                <div className='rect-2'/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -215,7 +219,7 @@ export class InstructorView extends React.Component {
             <Navbar color='light' />
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
-                <button onClick={this.modalHandler}>Add Text</button>
+                <button className='add-text-button' onClick={this.modalHandler}>Add Text</button>
                 <div>
                     {
                         this.state.showModal
