@@ -158,6 +158,8 @@ export class InstructorView extends React.Component {
         this.state = {
             textData: null,
             showModal: false,
+            addTitle: '',
+            addContent: '',
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -182,6 +184,24 @@ export class InstructorView extends React.Component {
         });
     }
 
+    handleInput = (event) => {
+        if (event.target.id === 'title') {
+            this.setState({
+                addTitle: event.target.value,
+            });
+        } else {
+            this.setState({
+                addContent: event.target.value,
+            });
+        }
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(this.state.addTitle);
+        console.log(this.state.addContent);
+    }
+
     render() {
         if (!this.state.textData) {
             return (<LoadingPage text='Setting up Teacher Interface...'/>);
@@ -204,18 +224,39 @@ export class InstructorView extends React.Component {
                         opacity: this.state.showModal ? 1 : 0,
                     }}>
                         <div className="modal-header">
-                            <h5 className="modal-title">Instructions</h5>
+                            <h5 className="modal-title">Create Resource</h5>
                             <button type="button" className="close" onClick={this.modalHandler}>
                                 <span>&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body">
-                            <p>Instructions will go here.</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary"
-                                onClick={this.modalHandler}>Close</button>
-                        </div>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="modal-body">
+                                <div className="row align-items-center">
+                                    <div className="col-auto">
+                                        <label htmlFor="title" className="form-label">Title:</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input type="text" id="title"
+                                            className="form-control" onChange={this.handleInput}
+                                            value={this.state.addTitle} required/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="content" className="form-label">Content:</label>
+                                    <textarea className="form-control" id="content"
+                                        rows="7" onChange={this.handleInput}
+                                        value={this.state.addContent} required>
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-danger"
+                                    onClick={this.modalHandler}>Cancel</button>
+                                <button type="submit" className="btn btn-success btn-create">
+                                    Create
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 {
