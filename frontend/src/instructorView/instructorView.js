@@ -94,6 +94,18 @@ class TextInfo extends React.Component {
         this.setState({ collapse: !this.state.collapse });
     }
 
+    editText = (e) => {
+        const { textData } = this.state;
+        textData.text = e.target.value;
+        this.setState({ textData });
+    }
+
+    editTitle = (e) => {
+        const { textData } = this.state;
+        textData.title = e.target.value;
+        this.setState({ textData });
+    }
+
     render() {
         const { textData, collapse } = this.state;
         const { modules, text, title } = textData;
@@ -102,23 +114,33 @@ class TextInfo extends React.Component {
             <div className="card">
                 <div className={`card-header ${collapse ? 'header-round' : ''}`}>
                     <div className="row">
-                        <div className="col text-title">
-                            {title}
+                        <div className="col">
+                            <input
+                                className='text-title'
+                                type='text'
+                                name='title'
+                                onChange={this.editTitle}
+                                value={title}
+                            />
                         </div>
                         <div
                             onClick={this.toggleCollapse}
-                            className="col text-right title-collapse"
+                            className="col text-right collapse-div"
                         >
-                            {collapse ? 'Show More' : 'Show Less'}
+                            <label className='title-collapse'>
+                                {collapse ? 'Show More' : 'Show Less'}
+                            </label>
                         </div>
                     </div>
                 </div>
                 <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
                     <div className="row">
                         <div className="col-5 ">
-                            <textarea className="text-content">
-                                {text}
-                            </textarea>
+                            <textarea
+                                className="text-content"
+                                value={text}
+                                onChange={this.editText}
+                            />
                         </div>
                         <div className="col-7 module-selection">
                             <div className="row">

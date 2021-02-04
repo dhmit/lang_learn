@@ -100,12 +100,19 @@ label {
     font-size: 26px;
     font-weight: bold;
     color: #F9EEFF;
+    background: #5941A9;
+    border: none;
+}
+
+.collapse-div {
+    margin: auto;
 }
 
 .title-collapse {
     color: #9F91CC;
     font-size: 18px;
     margin: auto;
+    cursor: pointer;
 }
 
 
