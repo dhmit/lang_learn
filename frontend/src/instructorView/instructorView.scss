@@ -37,10 +37,13 @@
 }
 
 .text-content {
-    margin: 0;
-    padding: 15px;
     background-color: #5941A9;
     border-radius: 10px;
+    color: white;
+    margin: 0;
+    padding: 15px;
+    height: 100%;
+    width: 100%;
 }
 
 /* Card Buttons */
@@ -49,21 +52,38 @@
 }
 
 .card-buttons {
-    border: none;
+    border: transparent 2px solid;
     border-radius: 8px;
     color: white;
     font-size: 24px;
     font-weight: bold;
     margin: 0 0 0 20px;
     padding: 5px 20px;
+    transition-duration: 0.3s;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .save-button {
     background: #2D2155;
+
+    &:hover {
+        background: white;
+        border: #2D2155 2px solid;
+        color: #2D2155;
+    }
 }
 
 .delete-button {
     background: #933A3A;
+
+    &:hover {
+        background: white;
+        border: #933A3A 2px solid;
+        color: #933A3A;
+    }
 }
 
 /* Module Selection Styles */

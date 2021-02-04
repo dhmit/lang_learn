@@ -99,9 +99,9 @@ class TextInfo extends React.Component {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-5 ">
-                            <div className="text-content">
+                            <textarea className="text-content">
                                 {text['text']}
-                            </div>
+                            </textarea>
                         </div>
                         <div className="col-7 module-selection">
                             <div className="row">
@@ -164,6 +164,7 @@ export class InstructorView extends React.Component {
             <Navbar color='light' />
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
+                <button>Add Text</button>
                 {
                     this.state.textData.map((text, i) => (<TextInfo key={i} text={text}/>))
                 }
