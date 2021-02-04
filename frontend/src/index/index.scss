@@ -22,17 +22,19 @@ code {
     margin-bottom: 1px;
 }
 
-$header-height: 100px;
-$footer-height: 150px;
+$header-padding: 10px;
 $side-padding: 100px;
 
 .page {
-    padding: $header-height $side-padding $footer-height;
+    padding: $header-padding $side-padding 0;
+    flex: 1 0 auto;
+    background-color: #2D2155;
+    color: white;
 }
 
 @media (max-width: 992px) {
     .page {
-        padding: $header-height 0 $footer-height;
+        padding: $header-padding 0 0;
     }
 }
 
@@ -57,4 +59,7 @@ $side-padding: 100px;
 
 .map-square:hover {
     color: black;
+}
+
+#anagram-button {
 }

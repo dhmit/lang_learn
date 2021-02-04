@@ -6,11 +6,10 @@ import {
     Button,
     ToggleButton,
     ToggleButtonGroup,
-    Tooltip,
-    OverlayTrigger,
 } from 'react-bootstrap';
 
-// import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+
 
 export class QuizView extends React.Component {
     constructor(props) {
@@ -68,15 +67,27 @@ export class QuizView extends React.Component {
     }
 
     gradeQuiz() {
-        this.setState({ graded: true });
-        let score = 0;
-        const answers = this.state.userAnswers;
-        for (let i = 0; i < this.state.data.length; i++) {
-            if (answers[i + 1] === this.state.data[i].answer) {
-                score += 1;
-            }
+        let cSubmit;
+        if (this.getUnanswered() === 0) {
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
+                + ' answers are final.');
+        } else {
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
+                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
         }
-        this.setState({ score: score });
+        if (cSubmit === true) {
+            this.setState({ graded: true });
+            let score = 0;
+            const answers = this.state.userAnswers;
+            for (let i = 0; i < this.state.data.length; i++) {
+                if (answers[i + 1] === this.state.data[i].answer) {
+                    score += 1;
+                }
+            }
+            this.setState({ score: score });
+        } else {
+            console.log();
+        }
     }
 
     onProgressBarClick = (event) => {
@@ -99,7 +110,7 @@ export class QuizView extends React.Component {
 
     render() {
         if (!this.state.data) {
-            return (<p>Loading...</p>);
+            return (<LoadingPage />);
         }
 
         // Previously a ButtonChoices function
@@ -121,13 +132,13 @@ export class QuizView extends React.Component {
 
         return (
             <React.Fragment>
-                {/* <Navbar /> */}
+                <Navbar />
                 <div className="page">
                     <div className="row justify-content-between" id="top">
-                        <div className="exit-button">
+                        <a className="exit-button" href={'/quiz'}>
                             <p>&lt;</p>
                             {/* Eventually, this button will let you leave the quiz */}
-                        </div>
+                        </a>
                         <div className="col">
                             <h1 className="quiz-title">Verb Conjugation Quiz</h1>
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>
@@ -138,20 +149,9 @@ export class QuizView extends React.Component {
                                     Score:&nbsp;
                                     {this.state.score}/{this.state.data.length}
                                 </p>
-                                : <OverlayTrigger
-                                    key={'left'}
-                                    placement={'left'}
-                                    overlay={
-                                        <Tooltip>
-                                            Are you sure?
-                                            You have {this.getUnanswered()} unanswered question(s).
-                                        </Tooltip>
-                                    }
-                                >
-                                    <Button id="submit" onClick={() => this.gradeQuiz()}>
+                                : <Button id="submit" onClick={() => this.gradeQuiz()}>
                                         Submit
-                                    </Button>
-                                </OverlayTrigger>
+                                </Button>
                             }
                         </div>
                     </div>
@@ -164,7 +164,10 @@ export class QuizView extends React.Component {
                                     const answers = this.state.userAnswers;
 
                                     if (this.state.graded) {
-                                        if (Object.prototype.hasOwnProperty.call(answers, qNumber)) {
+                                        if (Object.prototype.hasOwnProperty.call(
+                                            answers,
+                                            qNumber,
+                                        )) {
                                             const userAnswer = answers[qNumber];
                                             const correctAnswer = this.state.data[key].answer;
                                             if (userAnswer === correctAnswer) {
@@ -264,7 +267,7 @@ export class QuizView extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <Footer /> */}
+                <Footer />
             </React.Fragment>
         );
     }

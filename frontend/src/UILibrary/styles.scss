@@ -3,6 +3,7 @@
  */
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import '../index/index';
+@import '../anagramView/anagramView';
 
 html {
     position: relative;
@@ -19,16 +20,45 @@ body {
     @extend .flex-column;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+/**
+ * Footer Styles
+ */
+
+ .footer-img {
+     height: 80px;
+     max-height: 10vh;
+     max-width: 20vw;
+     object-fit: contain;
+     padding-bottom: 10px;
+ }
+
+ .footer {
+     flex-shrink: 0;
+ }
+
+/**
+ * Navbar styles
+ */
+
+.navbar-brand {
+    font-size: 1.50rem;
 }
 
-.footer-img {
-    height: 80px;
-    max-height: 10vh;
-    max-width: 20vw;
-    object-fit: contain;
+
+.nav-link {
+    font-size: 1.25rem;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.loading {
+    background-color: #2D2155;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 86%;
 }

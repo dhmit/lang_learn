@@ -1,23 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-html, body {
-    background-color: #2D2155;
-}
-
-.page {
-    font-family: "Lato", "Verdana", sans-serif;
-    background-color: #2D2155;
-    color: white;
-    height: 100%;
-    width: 100%;
-}
-
 #submit {
     background-color: #278E73;
     padding: 5px 30px;
     border: none;
     font-size: 28px;
     font-weight: bold;
+}
+
+#quiz-text {
+    background-color: #5941A9;
+    padding: 5px 30px;
+    border: none;
+    width: 80%;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.text-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 // Row Properties
@@ -46,6 +50,12 @@ html, body {
 .exit-button {
     font-size: 44.8px;
     font-weight: bold;
+    color: white;
+    text-decoration: none !important;
+
+    &:hover {
+        color: white;
+    }
 }
 
 // Submit Button Section

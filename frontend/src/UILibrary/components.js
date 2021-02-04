@@ -2,7 +2,7 @@
  *  Components that are reused frequently throughout the project
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
@@ -100,39 +100,104 @@ CaptionedImage.propTypes = {
 export class Footer extends React.Component {
     render() {
         return (
-            <footer className="footer bg-white text-dark text-center mt-auto">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-4 py-3">
-                            <a href="https://digitalhumanities.mit.edu/">
-                                <img
-                                    src="/static/img/footer/dh_logo.svg"
-                                    className='footer-img'
-                                    alt='Digital Humanities at MIT Logo'
-                                />
-                            </a>
-                        </div>
-                        <div className="col-4 py-3">
-                            <a href="https://www.mit.edu/">
-                                <img
-                                    src="/static/img/footer/mit_logo.svg"
-                                    className='footer-img'
-                                    alt='MIT Logo'
-                                />
-                            </a>
-                        </div>
-                        <div className="col-4 py-3">
-                            <a href="https://www.mellon.org/">
-                                <img
-                                    src="/static/img/footer/mellon_logo.svg"
-                                    className='footer-img'
-                                    alt="Mellon Foundation Logo"
-                                />
-                            </a>
-                        </div>
-                    </div>
+            <div className="row text-center footer">
+                <div className="col-4 py-3">
+                    <a href="https://digitalhumanities.mit.edu/">
+                        <img
+                            src="/static/img/footer/dh_logo.svg"
+                            className='footer-img'
+                            alt='Digital Humanities at MIT Logo'
+                        />
+                    </a>
                 </div>
-            </footer>
+                <div className="col-4 py-3">
+                    <a href="https://www.mit.edu/">
+                        <img
+                            src="/static/img/footer/mit_logo.svg"
+                            className='footer-img'
+                            alt='MIT Logo'
+                        />
+                    </a>
+                </div>
+                <div className="col-4 py-3">
+                    <a href="https://www.mellon.org/">
+                        <img
+                            src="/static/img/footer/mellon_logo.svg"
+                            className='footer-img'
+                            alt="Mellon Foundation Logo"
+                        />
+                    </a>
+                </div>
+            </div>
         );
     }
 }
+
+const navbarLinks = [];
+
+export class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showNav: false,
+        };
+    }
+
+    render() {
+        const show = (this.state.showNav) ? 'show' : '';
+        return (
+            <div>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" style={{ 'fontSize': '200%' }}
+                            href="/"><b>Lang Learn</b></a>
+                        <button className="navbar-toggler" type="button"
+                            onClick={() => { this.setState({ showNav: !this.state.showNav }); }}
+                            data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className={'collapse navbar-collapse ' + show} id="navbarNav">
+                            <ul className="navbar-nav ml-auto">
+                                {
+                                    navbarLinks.map((page) => (
+                                        <li key={page.name} className="nav-item">
+                                            <a key={page.name} className="nav-link"
+                                                href={page.link}>{page.name}</a>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        );
+    }
+}
+
+export class LoadingPage extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <>
+                <Navbar/>
+                <div className="loading">
+                    <div className="loading-text">{this.props.loadingText}</div>
+                    <div className="spinner-border loading-spinner" role="status" >
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <Footer/>
+            </>
+        );
+    }
+}
+
+LoadingPage.propTypes = {
+    loadingText: PropTypes.string,
+};
