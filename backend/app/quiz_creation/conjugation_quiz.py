@@ -1,5 +1,5 @@
 import random
-from app.analysis.parts_of_speech import get_parts_of_speech_tags, remove_contractions
+from app.analysis.parts_of_speech import get_parts_of_speech_tags, CONTRACTIONS
 from app.quiz_creation.verb_conjugation import (
     verb_tenses,
     verb_tense,
@@ -73,6 +73,7 @@ def process_text(text):
     return processed
 
 
+
 def get_quiz_sentences(text):
     """
     Given a piece of text, create a dictionary of lists. The lists contain a single sentence
@@ -92,24 +93,37 @@ def get_quiz_sentences(text):
 
     # Keep track of the absolute and relative indexes of each word
     verb_index_data = [0, []]
+    is_contraction = False
     for i, [word, pos] in enumerate(pos_tags):
 
-        # Removes the space between words and commas, letters and apostrophes and parts of
-        # contractions
+        # Removes spaces with words, commas, and quotations
         # "~~" is a filler to preserve length of list when indexing for the verb
-        if pos == ',' or pos == "POS":
+        if pos == ',' or pos == "POS" or word == "'" or word == "''":
             current_sentence['sentence'][-1] += word
-            current_sentence['sentence'].append("~~")
-            continue
-        if word == "n't":
             current_sentence['sentence'].append("~~")
             continue
 
         # If the current word is a type of verb, record its index.
         if pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
-            if pos_tags[i+1][0] == "n't":
-                word = word + "n't"
             verb_index_data[1].append(i)
+
+        # remove space between beginning double quotes and word
+        if pos_tags[i - 1][1] == '``':
+            current_sentence['sentence'][-1] = "~~"
+            current_sentence['sentence'].append("''" + word)
+            continue
+
+        # prevent contractions from splitting
+        if i != len(pos_tags)-1 and word + pos_tags[i+1][0] in CONTRACTIONS:
+            current_sentence['sentence'].append(word + pos_tags[i+1][0])
+            is_contraction = True
+            continue
+
+        # adds filler when adjusting contractions
+        if is_contraction:
+            current_sentence['sentence'].append("~~")
+            is_contraction = False
+            continue
 
 
         # Add a new word to the current sentence.
@@ -126,13 +140,18 @@ def get_quiz_sentences(text):
                 sentence = current_sentence['sentence']
                 word = sentence[verb_index]
 
-                if word[0] == ("'" or '"'):
-                    quote_type = [word[0]]
-                    current_sentence['sentence'] = (
-                        sentence[:verb_index] + quote_type + ['___'] + sentence[verb_index + 1:]
-                    )
+                # make sure answer choices don't include quotations
+                # fixes question to include quotation marks
+                if word[0] == "'" or word[0] == '"':
                     current_sentence['options'] = get_sentence_options(word[1:])
                     current_sentence['answer'] = word[1:]
+                    quote_type = word[0]
+                    current_sentence['sentence'][verb_index] = quote_type + "___"
+                elif word[-1] == "'" or word[-1] == '"':
+                    current_sentence['options'] = get_sentence_options(word[:-1])
+                    current_sentence['answer'] = word[:-1]
+                    quote_type = word[-1]
+                    current_sentence['sentence'][verb_index] = "___" + quote_type
                 else:
                     current_sentence['sentence'] = (
                         sentence[:verb_index] + ['___'] + sentence[verb_index + 1:]
@@ -145,7 +164,7 @@ def get_quiz_sentences(text):
 
                 # If the final 'word' in a sentence is a punctuation, connect the punctuation and
                 # the last normal word.
-
+                # remove fillers
                 while "~~" in current_sentence['sentence']:
                     current_sentence['sentence'].remove("~~")
 
