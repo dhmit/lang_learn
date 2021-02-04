@@ -147,7 +147,8 @@ export class Navbar extends Component {
         const show = (this.state.showNav) ? 'show' : '';
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <nav className={`navbar navbar-expand-lg ${this.props.color === 'light'
+                    ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`}>
                     <div className="container-fluid">
                         <a className="navbar-brand" style={{ 'fontSize': '200%' }}
                             href="/"><b>Lang Learn</b></a>
@@ -176,6 +177,9 @@ export class Navbar extends Component {
         );
     }
 }
+Navbar.propTypes = {
+    color: PropTypes.string,
+};
 
 export class LoadingPage extends Component {
     render() {
