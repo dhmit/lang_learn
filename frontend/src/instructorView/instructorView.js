@@ -46,31 +46,9 @@ class TextInfo extends React.Component {
     constructor(props) {
         super(props);
         /* TODO: Handle checkbox state here so that we can submit all the info here as well */
-        const { text } = this.props;
         this.state = {
             collapse: true,
-            textData: {
-                id: text.id,
-                title: text.title,
-                text: text.text,
-                modules: {
-                    anagrams: {
-                        noun: false,
-                        verb: false,
-                        adjective: false,
-                        adverb: false,
-                    },
-                    flashcards: {
-                        noun: false,
-                        verb: false,
-                        adjective: false,
-                        adverb: false,
-                    },
-                    quiz: {
-                        conjugations: false,
-                    },
-                },
-            },
+            textData: this.props.text,
         };
     }
 
