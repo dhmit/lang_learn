@@ -98,7 +98,8 @@ def get_quiz_sentences(text):
 
         # Removes spaces with words, commas, and quotations
         # "~~" is a filler to preserve length of list when indexing for the verb
-        if pos == ',' or pos == "POS" or word == "'" or word == "''":
+        if current_sentence['sentence'] != [] and (pos == ',' or pos == "POS" or word == "'" or
+                                                   word == "''"):
             current_sentence['sentence'][-1] += word
             current_sentence['sentence'].append("~~")
             continue
@@ -147,7 +148,7 @@ def get_quiz_sentences(text):
                     current_sentence['answer'] = word[1:]
                     quote_type = word[0]
                     current_sentence['sentence'][verb_index] = quote_type + "___"
-                elif word[-1] == "'" or word[-1] == '"':
+                elif word[-1] == "'" or word[-1] == '"' or word[-1] == ',':
                     current_sentence['options'] = get_sentence_options(word[:-1])
                     current_sentence['answer'] = word[:-1]
                     quote_type = word[-1]
