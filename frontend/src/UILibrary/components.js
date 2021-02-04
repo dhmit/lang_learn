@@ -133,7 +133,9 @@ export class Footer extends React.Component {
     }
 }
 
-const navbarLinks = [];
+const navbarLinks = [
+    { name: 'Instructor\'s Page', link: '/instructor' },
+];
 
 export class Navbar extends Component {
     constructor(props) {
@@ -163,9 +165,15 @@ export class Navbar extends Component {
                             <ul className="navbar-nav ml-auto">
                                 {
                                     navbarLinks.map((page) => (
-                                        <li key={page.name} className="nav-item">
-                                            <a key={page.name} className="nav-link"
-                                                href={page.link}>{page.name}</a>
+                                        <li key={page.name} className='nav-item'>
+                                            <a
+                                                key={page.name}
+                                                className={`nav-link ${this.props.color === 'light'
+                                                    ? 'text-light' : 'text-dark'}`}
+                                                href={page.link}
+                                            >
+                                                {page.name}
+                                            </a>
                                         </li>
                                     ))
                                 }

@@ -3,10 +3,20 @@
     color: black;
 }
 
+.instructor-header {
+    color: #2D2155;
+    font-size: 60px;
+    font-weight: bold;
+}
+
 .card {
     border-radius: 10px;
     color: white;
-    margin: 10px;
+    margin: 20px 0;
+}
+
+.card-body {
+    background: rgba(200, 200, 200, 0.3);
 }
 
 .card-header {
@@ -17,6 +27,7 @@
 .text-title {
     font-size: 26px;
     font-weight: bold;
+    color: #F9EEFF;
 }
 
 .title-collapse {

@@ -3,6 +3,42 @@ import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
+class TextInfo extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const { text } = this.props;
+        return (
+            <div className="card">
+                <div className="card-header">
+                    <div className="row">
+                        <div className="col text-title">
+                            {text['title']}
+                        </div>
+                        <div className="col text-right title-collapse">
+                            Show More
+                        </div>
+                    </div>
+                </div>
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col text-content">
+                            {text['text']}
+                        </div>
+                        <div className="col">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+TextInfo.propTypes = {
+    text: PropTypes.string,
+};
+
 export class InstructorView extends React.Component {
     constructor(props) {
         super(props);
@@ -31,33 +67,9 @@ export class InstructorView extends React.Component {
         return (<React.Fragment>
             <Navbar color='light' />
             <div className="page instructor">
-                <div className="row">
-                    <h1>Resources</h1>
-                </div>
+                <h1 className='instructor-header'>Resources</h1>
                 {
-                    this.state.textData.map((text, i) => (
-                        <div className="card" key={i}>
-                            <div className="card-header">
-                                <div className="row">
-                                    <div className="col text-title">
-                                        {text['title']}
-                                    </div>
-                                    <div className="col text-right title-collapse">
-                                        Show More
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col text-content">
-                                        {text['text']}
-                                    </div>
-                                    <div className="col">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))
+                    this.state.textData.map((text, i) => (<TextInfo key={i} text={text}/>))
                 }
             </div>
             <Footer />
