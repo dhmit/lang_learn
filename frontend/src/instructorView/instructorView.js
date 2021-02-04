@@ -2,10 +2,84 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { capitalize } from '../common';
+
+class Module extends React.Component {
+    render() {
+        const { moduleInfo, moduleName } = this.props;
+        return (
+            <div className='col-4'>
+                <h2 className='module-header'>{capitalize(moduleName)}</h2>
+                {
+                    Object.keys(moduleInfo).map((category, k) => (
+                        <div className='module-category' key={k}>
+                            <input
+                                className='module-category-checkbox'
+                                type='checkbox'
+                                name={category}
+                                checked={moduleInfo[category]}
+                                onChange={() => {
+                                    this.props.updateModule(
+                                        moduleName,
+                                        category,
+                                        !moduleInfo[category],
+                                    );
+                                }}
+                            />
+                            <label className='module-category-label'>
+                                {capitalize(category)}
+                            </label>
+                        </div>
+                    ))
+                }
+            </div>
+        );
+    }
+}
+Module.propTypes = {
+    moduleName: PropTypes.string,
+    moduleInfo: PropTypes.object,
+    updateModule: PropTypes.func,
+};
 
 class TextInfo extends React.Component {
     constructor(props) {
         super(props);
+        /* TODO: Handle checkbox state here so that we can submit all the info here as well */
+        this.state = {
+            anagrams: {
+                noun: false,
+                verb: false,
+                adjective: false,
+                adverb: false,
+            },
+            flashcards: {
+                noun: false,
+                verb: false,
+                adjective: false,
+                adverb: false,
+            },
+            quiz: {
+                conjugations: false,
+            },
+        };
+    }
+
+    updateModule = (module, category, value) => {
+        console.log(module, category, value);
+        const moduleData = this.state[module];
+        moduleData[category] = value;
+        this.setState({ [module]: moduleData });
+    }
+
+    saveText = () => {
+        /* Code for saving text to database */
+        console.log('SAVING TEXT');
+    }
+
+    deleteText = () => {
+        /* Code for deleting text */
+        console.log('DELETING TEXT');
     }
 
     render() {
@@ -24,11 +98,33 @@ class TextInfo extends React.Component {
                 </div>
                 <div className="card-body">
                     <div className="row">
-                        <div className="col text-content">
-                            {text['text']}
+                        <div className="col-5 ">
+                            <div className="text-content">
+                                {text['text']}
+                            </div>
                         </div>
-                        <div className="col">
+                        <div className="col-7 module-selection">
+                            <div className="row">
+                                {
+                                    Object.keys(this.state).map((module, k) => (
+                                        <Module
+                                            key={k}
+                                            moduleName={module}
+                                            moduleInfo={this.state[module]}
+                                            updateModule={this.updateModule}
+                                        />
+                                    ))
+                                }
+                            </div>
                         </div>
+                    </div>
+                    <div className="card-button-div">
+                        <button onClick={this.saveText} className='card-buttons save-button'>
+                            Save
+                        </button>
+                        <button onClick={this.deleteText} className='card-buttons delete-button'>
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>

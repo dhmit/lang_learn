@@ -1,3 +1,4 @@
+/* Top Level Instructor View*/
 .instructor {
     background-color: #F9EEFF;
     color: black;
@@ -9,6 +10,7 @@
     font-weight: bold;
 }
 
+/* Card (Text Info) Styles*/
 .card {
     border-radius: 10px;
     color: white;
@@ -35,8 +37,60 @@
 }
 
 .text-content {
-    margin: 0 10px;
-    padding: 10px;
+    margin: 0;
+    padding: 15px;
     background-color: #5941A9;
     border-radius: 10px;
+}
+
+/* Card Buttons */
+.card-button-div {
+    text-align: right;
+}
+
+.card-buttons {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 0 20px;
+    padding: 5px 20px;
+}
+
+.save-button {
+    background: #2D2155;
+}
+
+.delete-button {
+    background: #933A3A;
+}
+
+/* Module Selection Styles */
+.module-header {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.module-selection {
+    color: black;
+}
+
+.module-category {
+    margin: 0 0 20px;
+}
+
+.module-category-checkbox {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    vertical-align: top;
+    border-color: white;
+}
+
+.module-category-label {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 500;
 }
