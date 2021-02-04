@@ -5,6 +5,9 @@ from django.db import models
 
 
 def default_module():
+    """
+    List of modules with available states, default permission set to False
+    """
     mods = {
         'anagrams': {
             'noun': False,

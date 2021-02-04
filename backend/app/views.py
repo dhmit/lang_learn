@@ -99,3 +99,26 @@ def get_anagram(request, text_id, part_of_speech):
         'extra_words': extra_words
     }
     return Response(res)
+
+@api_view(['POST'])
+def update_text(request, text_id):
+    """
+    API endpoint for updating title, content, and modules for a given piece of text given
+    the id of the text.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    text_obj.title = request.body.title
+    text_obj.content = request.body.content
+    text_obj.modules = request.body.modules
+    try:
+        text_obj.save()
+        res = {
+            'status': 'Success!'
+        }
+    except Exception as e:
+        res = {
+            'status': 'Failed!',
+            'error': e
+        }
+
+    return Response(res)
