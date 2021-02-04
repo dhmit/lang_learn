@@ -140,7 +140,9 @@ export class InstructorView extends React.Component {
         super(props);
         this.state = {
             textData: null,
+            showModal: false,
         };
+        this.modalHandler = this.modalHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -156,6 +158,13 @@ export class InstructorView extends React.Component {
         }
     }
 
+    modalHandler = (event) => {
+        event.preventDefault();
+        this.setState({
+            showModal: !this.state.showModal,
+        });
+    }
+
     render() {
         if (!this.state.textData) {
             return (<LoadingPage text='Setting up Teacher Interface...'/>);
@@ -164,7 +173,34 @@ export class InstructorView extends React.Component {
             <Navbar color='light' />
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
-                <button>Add Text</button>
+                <button onClick={this.modalHandler}>Add Text</button>
+                <div>
+                    {
+                        this.state.showModal
+                            ? <div className="backdrop" onClick={this.modalHandler}>
+                            </div>
+                            : null
+                    }
+                    <div className="Modal modal-content" style={{
+                        transform: this.state.showModal
+                            ? 'translateY(0)' : 'translateY(-100vh)',
+                        opacity: this.state.showModal ? 1 : 0,
+                    }}>
+                        <div className="modal-header">
+                            <h5 className="modal-title">Instructions</h5>
+                            <button type="button" className="close" onClick={this.modalHandler}>
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Instructions will go here.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary"
+                                onClick={this.modalHandler}>Close</button>
+                        </div>
+                    </div>
+                </div>
                 {
                     this.state.textData.map((text, i) => (<TextInfo key={i} text={text}/>))
                 }
