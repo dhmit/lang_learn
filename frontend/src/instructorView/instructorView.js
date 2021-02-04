@@ -46,30 +46,38 @@ class TextInfo extends React.Component {
     constructor(props) {
         super(props);
         /* TODO: Handle checkbox state here so that we can submit all the info here as well */
+        const { text } = this.props;
         this.state = {
-            anagrams: {
-                noun: false,
-                verb: false,
-                adjective: false,
-                adverb: false,
-            },
-            flashcards: {
-                noun: false,
-                verb: false,
-                adjective: false,
-                adverb: false,
-            },
-            quiz: {
-                conjugations: false,
+            collapse: true,
+            textData: {
+                id: text.id,
+                title: text.title,
+                text: text.text,
+                modules: {
+                    anagrams: {
+                        noun: false,
+                        verb: false,
+                        adjective: false,
+                        adverb: false,
+                    },
+                    flashcards: {
+                        noun: false,
+                        verb: false,
+                        adjective: false,
+                        adverb: false,
+                    },
+                    quiz: {
+                        conjugations: false,
+                    },
+                },
             },
         };
     }
 
     updateModule = (module, category, value) => {
-        console.log(module, category, value);
-        const moduleData = this.state[module];
-        moduleData[category] = value;
-        this.setState({ [module]: moduleData });
+        const textData = this.state.textData;
+        textData.modules[module][category] = value;
+        this.setState({ textData });
     }
 
     saveText = () => {
@@ -82,35 +90,44 @@ class TextInfo extends React.Component {
         console.log('DELETING TEXT');
     }
 
+    toggleCollapse = () => {
+        this.setState({ collapse: !this.state.collapse });
+    }
+
     render() {
-        const { text } = this.props;
+        const { textData, collapse } = this.state;
+        const { modules, text, title } = textData;
+
         return (
             <div className="card">
-                <div className="card-header">
+                <div className={`card-header ${collapse ? 'header-round' : ''}`}>
                     <div className="row">
                         <div className="col text-title">
-                            {text['title']}
+                            {title}
                         </div>
-                        <div className="col text-right title-collapse">
-                            Show More
+                        <div
+                            onClick={this.toggleCollapse}
+                            className="col text-right title-collapse"
+                        >
+                            {collapse ? 'Show More' : 'Show Less'}
                         </div>
                     </div>
                 </div>
-                <div className="card-body">
+                <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
                     <div className="row">
                         <div className="col-5 ">
                             <textarea className="text-content">
-                                {text['text']}
+                                {text}
                             </textarea>
                         </div>
                         <div className="col-7 module-selection">
                             <div className="row">
                                 {
-                                    Object.keys(this.state).map((module, k) => (
+                                    Object.keys(modules).map((module, k) => (
                                         <Module
                                             key={k}
                                             moduleName={module}
-                                            moduleInfo={this.state[module]}
+                                            moduleInfo={modules[module]}
                                             updateModule={this.updateModule}
                                         />
                                     ))
@@ -132,7 +149,7 @@ class TextInfo extends React.Component {
     }
 }
 TextInfo.propTypes = {
-    text: PropTypes.string,
+    text: PropTypes.object,
 };
 
 export class InstructorView extends React.Component {

@@ -17,23 +17,24 @@
     margin: 20px 0;
 }
 
+/* Card body and collapsing animation */
+
 .card-body {
     background: rgba(200, 200, 200, 0.3);
 }
 
-.card-header {
-    background-color: #5941A9;
-    border-radius: 10px 10px 0 0 !important;
+.card-collapse {
+    height: 0;
+    opacity: 0;
+    padding: 0 1.25rem;
+    transition: height 0.8s linear, opacity 0.3s ease-out, padding 0.3s linear;
 }
 
-.text-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: #F9EEFF;
-}
-
-.title-collapse {
-    margin: auto;
+.card-expand {
+    height: 350px;
+    opacity: 1;
+    padding: 1.25rem;
+    transition: height 0.3s ease-out, opacity 0.8s linear, padding 0.3s linear;
 }
 
 .text-content {
@@ -45,6 +46,31 @@
     height: 100%;
     width: 100%;
 }
+
+
+/* Card Header Styles */
+.card-header {
+    background-color: #5941A9;
+    transition: border-radius 0.3s ease;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.header-round {
+    border-radius: 10px !important;
+}
+
+.text-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #F9EEFF;
+}
+
+.title-collapse {
+    color: #9F91CC;
+    font-size: 18px;
+    margin: auto;
+}
+
 
 /* Card Buttons */
 .card-button-div {
