@@ -222,6 +222,11 @@ export class InstructorView extends React.Component {
         event.preventDefault();
         console.log(this.state.addTitle);
         console.log(this.state.addContent);
+        this.setState({
+            addTitle: '',
+            addContent: '',
+        });
+        this.modalHandler(event);
     }
 
     render() {
