@@ -178,6 +178,7 @@ export class InstructorView extends React.Component {
     }
 
     modalHandler = (event) => {
+        event.preventDefault();
         this.setState({
             showModal: !this.state.showModal,
         });
@@ -203,7 +204,7 @@ export class InstructorView extends React.Component {
             addTitle: '',
             addContent: '',
         });
-        this.modalHandler();
+        this.modalHandler(event);
     }
 
     render() {
