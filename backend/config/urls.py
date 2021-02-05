@@ -25,6 +25,7 @@ from app.views import (
     update_text,
     delete_text,
     add_text,
+    get_flashcards,
 )
 
 
@@ -50,9 +51,11 @@ urlpatterns = [
     path('api/update_text', update_text),
     path('api/delete_text', delete_text),
     path('api/add_text', add_text),
+    path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
 
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
     react_view_path('instructor', 'InstructorView'),
+    react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
 ]

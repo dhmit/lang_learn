@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { IndexView } from './index/index';
 import { AnagramView } from './anagramView/anagramView';
 import { InstructorView } from './instructorView/instructorView';
+import { FlashcardView } from './flashcard/flashcardView';
 
 
 // Import all styles
@@ -23,4 +24,5 @@ window.app_modules = {
     IndexView,
     AnagramView,
     InstructorView,
+    FlashcardView,
 };
