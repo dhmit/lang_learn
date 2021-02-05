@@ -78,7 +78,6 @@ class TextInfo extends React.Component {
     }
 
     deleteText = () => {
-        /* Code for deleting text */
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/delete_text';
@@ -98,7 +97,6 @@ class TextInfo extends React.Component {
         } catch (e) {
             console.log(e);
         }
-        console.log('DELETING TEXT');
     }
 
     toggleCollapse = () => {
@@ -240,10 +238,34 @@ export class InstructorView extends React.Component {
         }
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
         console.log(this.state.addTitle);
         console.log(this.state.addContent);
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const apiURL = '/api/add_text';
+            const response = await fetch(apiURL, {
+                credentials: 'include',
+                method: 'POST',
+                mode: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({
+                    title: this.state.addTitle,
+                    content: this.state.addContent,
+                }),
+            });
+            const newText = await response.json();
+            const { textData } = this.state;
+            textData.push(newText);
+            this.setState({ textData });
+        } catch (e) {
+            console.log(e);
+        }
         this.setState({
             addTitle: '',
             addContent: '',

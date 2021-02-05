@@ -24,6 +24,7 @@ from app.views import (
     get_anagram,
     update_text,
     delete_text,
+    add_text,
 )
 
 
@@ -48,6 +49,7 @@ urlpatterns = [
     path('api/get_anagram/<int:text_id>/<str:part_of_speech>', get_anagram),
     path('api/update_text', update_text),
     path('api/delete_text', delete_text),
+    path('api/add_text', add_text),
 
     # View paths
     react_view_path('', 'IndexView'),

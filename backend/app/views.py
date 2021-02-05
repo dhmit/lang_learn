@@ -103,6 +103,18 @@ def get_anagram(request, text_id, part_of_speech):
 
 
 @api_view(['POST'])
+def add_text(request):
+    """
+    API endpoint for adding a piece of text
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    new_text_obj = Text(title=body['title'], content=body['content'])
+    new_text_obj.save()
+    serializer = TextSerializer(new_text_obj)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
 def update_text(request):
     """
     API endpoint for updating title, content, and modules for a given piece of text given
