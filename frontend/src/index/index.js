@@ -24,13 +24,13 @@ class TextInfo extends React.Component {
 
     render() {
         // const posLink = pos.toLowerCase();
-        const { title, text, textId } = this.props;
+        const { title, content, textId } = this.props;
         const { quizType, partOfSpeech } = this.state;
 
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
-                <p className='text-text'>{text}</p>
+                <p className='text-text'>{content}</p>
                 <div className='quiz-selection'>
                     <label className='selection-label'>Quiz:</label>
                     <select
@@ -65,7 +65,7 @@ class TextInfo extends React.Component {
 }
 TextInfo.propTypes = {
     title: PropTypes.string,
-    text: PropTypes.string,
+    content: PropTypes.string,
     textId: PropTypes.number,
 };
 
@@ -101,7 +101,7 @@ export class IndexView extends React.Component {
                     <TextInfo
                         key={k}
                         title={text.title}
-                        text={text.text}
+                        content={text.content}
                         textId={text.id}
                     />
                 ))}
