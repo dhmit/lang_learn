@@ -194,6 +194,7 @@ export class InstructorView extends React.Component {
         this.state = {
             textData: null,
             showModal: false,
+            addingText: 0,
             addTitle: '',
             addContent: '',
         };
@@ -240,11 +241,17 @@ export class InstructorView extends React.Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(this.state.addTitle);
-        console.log(this.state.addContent);
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/add_text';
+
+            this.setState({
+                addTitle: '',
+                addContent: '',
+                addingText: this.state.addingText + 1,
+            });
+            this.modalHandler(event);
+
             const response = await fetch(apiURL, {
                 credentials: 'include',
                 method: 'POST',
@@ -259,18 +266,14 @@ export class InstructorView extends React.Component {
                     content: this.state.addContent,
                 }),
             });
+
             const newText = await response.json();
             const { textData } = this.state;
             textData.push(newText);
-            this.setState({ textData });
+            this.setState({ textData, addingText: this.state.addingText - 1});
         } catch (e) {
             console.log(e);
         }
-        this.setState({
-            addTitle: '',
-            addContent: '',
-        });
-        this.modalHandler(event);
     }
 
     render() {
@@ -281,6 +284,17 @@ export class InstructorView extends React.Component {
             <Navbar color='light' />
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
+                {
+                    this.state.addingText > 0
+                    && <div
+                        className="alert"
+                        style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
+                        role="alert"
+                    >
+                        Currently adding {this.state.addingText} text(s)! (You may exit the page
+                        if you desire to do so.)
+                    </div>
+                }
                 <button className='add-text-button' onClick={this.modalHandler}>
                     <div className='plus-icon'>
                         <div className="plus-1" />
@@ -337,9 +351,9 @@ export class InstructorView extends React.Component {
                     </div>
                 </div>
                 {
-                    this.state.textData.map((text, i) => (
+                    this.state.textData.map((text) => (
                         <TextInfo
-                            key={i}
+                            key={text.id}
                             text={text}
                             delete={() => this.deleteText(text.id)}
                         />
