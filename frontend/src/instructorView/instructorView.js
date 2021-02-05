@@ -2,7 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
-import { capitalize } from '../common';
+import { capitalize, getCookie } from '../common';
 
 class Module extends React.Component {
     render() {
@@ -60,6 +60,23 @@ class TextInfo extends React.Component {
 
     saveText = () => {
         /* Code for saving text to database */
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const apiURL = '/api/update_text';
+            fetch(apiURL, {
+                credentials: 'include',
+                method: 'POST',
+                mode: 'same-origin',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrftoken,
+                },
+                body: this.state.textData
+            });
+        } catch (e) {
+            console.log(e);
+        }
         console.log('SAVING TEXT');
     }
 

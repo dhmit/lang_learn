@@ -101,12 +101,12 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 @api_view(['POST'])
-def update_text(request, text_id):
+def update_text(request):
     """
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    text_obj = Text.objects.get(id=text_id)
+    text_obj = Text.objects.get(id=request.body.id)
     text_obj.title = request.body.title
     text_obj.content = request.body.content
     text_obj.modules = request.body.modules

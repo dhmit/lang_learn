@@ -45,7 +45,7 @@ urlpatterns = [
     path('api/text/<int:text_id>', text),
     path('api/all_text', all_text),
     path('api/get_anagram/<int:text_id>/<str:part_of_speech>', get_anagram),
-    path('api/update_text/<int:text_id>', update_text),
+    path('api/update_text', update_text),
 
     # View paths
     react_view_path('', 'IndexView'),
