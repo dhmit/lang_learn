@@ -33,6 +33,6 @@ class Text(models.Model):
     This model will hold the piece of text that will be used to generate exercises
     such as the anagram and quiz.
     """
-    text = models.TextField(max_length=5000, null=True)
+    content = models.TextField(max_length=5000, null=True)
     title = models.CharField(max_length=252, null=True)
     modules = models.JSONField(null=True, blank=True, default=default_module())

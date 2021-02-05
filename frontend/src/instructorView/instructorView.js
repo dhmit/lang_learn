@@ -68,16 +68,15 @@ class TextInfo extends React.Component {
                 method: 'POST',
                 mode: 'same-origin',
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': csrftoken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
                 },
-                body: this.state.textData
+                body: JSON.stringify(this.state.textData),
             });
         } catch (e) {
             console.log(e);
         }
-        console.log('SAVING TEXT');
     }
 
     deleteText = () => {
@@ -91,7 +90,7 @@ class TextInfo extends React.Component {
 
     editText = (e) => {
         const { textData } = this.state;
-        textData.text = e.target.value;
+        textData.content = e.target.value;
         this.setState({ textData });
     }
 
@@ -103,7 +102,7 @@ class TextInfo extends React.Component {
 
     render() {
         const { textData, collapse } = this.state;
-        const { modules, text, title } = textData;
+        const { modules, content, title } = textData;
 
         return (
             <div className="card">
@@ -137,7 +136,7 @@ class TextInfo extends React.Component {
                         <div className="col-5 ">
                             <textarea
                                 className="text-content"
-                                value={text}
+                                value={content}
                                 onChange={this.editText}
                             />
                         </div>

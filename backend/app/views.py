@@ -1,6 +1,7 @@
 """
 These view functions and classes implement API endpoints
 """
+import json
 import random
 
 from rest_framework.decorators import api_view
@@ -63,7 +64,7 @@ def get_anagram(request, text_id, part_of_speech):
     the id of the text and the part of speech. The anagrams will be random.
     """
     text_obj = Text.objects.get(id=text_id)
-    words = list(set(word for word in get_part_of_speech_words(text_obj.text.lower(),
+    words = list(set(word for word in get_part_of_speech_words(text_obj.content.lower(),
                                                                part_of_speech)
                      if (not punct_in_word(word) and len(word) > 2)))
     random.shuffle(words)
@@ -71,7 +72,7 @@ def get_anagram(request, text_id, part_of_speech):
     words = words[:5]
 
     definitions = get_word_definition(words, part_of_speech)
-    examples = get_word_examples(words, part_of_speech, text_obj.text.lower())
+    examples = get_word_examples(words, part_of_speech, text_obj.content.lower())
 
     # Gets the minimum possible numbers of each letter required to generate all the text
     anagram_freq = {}
@@ -100,16 +101,18 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
+
 @api_view(['POST'])
 def update_text(request):
     """
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    text_obj = Text.objects.get(id=request.body.id)
-    text_obj.title = request.body.title
-    text_obj.content = request.body.content
-    text_obj.modules = request.body.modules
+    body = json.loads(request.body.decode('utf-8'))
+    text_obj = Text.objects.get(id=body['id'])
+    text_obj.title = body['title']
+    text_obj.content = body['content']
+    text_obj.modules = body['modules']
     try:
         text_obj.save()
         res = {

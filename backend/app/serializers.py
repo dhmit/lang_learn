@@ -15,4 +15,4 @@ class TextSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Text
-        fields = ['id', 'title', 'text', 'modules']
+        fields = ['id', 'title', 'content', 'modules']
