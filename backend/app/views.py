@@ -54,7 +54,7 @@ def get_flashcards(request, text_id, part_of_speech):
     definitions = text_obj.definitions
     examples = text_obj.examples
 
-    words = get_valid_words(text_obj.text, part_of_speech)
+    words = get_valid_words(text_obj.content, part_of_speech)
 
     res = [{'word': word,
             'definition': definitions[word].get(part_of_speech, []),
@@ -73,7 +73,7 @@ def get_anagram(request, text_id, part_of_speech):
     text_obj = Text.objects.get(id=text_id)
     definitions = text_obj.definitions
     examples = text_obj.examples
-    words = get_valid_words(text_obj.text, part_of_speech)
+    words = get_valid_words(text_obj.content, part_of_speech)
     random.shuffle(words)
     words = words[:5]
 
