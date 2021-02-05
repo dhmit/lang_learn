@@ -2,7 +2,7 @@
 .instructor {
     background-color: #F9EEFF;
     color: black;
-    padding-bottom: 420px;
+    overflow-y: hidden;
 }
 
 .instructor-header {
@@ -20,9 +20,15 @@
     font-size: 25px;
     padding: 5px 20px 5px 60px;
     position: relative;
+    transition: all 0.3s linear;
 
     &:focus {
         outline: none;
+    }
+
+    &:hover {
+        color: white;
+        background: #5941A9;
     }
 }
 
