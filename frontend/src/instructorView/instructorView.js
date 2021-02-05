@@ -291,8 +291,8 @@ export class InstructorView extends React.Component {
                         style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
                         role="alert"
                     >
-                        Currently adding {this.state.addingText} text(s)! (You may exit the page
-                        if you desire to do so.)
+                        Currently adding {this.state.addingText} text(s)! (Do
+                            not close this page.)
                     </div>
                 }
                 <button className='add-text-button' onClick={this.modalHandler}>
