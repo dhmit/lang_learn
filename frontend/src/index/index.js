@@ -28,7 +28,7 @@ class TextInfo extends React.Component {
             title,
             content,
             textId,
-            modules
+            modules,
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
 

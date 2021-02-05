@@ -282,7 +282,7 @@ export class InstructorView extends React.Component {
             const newText = await response.json();
             const { textData } = this.state;
             textData.push(newText);
-            this.setState({ textData, addingText: this.state.addingText - 1});
+            this.setState({ textData, addingText: this.state.addingText - 1 });
         } catch (e) {
             console.log(e);
         }
