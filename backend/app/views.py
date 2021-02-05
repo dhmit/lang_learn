@@ -132,12 +132,17 @@ def update_text(request):
     """
     body = json.loads(request.body.decode('utf-8'))
     text_obj = Text.objects.get(id=body['id'])
+    old_text = text_obj.content
+
     text_obj.title = body['title']
     text_obj.content = body['content']
     text_obj.modules = body['modules']
+    text_obj.save()
 
-    res = text_obj.save()
-    return Response(res)
+    if old_text != text_obj.content:
+        get_text_data(text_obj)
+
+    return Response()
 
 
 @api_view(['POST'])

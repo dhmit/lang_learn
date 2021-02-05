@@ -227,6 +227,7 @@ label {
 
 .save-button {
     background: #2D2155;
+    cursor: pointer;
 
     &:hover {
         background: white;
@@ -237,11 +238,24 @@ label {
 
 .delete-button {
     background: #933A3A;
+    cursor: pointer;
 
     &:hover {
         background: white;
         border: #933A3A 2px solid;
         color: #933A3A;
+    }
+}
+
+.disabled {
+    background: #d3d3d3;
+    color: black;
+    cursor: not-allowed;
+
+    &:hover {
+        background: #d3d3d3;
+        color: black;
+        border: transparent 2px solid;
     }
 }
 

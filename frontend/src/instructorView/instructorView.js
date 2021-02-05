@@ -47,6 +47,7 @@ class TextInfo extends React.Component {
         super(props);
         this.state = {
             collapse: true,
+            editing: false,
             textData: this.props.text,
         };
     }
@@ -57,11 +58,13 @@ class TextInfo extends React.Component {
         this.setState({ textData });
     }
 
-    saveText = () => {
+    saveText = async () => {
+        console.log('HIII');
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/update_text';
-            fetch(apiURL, {
+            this.setState({ editing: true });
+            await fetch(apiURL, {
                 credentials: 'include',
                 method: 'POST',
                 mode: 'same-origin',
@@ -72,6 +75,7 @@ class TextInfo extends React.Component {
                 },
                 body: JSON.stringify(this.state.textData),
             });
+            this.setState({ editing: false });
         } catch (e) {
             console.log(e);
         }
@@ -116,7 +120,7 @@ class TextInfo extends React.Component {
     }
 
     render() {
-        const { textData, collapse } = this.state;
+        const { textData, collapse, editing } = this.state;
         const { modules, content, title } = textData;
 
         return (
@@ -171,10 +175,18 @@ class TextInfo extends React.Component {
                         </div>
                     </div>
                     <div className="card-button-div">
-                        <button onClick={this.saveText} className='card-buttons save-button'>
+                        <button
+                            onClick={this.saveText}
+                            className={`card-buttons save-button ${editing ? 'disabled' : ''}`}
+                            disabled={editing}
+                        >
                             Save
                         </button>
-                        <button onClick={this.deleteText} className='card-buttons delete-button'>
+                        <button
+                            onClick={this.deleteText}
+                            className={`card-buttons delete-button ${editing ? 'disabled' : ''}`}
+                            disabled={editing}
+                        >
                             Delete
                         </button>
                     </div>
