@@ -113,15 +113,17 @@ def update_text(request):
     text_obj.title = body['title']
     text_obj.content = body['content']
     text_obj.modules = body['modules']
-    try:
-        text_obj.save()
-        res = {
-            'status': 'Success!'
-        }
-    except Exception as e:
-        res = {
-            'status': 'Failed!',
-            'error': e
-        }
 
+    res = text_obj.save()
+    return Response(res)
+
+
+@api_view(['POST'])
+def delete_text(request):
+    """
+    API endpoint for deleting a text.
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    text_obj = Text.objects.get(id=body)
+    res = text_obj.delete()
     return Response(res)

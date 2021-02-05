@@ -45,7 +45,6 @@ Module.propTypes = {
 class TextInfo extends React.Component {
     constructor(props) {
         super(props);
-        /* TODO: Handle checkbox state here so that we can submit all the info here as well */
         this.state = {
             collapse: true,
             textData: this.props.text,
@@ -59,7 +58,6 @@ class TextInfo extends React.Component {
     }
 
     saveText = () => {
-        /* Code for saving text to database */
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/update_text';
@@ -81,6 +79,25 @@ class TextInfo extends React.Component {
 
     deleteText = () => {
         /* Code for deleting text */
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const apiURL = '/api/delete_text';
+            fetch(apiURL, {
+                credentials: 'include',
+                method: 'POST',
+                mode: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify(this.state.textData.id),
+            }).then(() => {
+                this.props.delete();
+            });
+        } catch (e) {
+            console.log(e);
+        }
         console.log('DELETING TEXT');
     }
 
@@ -170,6 +187,7 @@ class TextInfo extends React.Component {
 }
 TextInfo.propTypes = {
     text: PropTypes.object,
+    delete: PropTypes.func,
 };
 
 export class InstructorView extends React.Component {
@@ -195,6 +213,12 @@ export class InstructorView extends React.Component {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    deleteText = (id) => {
+        let { textData } = this.state;
+        textData = textData.filter((text) => text.id !== id);
+        this.setState({ textData });
     }
 
     modalHandler = (event) => {
@@ -291,7 +315,13 @@ export class InstructorView extends React.Component {
                     </div>
                 </div>
                 {
-                    this.state.textData.map((text, i) => (<TextInfo key={i} text={text}/>))
+                    this.state.textData.map((text, i) => (
+                        <TextInfo
+                            key={i}
+                            text={text}
+                            delete={() => this.deleteText(text.id)}
+                        />
+                    ))
                 }
             </div>
             <Footer />
