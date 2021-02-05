@@ -63,9 +63,9 @@ class Command(BaseCommand):
             for pos in part_of_speech:
                 print("Getting definitions and examples for " + pos + " in the text " +
                       text_obj.title + "... (This might take a while)")
-                words = get_valid_words(text_obj.text.lower(), pos)
+                words = get_valid_words(text_obj.content.lower(), pos)
                 definitions = get_word_definition(words, pos)
-                examples = get_word_examples(words, pos, text_obj.text.lower())
+                examples = get_word_examples(words, pos, text_obj.content.lower())
 
                 print("Updating database for " + pos + " in the text " + text_obj.title)
                 for word in tqdm.tqdm(words):
