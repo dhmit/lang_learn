@@ -13,11 +13,45 @@
 .add-text-button {
     background: white;
     border: none;
-    border-radius: 20px;
+    border-radius: 30px;
     color: black;
     font-weight: bold;
     font-size: 25px;
-    padding: 5px 20px 5px 40px;
+    padding: 5px 20px 5px 60px;
+    position: relative;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.plus-icon {
+    background: #5941A9;
+    border-radius: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 47px;
+    height: 47px;
+}
+
+.plus-1 {
+    width: 30px;
+    height: 8px;
+    background: white;
+    position: absolute;
+    top: 19px;
+    left: 8px;
+}
+
+.plus-2 {
+    width: 30px;
+    height: 8px;
+    background: white;
+    position: absolute;
+    top: 19px;
+    left: 8px;
+    transform: rotate(90deg);
 }
 
 .Modal {

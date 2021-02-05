@@ -219,7 +219,13 @@ export class InstructorView extends React.Component {
             <Navbar color='light' />
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
-                <button className='add-text-button' onClick={this.modalHandler}>Add Text</button>
+                <button className='add-text-button' onClick={this.modalHandler}>
+                    <div className='plus-icon'>
+                        <div className="plus-1" />
+                        <div className="plus-2"/>
+                    </div>
+                    Add Text
+                </button>
                 <div>
                     {
                         this.state.showModal
