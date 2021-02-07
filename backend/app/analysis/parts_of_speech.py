@@ -1,5 +1,5 @@
-import nltk
 import re
+import nltk
 from PyDictionary import PyDictionary
 # find better way to download wordnet
 try:
