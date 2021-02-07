@@ -112,14 +112,14 @@ label {
 }
 
 .card-collapse {
-    height: 0;
+    max-height: 0;
     opacity: 0;
     padding: 0 1.25rem;
     transition: height 0.4s ease-out, opacity 0.2s ease-out, padding 0.2s linear;
 }
 
 .card-expand {
-    height: 350px;
+    max-height: 1000px;
     opacity: 1;
     padding: 1.25rem;
     transition: height 0.2s ease-in, opacity 0.4s ease-in, padding 0.2s linear;
