@@ -8,7 +8,7 @@ class Module extends React.Component {
     render() {
         const { moduleInfo, moduleName } = this.props;
         return (
-            <div className='col-4'>
+            <div className='col-md-4 col-6'>
                 <h2 className='module-header'>{capitalize(moduleName)}</h2>
                 {
                     Object.keys(moduleInfo).map((category, k) => (
@@ -152,14 +152,14 @@ class TextInfo extends React.Component {
                 </div>
                 <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
                     <div className="row">
-                        <div className="col-5 ">
+                        <div className="col-xl-5 col-12 mb-4 mb-xl-0">
                             <textarea
                                 className="text-content"
                                 value={content}
                                 onChange={this.editText}
                             />
                         </div>
-                        <div className="col-7 module-selection">
+                        <div className="col-xl-7 col-12 module-selection">
                             <div className="row">
                                 {
                                     Object.keys(modules).map((module, k) => (
