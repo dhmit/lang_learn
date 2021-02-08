@@ -1,12 +1,16 @@
+"""
+Helper functions that use various aspects of the nltk library to find the part of speech,
+definitions, and examples for words in the text.
+"""
 import re
 import nltk
+from nltk.corpus import wordnet as wn
 from PyDictionary import PyDictionary
 # find better way to download wordnet
 try:
     nltk.data.find('wordnet')
 except LookupError:
     nltk.download('wordnet', quiet=True)
-from nltk.corpus import wordnet as wn
 
 
 CONTRACTIONS = {
@@ -131,6 +135,11 @@ CONTRACTIONS = {
 
 
 def remove_contractions(text):
+    """
+    Given a piece of text, expand all of the contractions in that text
+    :param text: A body of text as a string
+    :return: New body of text as a string without contractions
+    """
     text = text.replace('’', "'")
     text = text.replace('“', '"')
     words = text.split(' ')
@@ -144,6 +153,11 @@ def remove_contractions(text):
 
 
 def get_parts_of_speech_tags(text):
+    """
+    Tags each token in a piece of text with a part of speech code
+    :param text: A body of text as a string
+    :return: List of tuples containing word, part_of_speech_code
+    """
     tokens = nltk.word_tokenize(text)
     return nltk.pos_tag(tokens)
 
@@ -157,6 +171,12 @@ tags = {
 
 
 def get_part_of_speech_words(text, part):
+    """
+    Filters a piece of text by part of speech
+    :param text: A body of text as a string
+    :param part: The part of speech to search for in the text
+    :return: List of words that match the part of speech
+    """
     text = remove_contractions(text)
     part = part.lower()
 
@@ -168,11 +188,24 @@ def get_part_of_speech_words(text, part):
 
 
 def filter_pos(word_list, part):
+    """
+    Given a list of words, filter it by part of speech
+    :param word_list: the list of words that you want to filter
+    :param part: the part of speech to filter by
+    :return: a new word list that is a subset of the original word list where each word has
+             the part of speech `part`
+    """
     token_list = nltk.pos_tag(word_list)
     return [word[0].lower() for word in token_list if word[1] in tags[part] and len(word[0]) >= 3]
 
 
 def get_word_definition(word_list, pos):
+    """
+    Find the definitions of words from a list
+    :param word_list: A list of words to get the definition of
+    :param pos: The part of speech that is desired from the definitions
+    :return: A dictionary of word:definition pairs
+    """
     pos = pos.capitalize()
     defs = PyDictionary(*word_list)
     meanings = defs.getMeanings()
@@ -187,6 +220,15 @@ def get_word_definition(word_list, pos):
 
 
 def get_word_examples(word_list, part_of_speech, text):
+    """
+    Find examples of words used in a sentence given a word list, the part of speech,
+    and the original text
+    :param word_list: A list of words to find example sentences for
+    :param part_of_speech: the part of speech that you want for the examples
+    :param text: the text that the words are from
+    :return: A dictionary of word:list_of_examples pairs, where the examples come from
+             both PyDictionary and the original text
+    """
     pos_tags = {
         'noun': 'n',
         'verb': 'v',
@@ -226,5 +268,12 @@ def punct_in_word(word):
 
 
 def get_valid_words(text, pos):
+    """
+    Retrieves all the valid words of length 3 or more with a specific part of speech from a piece
+    of text
+    :param text: the text that you want the words from
+    :param pos: the part of speech that you want to filter by
+    :return: a list of words from the piece of text that has the specified part of speech
+    """
     return list(set(word.lower() for word in get_part_of_speech_words(text.lower(), pos)
                     if (not punct_in_word(word) and len(word) > 2)))

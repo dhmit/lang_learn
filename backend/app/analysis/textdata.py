@@ -8,7 +8,6 @@ import urllib.parse
 import tqdm
 
 # Ours
-from app.models import Text
 from app.analysis.parts_of_speech import (
     get_word_definition,
     get_word_examples,
@@ -19,7 +18,8 @@ from app.analysis.parts_of_speech import (
 # Modified Code from Bing library
 def get_bing_image_url(query):
     """
-    Custom command to get image url from Bing
+    Given the word that we want to search for, returns a url of the image found from Bing image
+    search
     """
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
@@ -35,6 +35,11 @@ def get_bing_image_url(query):
 
 
 def get_text_data(text_obj):
+    """
+    Given a Text object, stores the definitions, examples, and image urls for all the words
+    in this text.
+    :param text_obj: the Text object that we want to get data for
+    """
     part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
 
     # Reused the old image url dictionary if we are not getting all of the urls
