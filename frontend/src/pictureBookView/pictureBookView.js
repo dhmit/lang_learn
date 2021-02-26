@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
-export class PicturebookView extends React.Component {
+export class PictureBookView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
