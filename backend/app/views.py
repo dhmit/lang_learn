@@ -111,6 +111,24 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
+@api_view(['GET'])
+def get_picturebook(request, text_id, part_of_speech):
+    """
+    API endpoint for getting the necessary information for the picture book exercise
+    given the id of the text and the part of speech. The words chosen will be random.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    image_urls = text_obj.images
+    words = get_valid_words(text_obj.content, part_of_speech)
+    random.shuffle(words)
+    words = words[:4]
+
+    res = [{'word': word,
+            'url': image_urls.get(word, '')}
+           for word in words]
+    return Response(res)
+
+
 @api_view(['POST'])
 def add_text(request):
     """

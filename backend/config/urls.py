@@ -26,6 +26,7 @@ from app.views import (
     delete_text,
     add_text,
     get_flashcards,
+    get_picturebook,
 )
 
 
@@ -52,6 +53,7 @@ urlpatterns = [
     path('api/delete_text', delete_text),
     path('api/add_text', add_text),
     path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
+    path('api/get_picturebook/<int:text_id>/<str:part_of_speech>', get_picturebook),
 
     # View paths
     react_view_path('', 'IndexView'),
