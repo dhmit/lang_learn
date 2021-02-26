@@ -21,6 +21,10 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
+        'picturebook': {
+            'noun': False,
+            'noun_word_list': [],
+        },
         'quiz': {
             'conjugations': False,
         }
