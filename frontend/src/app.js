@@ -11,6 +11,7 @@ import { IndexView } from './index/index';
 import { AnagramView } from './anagramView/anagramView';
 import { InstructorView } from './instructorView/instructorView';
 import { FlashcardView } from './flashcard/flashcardView';
+import { CrosswordView } from './crosswordView/crosswordView';
 
 
 // Import all styles
@@ -25,4 +26,5 @@ window.app_modules = {
     AnagramView,
     InstructorView,
     FlashcardView,
+    CrosswordView,
 };

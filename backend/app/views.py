@@ -154,3 +154,24 @@ def delete_text(request):
     text_obj = Text.objects.get(id=body)
     res = text_obj.delete()
     return Response(res)
+
+
+@api_view(['GET'])
+def get_crossword(request, text_id, part_of_speech):
+    """
+    API endpoint for getting the necessary information for the crossword given
+    the id of the text and the part of speech.
+    """
+    # text_obj = Text.objects.get(id=text_id)
+    # image_urls = text_obj.images
+    # definitions = text_obj.definitions
+    # examples = text_obj.examples
+    #
+    # words = get_valid_words(text_obj.content, part_of_speech)
+    #
+    # res = [{'word': word,
+    #         'definition': definitions[word].get(part_of_speech, []),
+    #         'example': examples[word].get(part_of_speech, []),
+    #         'url': image_urls.get(word, '')}
+    #        for word in words]
+    return Response("hi")
