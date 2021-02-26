@@ -25,8 +25,16 @@ export class ResponseQuizView extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
-            const data = await response.json();
+            // const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
+            // const data = await response.json();
+            const data = [
+                {
+                    'sentence': 'Hi! My name is Maria.',
+                    'answer': 'Hi! My name is Bob.',
+                    'options': ['Bye!', 'Hi! My name is Bob.', '76, actually.', 'You\'re weird.'],
+                    'type': 'mc'
+                }
+            ];
             this.setState({ data: data });
         } catch (e) {
             console.log(e);
@@ -208,7 +216,7 @@ export class ResponseQuizView extends React.Component {
                         <div className="col-9 shaded-box">
                             <h3 className="question-title">Question #{this.state.question}</h3>
                             <p className="question-primary-text">
-                                Select the correct conjugation for the missing word.
+                                Respond to the prompt below:
                             </p>
                             <br />
                             <p className="question-secondary-text">

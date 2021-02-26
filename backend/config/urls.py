@@ -43,9 +43,11 @@ urlpatterns = [
     # API endpoints
     path('api/text/<int:text_id>', text),
     path('api/all_text', all_text),
+    path('api/all_text/', all_text),
     path('api/get_anagram/<int:text_id>/<str:part_of_speech>', get_anagram),
 
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
+    react_view_path('response_quiz/', 'ResponseQuizView'),
 ]
