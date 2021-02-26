@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactTooltipDefaultExport from 'react-tooltip';
 import Confetti from 'react-dom-confetti';
-
 import * as PropTypes from 'prop-types';
+
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 const CONFETTI_CONFIG = {
@@ -173,15 +173,17 @@ export class AnagramView extends React.Component {
             let letters = [];
             const targetWordDefs = [];
             const targetExamples = [];
-            for (let i = 0; i < (data['word_data']).length; i++) {
-                const word = data['word_data'][i];
-                const examples = word[1]['example'];
-                targetWords.push(word[0]);
-                targetWordDefs.push(word[1]['definition']);
+            const wordData = data['word_data'];
+            for (let i = 0; i < wordData.length; i++) {
+                const curData = wordData[i];
+                const word = curData['word'];
+                const examples = curData['example'];
+                targetWords.push(word);
+                targetWordDefs.push(curData['definition']);
                 if (examples.length === 0) {
                     targetExamples.push(['N/A']);
                 } else {
-                    targetExamples.push(word[1]['example']);
+                    targetExamples.push(curData['example']);
                 }
             }
             for (let i = 0; i < (data['letters']).length; i++) {
@@ -229,7 +231,7 @@ export class AnagramView extends React.Component {
 
     render() {
         if (!this.state.targetWordDefs) {
-            return (<LoadingPage/>);
+            return (<LoadingPage text='Creating Anagram Quiz...'/>);
         }
 
         /*
@@ -327,11 +329,11 @@ export class AnagramView extends React.Component {
             }
             return (
                 <div key={i}>
-                    <li data-tip data-for={defs[0]}>
+                    <li data-tip data-for={`${i}`}>
                         <span>{defs[0]}</span>
                     </li>
                     <ReactTooltipDefaultExport
-                        id={defs[0]}
+                        id={`${i}`}
                         place="top"
                     >
                         Definitions:
