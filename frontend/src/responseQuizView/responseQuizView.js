@@ -25,6 +25,7 @@ export class ResponseQuizView extends React.Component {
 
     async componentDidMount() {
         try {
+            // TODO: Run an API that pulls the quiz data from the backend.
             // const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
             // const data = await response.json();
             const data = [
@@ -32,7 +33,18 @@ export class ResponseQuizView extends React.Component {
                     'sentence': 'Hi! My name is Maria.',
                     'answer': 'Hi! My name is Bob.',
                     'options': ['Bye!', 'Hi! My name is Bob.', '76, actually.', 'You\'re weird.'],
-                    'type': 'mc'
+                    'type': 'mc',
+                },
+                {
+                    'sentence': 'How are you?',
+                    'answer': 'Great!',
+                    'options': ['No.', 'Hi! My name is Bob.', 'Bye!', 'Great!'],
+                    'type': 'mc',
+                },
+                {
+                    'sentence': 'What\'s your favorite color?',
+                    'answer': 'Purple.',
+                    'type': 'fr',
                 }
             ];
             this.setState({ data: data });
@@ -75,27 +87,28 @@ export class ResponseQuizView extends React.Component {
     }
 
     gradeQuiz() {
-        let cSubmit;
-        if (this.getUnanswered() === 0) {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
-                + ' answers are final.');
-        } else {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
-                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
-        }
-        if (cSubmit === true) {
-            this.setState({ graded: true });
-            let score = 0;
-            const answers = this.state.userAnswers;
-            for (let i = 0; i < this.state.data.length; i++) {
-                if (answers[i + 1] === this.state.data[i].answer) {
-                    score += 1;
-                }
-            }
-            this.setState({ score: score });
-        } else {
-            console.log();
-        }
+        // TODO: Write the API request that will send the user's answers to the backend for grading
+        // let cSubmit;
+        // if (this.getUnanswered() === 0) {
+        //     cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
+        //         + ' answers are final.');
+        // } else {
+        //     cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
+        //         + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
+        // }
+        // if (cSubmit === true) {
+        //     this.setState({ graded: true });
+        //     let score = 0;
+        //     const answers = this.state.userAnswers;
+        //     for (let i = 0; i < this.state.data.length; i++) {
+        //         if (answers[i + 1] === this.state.data[i].answer) {
+        //             score += 1;
+        //         }
+        //     }
+        //     this.setState({ score: score });
+        // } else {
+        //     console.log();
+        // }
     }
 
     onProgressBarClick = (event) => {
@@ -116,34 +129,64 @@ export class ResponseQuizView extends React.Component {
         }
     }
 
+    onTextChange = (event) => {
+        const answers = this.state.userAnswers;
+        answers[this.state.question] = event.target.value;
+        this.setState({ userAnswers: answers });
+    }
+
     render() {
         if (!this.state.data) {
             return (<LoadingPage />);
         }
 
-        // Previously a ButtonChoices function
-        const choices = this.state.data[this.state.question - 1].options;
+        const displayQuestion = () => {
+            if (this.state.data[this.state.question - 1].type === 'mc') {
+                const choices = this.state.data[this.state.question - 1].options;
 
-        const radios = choices.map((choice, i) => {
-            return (
-                <ToggleButton
-                    key={i + 1}
-                    variant="outline-light"
-                    value={choice}
-                    className="c-button"
-                    onClick={this.onAnswerChoiceClick}
-                >
-                    {choice}
-                </ToggleButton>
-            );
-        });
+                const radios = choices.map((choice, i) => {
+                    return (
+                        <ToggleButton
+                            key={i + 1}
+                            variant="outline-light"
+                            value={choice}
+                            className="c-button"
+                            onClick={this.onAnswerChoiceClick}
+                        >
+                            {choice}
+                        </ToggleButton>
+                    );
+                });
+
+                return (<>
+                    <ToggleButtonGroup
+                        className="text-center"
+                        type="radio"
+                        name="options"
+                        value={this.state.userAnswers[this.state.question]}
+                    >
+                        {radios}
+                    </ToggleButtonGroup>
+                </>);
+            }
+            if (this.state.data[this.state.question - 1].type === 'fr') {
+                return (<>
+                    <input
+                        type="text"
+                        value={this.state.userAnswers[this.state.question]}
+                        onChange={this.onTextChange}
+                    />
+                </>);
+            }
+            return null;
+        };
 
         return (
             <React.Fragment>
                 <Navbar />
                 <div className="page">
                     <div className="row justify-content-between" id="top">
-                        <a className="exit-button" href={'/quiz'}>
+                        <a className="exit-button" href={'/response_quiz'}>
                             <p>&lt;</p>
                             {/* Eventually, this button will let you leave the quiz */}
                         </a>
@@ -157,8 +200,8 @@ export class ResponseQuizView extends React.Component {
                                     Score:&nbsp;
                                     {this.state.score}/{this.state.data.length}
                                 </p>
-                                : <Button id="submit" onClick={() => this.gradeQuiz()}>
-                                        Submit
+                                : <Button id="submit">
+                                    Submit
                                 </Button>
                             }
                         </div>
@@ -237,14 +280,7 @@ export class ResponseQuizView extends React.Component {
                                             this.state.data[this.state.question - 1].answer
                                         }
                                     </p>
-                                    : <ToggleButtonGroup
-                                        className="text-center"
-                                        type="radio"
-                                        name="options"
-                                        value={this.state.userAnswers[this.state.question]}
-                                    >
-                                        {radios}
-                                    </ToggleButtonGroup>
+                                    : displayQuestion()
                                 }
                             </div>
                         </div>
