@@ -5,7 +5,8 @@ import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 const testData = {
     clues: [
         {
-            location: [2, 0],
+            row: 2,
+            col: 0,
             across: null,
             down: {
                 word: 'thankful',
@@ -13,7 +14,8 @@ const testData = {
             },
         },
         {
-            location: [5, 0],
+            row: 5,
+            col: 0,
             across: {
                 word: 'nod',
                 clue: 'When you shake your head up and down',
@@ -21,7 +23,8 @@ const testData = {
             down: null,
         },
         {
-            location: [0, 3],
+            row: 0,
+            col: 3,
             across: {
                 word: 'hippo',
                 clue: 'Big gray animal, moto moto',
@@ -46,11 +49,28 @@ const testData = {
     ],
 };
 
+const testGrid = [
+    ['#', '#', '#', '', '', '', '', ''],
+    ['#', '#', '#', '', '#', '', '#', '#'],
+    ['', '#', '#', '', '#', '', '#', '#'],
+    ['', '#', '', '', '', '', '', '#'],
+    ['', '#', '', '', '', '', '#', '#'],
+    ['', '', '', '#', '#', '#', '', '#'],
+    ['', '#', '#', '#', '', '', '', ''],
+    ['', '', '', '', '', '#', '', '#'],
+    ['', '#', '#', '#', '', '#', '', '#'],
+    ['', '#', '#', '#', '', '', '', ''],
+];
+
+const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 export class CrosswordView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             crosswordData: testData,
+            grid: testGrid,
+            found: testData.clues.map((_) => ({ across: false, down: false })),
         };
     }
 
@@ -67,15 +87,64 @@ export class CrosswordView extends React.Component {
         }
     }
 
+    getClueNumber = (row, col) => {
+        for (const [clueNum, clue] of this.state.crosswordData.clues.entries()) {
+            if (clue.row === row && clue.col === col) {
+                return clueNum + 1;
+            }
+        }
+        return null;
+    }
+
+    updateCell = (e, row, col) => {
+        const grid = this.state.grid;
+        const curLetter = e.target.value.toUpperCase();
+        if (ALPHA.includes(curLetter)) {
+            grid[row][col] = curLetter;
+            // Check if a word has been found
+            
+            this.setState({ grid });
+        }
+    }
+
     render() {
         if (!this.state.crosswordData) {
             return (<LoadingPage />);
         }
 
+        const crossword = this.state.grid.map((row, k) => {
+            return (
+                <div className='crossword-row' key={k}>
+                    {row.map((cell, j) => {
+                        if (cell === '#') {
+                            return (
+                                <div className='blank-cell'/>
+                            );
+                        }
+                        const clueNum = this.getClueNumber(k, j);
+                        return (
+                            <div className='crossword-cell' key={j}>
+                                <div className='clue-num'>
+                                    {clueNum}
+                                </div>
+                                <input
+                                    className='cell-input'
+                                    type='text'
+                                    value={cell}
+                                    maxLength={1}
+                                    onChange={(e) => this.updateCell(e, k, j)}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        });
+
         return (
             <>
                 <Navbar/>
-                <div className='page'>
+                <div className='page' style={{ 'paddingBottom': '50px' }}>
                     <h1 className='crossword-title'>Crossword</h1>
                     <div className='row'>
                         <div className='col-lg-6 col-12 clues-box'>
@@ -107,7 +176,9 @@ export class CrosswordView extends React.Component {
                             }
                         </div>
                         <div className='col-lg-6 col-12'>
-                            Crossword
+                            <div className='crossword-grid'>
+                                {crossword}
+                            </div>
                         </div>
                     </div>
                 </div>
