@@ -1,6 +1,9 @@
 import os
+import random
 from django.conf import settings
 import copy
+
+from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 
 """
 Parsing text:
@@ -9,7 +12,7 @@ Take in string of question and answers, each separated by '\n'
 Send question to frontend
 
 option = {
-    'error-types':[strings reprenting error types],
+    'error-types':[strings representing error types],
     'text': str
 }
 
@@ -33,7 +36,7 @@ def get_quiz_questions(text):
     q_and_a = text.split('\n')
     assert len(q_and_a) % 2 == 0, "There must be an equal number of questions and answers."
     questions = []
-    for i in range(len(q_and_a) // 2):
+    for i in range(0, len(q_and_a), 2):
         answer = {
             'error-types': [],
             'text': q_and_a[i + 1],
@@ -45,3 +48,26 @@ def get_quiz_questions(text):
         }
         questions.append(new_question)
     return questions
+
+
+def verb_conjugation_error(question_option):
+    """
+    Creates a new option (dict) that has text with a verb conjugation error.
+    :param question_option: dict
+    """
+    # Use convert the option text into a sentence struct to get fill-in text and erroneous verb
+    # substitutions.
+    text_sentence = get_quiz_sentences(question_option['text'])[0]
+
+    # Remove the answer from the sentence option (to randomly pick from the other incorrect ones)
+    text_sentence['options'].remove(text_sentence['answer'])
+
+    # Set the new text to the sentence text with the fill-in replaced with a random incorrect option
+    # Add the verb-conjugation error to the question's error types
+    new_question_option = {
+        'error-types': question_option['error-types'] + ['verb-conjugation'],
+        'text': text_sentence['sentence'].replace(
+            '___', random.choice(text_sentence['options'])
+        ),
+    }
+    return new_question_option
