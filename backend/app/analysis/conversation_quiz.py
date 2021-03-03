@@ -2,6 +2,7 @@ import os
 import random
 from django.conf import settings
 import copy
+import importlib
 
 from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 
@@ -71,3 +72,30 @@ def verb_conjugation_error(question_option):
         ),
     }
     return new_question_option
+
+
+def apply_question_errors(quiz_question):
+    """
+    Given a single quiz question (dict), induce a random error in 3 of its options.
+    :param quiz_question:
+    """
+    # Get all of the error functions defined in conversation quiz (this file)
+    conversation_quiz = importlib.import_module('app.analysis.conversation_quiz')
+    error_functions = []
+    for func in dir(conversation_quiz):
+        if func[-6:] == '_error':
+            error_functions.append(getattr(conversation_quiz, func))
+
+    # Apply a random error to the last 3 options
+    for i in range(1, 4):
+        error_function = random.choice(error_functions)
+        quiz_question['options'][i] = error_function(quiz_question['options'][i])
+
+    # Randomize positions of the choices
+    random.shuffle(quiz_question['options'])
+
+    # Reassign question answer based on the new position of the actual answer
+    for i in range(4):
+        if len(quiz_question['options'][i]['error-types']) == 0:
+            quiz_question['answer'] = i
+            break
