@@ -34,6 +34,76 @@ const testData = {
                 clue: 'A common greeting',
             },
         },
+        {
+            row: 0,
+            col: 5,
+            across: null,
+            down: {
+                word: 'plane',
+                clue: 'A vehicle that allows you to travel by air',
+            },
+        },
+        {
+            row: 7,
+            col: 0,
+            across: {
+                word: 'fanta',
+                clue: 'Orange soda that rhymes with santa',
+            },
+            down: null,
+        },
+        {
+            row: 6,
+            col: 4,
+            across: {
+                word: 'snow',
+                clue: 'Frozen rain',
+            },
+            down: {
+                word: 'sand',
+                clue: 'Yellow particles found at the beach',
+            },
+        },
+        {
+            row: 5,
+            col: 6,
+            across: null,
+            down: {
+                word: 'modem',
+                clue: 'A hardware device that converts data from a digital format into one'
+                    + ' suitable for a transmission medium such as telephone lines or radio.',
+            },
+        },
+        {
+            row: 3,
+            col: 2,
+            across: {
+                word: 'alone',
+                clue: 'When you have no friends',
+            },
+            down: {
+                word: 'add',
+                clue: 'Opposite of subtract',
+            },
+        },
+        {
+            row: 4,
+            col: 2,
+            across: {
+                word: 'done',
+                clue: 'When you are finished with something',
+            },
+            down: null,
+        },
+        {
+            row: 9,
+            col: 4,
+            across: {
+                word: 'dumb',
+                clue: 'How one feels when they say "you too" in response to "happy birthday"',
+            },
+            down: null,
+        },
     ],
     grid: [
         ['#', '#', '#', 'H', 'I', 'P', 'P', 'O'],
@@ -102,7 +172,6 @@ export class CrosswordView extends React.Component {
         if (ALPHA.includes(curLetter)) {
             grid[row][col] = curLetter;
             // Check if a word has been found
-            
             this.setState({ grid });
         }
     }
