@@ -174,7 +174,7 @@ def delete_text(request):
     res = text_obj.delete()
     return Response(res)
 
-
+@api_view(['GET'])
 def get_quiz_data(request, text_id):
     """
     API endpoint for getting the necessary information for the verb conjugation quiz given
@@ -183,3 +183,4 @@ def get_quiz_data(request, text_id):
     """
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.text)
+    return Response(res)

@@ -39,7 +39,7 @@ class Text(models.Model):
     """
     content = models.TextField(max_length=5000, null=True)
     title = models.CharField(max_length=252, null=True)
-    modules = models.JSONField(null=True, blank=True, default=default_module())
+    modules = models.JSONField(null=True, blank=True, default=default_module)
     images = models.JSONField(null=True, blank=True, default=dict)
     examples = models.JSONField(null=True, blank=True, default=dict)
     definitions = models.JSONField(null=True, blank=True, default=dict)
