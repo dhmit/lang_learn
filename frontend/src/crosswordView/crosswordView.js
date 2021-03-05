@@ -9,7 +9,7 @@ const testData = {
             col: 0,
             across: null,
             down: {
-                word: 'thankful',
+                word: 'THANKFUL',
                 clue: 'How you feel in Thanksgiving',
             },
         },
@@ -17,7 +17,7 @@ const testData = {
             row: 5,
             col: 0,
             across: {
-                word: 'nod',
+                word: 'NOD',
                 clue: 'When you shake your head up and down',
             },
             down: null,
@@ -26,11 +26,11 @@ const testData = {
             row: 0,
             col: 3,
             across: {
-                word: 'hippo',
+                word: 'HIPPO',
                 clue: 'Big gray animal, moto moto',
             },
             down: {
-                word: 'hello',
+                word: 'HELLO',
                 clue: 'A common greeting',
             },
         },
@@ -39,7 +39,7 @@ const testData = {
             col: 5,
             across: null,
             down: {
-                word: 'plane',
+                word: 'PLANE',
                 clue: 'A vehicle that allows you to travel by air',
             },
         },
@@ -47,7 +47,7 @@ const testData = {
             row: 7,
             col: 0,
             across: {
-                word: 'fanta',
+                word: 'FANTA',
                 clue: 'Orange soda that rhymes with santa',
             },
             down: null,
@@ -56,11 +56,11 @@ const testData = {
             row: 6,
             col: 4,
             across: {
-                word: 'snow',
+                word: 'SNOW',
                 clue: 'Frozen rain',
             },
             down: {
-                word: 'sand',
+                word: 'SAND',
                 clue: 'Yellow particles found at the beach',
             },
         },
@@ -69,7 +69,7 @@ const testData = {
             col: 6,
             across: null,
             down: {
-                word: 'modem',
+                word: 'MODEM',
                 clue: 'A hardware device that converts data from a digital format into one'
                     + ' suitable for a transmission medium such as telephone lines or radio.',
             },
@@ -78,11 +78,11 @@ const testData = {
             row: 3,
             col: 2,
             across: {
-                word: 'alone',
+                word: 'ALONE',
                 clue: 'When you have no friends',
             },
             down: {
-                word: 'add',
+                word: 'ADD',
                 clue: 'Opposite of subtract',
             },
         },
@@ -90,7 +90,7 @@ const testData = {
             row: 4,
             col: 2,
             across: {
-                word: 'done',
+                word: 'DONE',
                 clue: 'When you are finished with something',
             },
             down: null,
@@ -99,13 +99,13 @@ const testData = {
             row: 9,
             col: 4,
             across: {
-                word: 'dumb',
+                word: 'DUMB',
                 clue: 'How one feels when they say "you too" in response to "happy birthday"',
             },
             down: null,
         },
     ],
-    grid: [
+    solution: [
         ['#', '#', '#', 'H', 'I', 'P', 'P', 'O'],
         ['#', '#', '#', 'E', '#', 'L', '#', '#'],
         ['T', '#', '#', 'L', '#', 'A', '#', '#'],
@@ -119,27 +119,14 @@ const testData = {
     ],
 };
 
-const testGrid = [
-    ['#', '#', '#', '', '', '', '', ''],
-    ['#', '#', '#', '', '#', '', '#', '#'],
-    ['', '#', '#', '', '#', '', '#', '#'],
-    ['', '#', '', '', '', '', '', '#'],
-    ['', '#', '', '', '', '', '#', '#'],
-    ['', '', '', '#', '#', '#', '', '#'],
-    ['', '#', '#', '#', '', '', '', ''],
-    ['', '', '', '', '', '#', '', '#'],
-    ['', '#', '#', '#', '', '#', '', '#'],
-    ['', '#', '#', '#', '', '', '', ''],
-];
-
 const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export class CrosswordView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            crosswordData: testData,
-            grid: testGrid,
+            crosswordData: null,
+            grid: null,
             found: testData.clues.map((_) => ({ across: false, down: false })),
         };
     }
@@ -149,9 +136,13 @@ export class CrosswordView extends React.Component {
             // const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
             // const response = await fetch(apiURL);
             // const data = await response.json();
-            // this.setState({
-            //     crosswordData: data,
-            // });
+            const data = testData;
+            const emptyGrid = data.solution.map((row) => row
+                .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
+            this.setState({
+                crosswordData: data,
+                grid: emptyGrid,
+            });
         } catch (e) {
             console.log(e);
         }
@@ -172,14 +163,43 @@ export class CrosswordView extends React.Component {
         if (ALPHA.includes(curLetter)) {
             grid[row][col] = curLetter;
             // Check if a word has been found
-            this.setState({ grid });
+            this.setState({ grid }, this.updateFound);
         }
+    }
+
+    updateFound = () => {
+        const { grid, found } = this.state;
+        this.state.crosswordData.clues.forEach((clue, k) => {
+            if (clue.across) {
+                let correct = true;
+                for (let c = 0; c < clue.across.word.length; c++) {
+                    if (grid[clue.row][clue.col + c] !== clue.across.word.charAt(c)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                found[k].across = correct;
+            }
+            if (clue.down) {
+                let correct = true;
+                for (let r = 0; r < clue.down.word.length; r++) {
+                    if (grid[clue.row + r][clue.col] !== clue.down.word.charAt(r)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                found[k].down = correct;
+            }
+        });
+        this.setState({ found });
     }
 
     render() {
         if (!this.state.crosswordData) {
             return (<LoadingPage />);
         }
+
+        const { found } = this.state;
 
         const crossword = this.state.grid.map((row, k) => {
             return (
@@ -222,7 +242,14 @@ export class CrosswordView extends React.Component {
                                 this.state.crosswordData.clues.map((clue, k) => {
                                     if (clue.across) {
                                         return (
-                                            <div className='clue' key={k}>
+                                            <div
+                                                className={
+                                                    `clue ${found[k].across
+                                                        ? 'clue-found'
+                                                        : ''}`
+                                                }
+                                                key={k}
+                                            >
                                                 {k + 1}) {clue.across.clue}
                                             </div>
                                         );
@@ -235,7 +262,14 @@ export class CrosswordView extends React.Component {
                                 this.state.crosswordData.clues.map((clue, k) => {
                                     if (clue.down) {
                                         return (
-                                            <div className='clue' key={k}>
+                                            <div
+                                                className={
+                                                    `clue ${found[k].down
+                                                        ? 'clue-found'
+                                                        : ''}`
+                                                }
+                                                key={k}
+                                            >
                                                 {k + 1}) {clue.down.clue}
                                             </div>
                                         );

@@ -2,6 +2,7 @@
     font-size: 50px;
 }
 
+// Clue Styles
 .clues-box {
     background: rgba(105, 64, 238, 0.25);
     border-radius: 10px;
@@ -14,6 +15,11 @@
 
 .clue {
     margin: 5px 0;
+}
+
+.clue-found {
+    text-decoration: line-through;
+    color: #a0a0a0;
 }
 
 // Crossword Styles
