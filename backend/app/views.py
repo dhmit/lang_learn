@@ -24,6 +24,7 @@ from .analysis.anagrams import (
 from .analysis.textdata import (
     get_text_data,
 )
+from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
 @api_view(['GET'])
@@ -110,7 +111,6 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
-
 @api_view(['POST'])
 def add_text(request):
     """
@@ -175,3 +175,15 @@ def get_crossword(request, text_id, part_of_speech):
     #         'url': image_urls.get(word, '')}
     #        for word in words]
     return Response("hi")
+
+
+@api_view(['GET'])
+def get_quiz_data(request, text_id):
+    """
+    API endpoint for getting the necessary information for the verb conjugation quiz given
+    the id of the text. The first verb in each sentence of the text will be fill-in. The options
+    will be randomly selected and arranged.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    res = get_quiz_sentences(text_obj.text)
+    return Response(res)

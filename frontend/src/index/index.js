@@ -112,7 +112,7 @@ export class IndexView extends React.Component {
                     <TextInfo
                         key={k}
                         title={text.title}
-                        conetnt={text.content}
+                        content={text.content}
                         textId={text.id}
                         modules={text.modules}
                     />

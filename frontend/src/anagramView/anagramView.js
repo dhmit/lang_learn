@@ -231,7 +231,7 @@ export class AnagramView extends React.Component {
 
     render() {
         if (!this.state.targetWordDefs) {
-            return (<LoadingPage text='Creating Anagram Quiz...'/>);
+            return (<LoadingPage loadingText='Creating Anagram Quiz...' />);
         }
 
         /*
