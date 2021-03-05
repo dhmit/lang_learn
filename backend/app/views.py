@@ -131,6 +131,10 @@ def get_picturebook_prompt(request, text_id, part_of_speech):
 
 
 @api_view(['POST'])
+def get_
+
+
+@api_view(['POST'])
 def add_text(request):
     """
     API endpoint for adding a piece of text
