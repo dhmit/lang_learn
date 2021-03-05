@@ -3,13 +3,13 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
 const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
-const QUIZ_TYPES = ['Anagram', 'Flashcard'];
+const QUIZ_TYPES = ['Anagrams', 'Flashcards'];
 
 class TextInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            quizType: 'Anagram',
+            quizType: 'Anagrams',
             partOfSpeech: 'Noun',
         };
     }
@@ -24,9 +24,16 @@ class TextInfo extends React.Component {
 
     render() {
         // const posLink = pos.toLowerCase();
-        const { title, content, textId } = this.props;
+        const {
+            title,
+            content,
+            textId,
+            modules,
+        } = this.props;
         const { quizType, partOfSpeech } = this.state;
 
+        console.log(modules);
+        console.log(this.state.quizType.toLowerCase());
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
@@ -50,9 +57,12 @@ class TextInfo extends React.Component {
                         onChange={this.handlePos}
                         value={partOfSpeech}
                     >
-                        {PARTS_OF_SPEECH.map((pos) => (
-                            <option value={pos} key={pos}>{pos}</option>
-                        ))}
+                        {PARTS_OF_SPEECH.map((pos) => {
+                            if (modules[this.state.quizType.toLowerCase()][pos.toLowerCase()]) {
+                                return (<option value={pos} key={pos}>{pos}</option>);
+                            }
+                            return (<></>);
+                        })}
                     </select>
                     <a href={`/${quizType.toLowerCase()}/${textId}/${partOfSpeech.toLowerCase()}`}>
                         <button className='btn btn-light selection-button'>Start!</button>
@@ -67,6 +77,7 @@ TextInfo.propTypes = {
     title: PropTypes.string,
     content: PropTypes.string,
     textId: PropTypes.number,
+    modules: PropTypes.object,
 };
 
 export class IndexView extends React.Component {
@@ -103,6 +114,7 @@ export class IndexView extends React.Component {
                         title={text.title}
                         content={text.content}
                         textId={text.id}
+                        modules={text.modules}
                     />
                 ))}
             </div>

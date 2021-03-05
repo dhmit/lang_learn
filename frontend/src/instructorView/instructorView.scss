@@ -1,0 +1,289 @@
+/* Top Level Instructor View*/
+.instructor {
+    background-color: #F9EEFF;
+    color: black;
+    overflow-y: hidden;
+}
+
+.instructor-header {
+    color: #2D2155;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.add-text-button {
+    background: white;
+    border: none;
+    border-radius: 30px;
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+    padding: 5px 20px 5px 60px;
+    position: relative;
+    transition: all 0.3s linear;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:hover {
+        color: white;
+        background: #5941A9;
+    }
+}
+
+.plus-icon {
+    background: #5941A9;
+    border-radius: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 47px;
+    height: 47px;
+}
+
+.plus-1 {
+    width: 30px;
+    height: 8px;
+    background: white;
+    position: absolute;
+    top: 19px;
+    left: 8px;
+}
+
+.plus-2 {
+    width: 30px;
+    height: 8px;
+    background: white;
+    position: absolute;
+    top: 19px;
+    left: 8px;
+    transform: rotate(90deg);
+}
+
+.Modal {
+    color: #2D2155;
+    position: fixed;
+    z-index: 500;
+    transition: all 0.4s ease-out;
+}
+
+
+.backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+}
+
+@media (min-width: 600px) {
+    .Modal {
+        width: 500px;
+        left: calc(50% - 250px);
+    }
+}
+
+label {
+    font-size: 20px;
+    font-weight: 500;
+    margin: auto;
+    padding: 3px 0;
+}
+
+.btn-create {
+    color: white;
+    background-color: #278E73;
+}
+
+/* Card (Text Info) Styles*/
+.card {
+    border-radius: 10px;
+    color: white;
+    margin: 20px 0;
+}
+
+/* Card body and collapsing animation */
+
+.card-body {
+    background: rgba(200, 200, 200, 0.3);
+}
+
+.card-collapse {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 1.25rem;
+    transition: max-height 0.4s, opacity 0.2s, padding 0.5s linear;
+}
+
+.card-expand {
+    max-height: 3000px;
+    opacity: 1;
+    padding: 1.25rem;
+    transition: max-height 0.2s ease-in, opacity 0.4s ease-in, padding 0.2s linear;
+}
+
+.text-content {
+    background-color: #5941A9;
+    border-radius: 10px;
+    color: white;
+    margin: 0;
+    padding: 15px;
+    resize: none;
+    height: 100%;
+    width: 100%;
+}
+
+
+/* Card Header Styles */
+.card-header {
+    background-color: #5941A9;
+    transition: border-radius 0.5s ease-in;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.header-round {
+    border-radius: 10px !important;
+}
+
+.text-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #F9EEFF;
+    background: #5941A9;
+    border: none;
+}
+
+.collapse-div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.title-collapse {
+    color: #9F91CC;
+    font-size: 18px;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Arrow for collapsing */
+.collapse-arrow {
+    background: #9F91CC;
+    display: inline-block;
+    margin-left: 10px;
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0);
+}
+
+.arrow-flip {
+    transform: rotate(-180deg);
+}
+
+.rect-1 {
+    position: absolute;
+    top: 12px;
+    left: 3px;
+    width: 14px;
+    height: 3px;
+    transform: rotate(45deg);
+    background: #5941A9;
+}
+
+.rect-2 {
+    position: absolute;
+    top: 12px;
+    left: 11px;
+    width: 14px;
+    height: 3px;
+    transform: rotate(135deg);
+    background: #5941A9;
+}
+
+/* Card Buttons */
+.card-button-div {
+    text-align: right;
+}
+
+.card-buttons {
+    border: transparent 2px solid;
+    border-radius: 8px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 0 20px;
+    padding: 5px 20px;
+    transition-duration: 0.3s;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.save-button {
+    background: #2D2155;
+    cursor: pointer;
+
+    &:hover {
+        background: white;
+        border: #2D2155 2px solid;
+        color: #2D2155;
+    }
+}
+
+.delete-button {
+    background: #933A3A;
+    cursor: pointer;
+
+    &:hover {
+        background: white;
+        border: #933A3A 2px solid;
+        color: #933A3A;
+    }
+}
+
+.disabled {
+    background: #d3d3d3;
+    color: black;
+    cursor: not-allowed;
+
+    &:hover {
+        background: #d3d3d3;
+        color: black;
+        border: transparent 2px solid;
+    }
+}
+
+/* Module Selection Styles */
+.module-header {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.module-selection {
+    color: black;
+}
+
+.module-category {
+    margin: 0 0 20px;
+}
+
+.module-category-checkbox {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    vertical-align: top;
+    border-color: white;
+}
+
+.module-category-label {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 500;
+}

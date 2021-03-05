@@ -14,10 +14,11 @@ code {
 }
 
 $header-padding: 10px;
+$footer-padding: 10px;
 $side-padding: 100px;
 
 .page {
-    padding: $header-padding $side-padding 0;
+    padding: $header-padding $side-padding $footer-padding;
     flex: 1 0 auto;
     background-color: #2D2155;
     color: white;

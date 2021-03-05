@@ -1,6 +1,7 @@
 """
 These view functions and classes implement API endpoints
 """
+import json
 import random
 
 from rest_framework.decorators import api_view
@@ -19,6 +20,9 @@ from .analysis.parts_of_speech import (
 from .analysis.anagrams import (
     get_anagrams,
     get_letter_freq,
+)
+from .analysis.textdata import (
+    get_text_data,
 )
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
@@ -107,6 +111,49 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
+@api_view(['POST'])
+def add_text(request):
+    """
+    API endpoint for adding a piece of text
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    new_text_obj = Text(title=body['title'], content=body['content'])
+    new_text_obj.save()
+    get_text_data(new_text_obj)
+    serializer = TextSerializer(new_text_obj)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def update_text(request):
+    """
+    API endpoint for updating title, content, and modules for a given piece of text given
+    the id of the text.
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    text_obj = Text.objects.get(id=body['id'])
+    old_text = text_obj.content
+
+    text_obj.title = body['title']
+    text_obj.content = body['content']
+    text_obj.modules = body['modules']
+    text_obj.save()
+
+    if old_text != text_obj.content:
+        get_text_data(text_obj)
+
+    return Response()
+
+
+@api_view(['POST'])
+def delete_text(request):
+    """
+    API endpoint for deleting a text.
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    text_obj = Text.objects.get(id=body)
+    res = text_obj.delete()
+    return Response(res)
 
 @api_view(['GET'])
 def get_quiz_data(request, text_id):
