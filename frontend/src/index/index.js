@@ -32,8 +32,6 @@ class TextInfo extends React.Component {
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
 
-        console.log(modules);
-        console.log(this.state.quizType.toLowerCase());
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
