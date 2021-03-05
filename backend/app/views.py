@@ -23,6 +23,7 @@ from .analysis.anagrams import (
 )
 from .analysis.textdata import (
     get_text_data,
+    get_story_data,
 )
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
@@ -135,8 +136,12 @@ def get_picturebook_data(request):
     """
     API endpoint for getting the picture book images given the story the user wrote.
     """
-
-    pass
+    body = request.data
+    urls = get_story_data(body['content'])
+    res = [{'word': word,
+            'url': urls[word]}
+           for word in urls]
+    return Response(res)
 
 
 @api_view(['POST'])

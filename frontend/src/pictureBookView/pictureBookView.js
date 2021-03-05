@@ -2,6 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { getCookie } from '../common';
 
 const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -13,6 +14,7 @@ export class PictureBookView extends React.Component {
         this.state = {
             pictureData: null,
             showModal: false,
+            pictureBookData: null,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -24,6 +26,32 @@ export class PictureBookView extends React.Component {
         const pictureData = await response.json();
         this.setState({ pictureData });
         document.addEventListener('keydown', this.handleKeyDown, true);
+    }
+
+    createPictureBook = async () => {
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const apiURL = '/api/get_picturebook_data';
+
+            const response = await fetch(apiURL, {
+                credentials: 'include',
+                method: 'POST',
+                mode: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({
+                    content: this.state.pictureBookData,
+                }),
+            });
+
+            const pictureBookImages = await response.json();
+            console.log(pictureBookImages);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     modalHandler = (event) => {

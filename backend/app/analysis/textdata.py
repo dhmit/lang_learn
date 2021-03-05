@@ -76,3 +76,18 @@ def get_text_data(text_obj):
     text_obj.definitions = word_definitions
     text_obj.examples = word_examples
     text_obj.save()
+
+
+def get_story_data(content):
+    """
+    Given the body of a story, return the image urls for all the nouns in the text.
+    """
+    word_urls = {}
+    words = get_valid_words(content.lower(), 'noun')
+    for word in tqdm.tqdm(words):
+        word = word.lower()
+        if word not in word_urls:
+            image_url = get_bing_image_url(word)
+            if image_url is not None:
+                word_urls[word.lower()] = image_url
+    return word_urls

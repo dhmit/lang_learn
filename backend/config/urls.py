@@ -25,6 +25,7 @@ from app.views import (
     add_text,
     get_flashcards,
     get_picturebook_prompt,
+    get_picturebook_data,
     get_quiz_data,
     text,
 )
@@ -56,6 +57,7 @@ urlpatterns = [
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
     path('api/text/<int:text_id>', text),
     path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
+    path('api/get_picturebook_data', get_picturebook_data),
 
     # View paths
     react_view_path('', 'IndexView'),
