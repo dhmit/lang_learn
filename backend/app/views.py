@@ -131,7 +131,12 @@ def get_picturebook_prompt(request, text_id, part_of_speech):
 
 
 @api_view(['POST'])
-def get_
+def get_picturebook_data(request):
+    """
+    API endpoint for getting the picture book images given the story the user wrote.
+    """
+
+    pass
 
 
 @api_view(['POST'])
