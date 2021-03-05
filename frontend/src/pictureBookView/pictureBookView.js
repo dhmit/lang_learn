@@ -18,7 +18,7 @@ export class PictureBookView extends React.Component {
     }
 
     componentDidMount = async () => {
-        const apiURL = `/api/get_picturebook/${this.props.textID}/${this.props.partOfSpeech}`;
+        const apiURL = `/api/get_picturebook_prompt/${this.props.textID}/${this.props.partOfSpeech}`;
         const response = await fetch(apiURL);
         const pictureData = await response.json();
         this.setState({ pictureData });
@@ -79,6 +79,15 @@ export class PictureBookView extends React.Component {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className='row-2'>
+                    <form>
+                        <div className="form-group">
+                            <label>Please write a story based on the images above. Make sure to use the given words.</label>
+                            <input type="text" className="form-control" id="exampleInputPassword1"/>
+                        </div>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                      </form>
                 </div>
             </div>
             <Footer />
