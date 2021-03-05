@@ -18,7 +18,8 @@ export class PictureBookView extends React.Component {
     }
 
     componentDidMount = async () => {
-        const apiURL = `/api/get_picturebook_prompt/${this.props.textID}/${this.props.partOfSpeech}`;
+        const apiURL = `/api/get_picturebook_prompt/${this.props.textID}/`
+            + `${this.props.partOfSpeech}`;
         const response = await fetch(apiURL);
         const pictureData = await response.json();
         this.setState({ pictureData });
@@ -40,7 +41,7 @@ export class PictureBookView extends React.Component {
             <Navbar />
             <div className="page">
                 <div className='row'>
-                    <div className='col-xl-8 col-md-6 col-12 text-center text-md-left'>
+                    <div className='col-xl-8 text-left'>
                         <h1 className='flashcard-title'>Story Generator</h1>
                         <button
                             className="btn btn-outline-light btn-circle flashcard-instruction"
@@ -85,15 +86,21 @@ export class PictureBookView extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className='col-xl-4 text-right bottom-align-text'>
+                        <button type="submit" className="btn btn-success submit-btn" form="picturebook-form">
+                            Submit
+                        </button>
+                    </div>
                 </div>
                 <div className='row-2'>
                     <form>
-                        <div className="form-group">
-                            <label>Please write a story based on the images above. Make sure to use the given words.</label>
-                            <input type="text" className="form-control" id="exampleInputPassword1"/>
+                        <div className="form-group" id="picturebook-form">
+                            <label>Please write a story based on the images above.
+                                Make sure to use the given words.</label>
+                            <textarea className="form-control story-text-input" id="content" rows="10">
+                            </textarea>
                         </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                      </form>
+                    </form>
                 </div>
             </div>
             <Footer />
