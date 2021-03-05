@@ -71,7 +71,13 @@ export class PictureBookView extends React.Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p></p>
+                                <p>Welcome to the Storybook Generator! At the top of the page,
+                                you will see some pictures related to nouns from the story you read.
+                                In the textbox below, use these nouns to write a story
+                                of your own! Feel free to also make use of the suggested words.
+                                When you finish writing and click submit, your story will be
+                                checked for grammar correctness and you will be able to see
+                                your story in picturebook form!</p>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary"
