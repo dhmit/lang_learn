@@ -197,7 +197,6 @@ export class LoadingPage extends Component {
         );
     }
 }
-
 LoadingPage.propTypes = {
     loadingText: PropTypes.string,
 };

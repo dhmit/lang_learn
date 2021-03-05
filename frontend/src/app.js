@@ -11,6 +11,7 @@ import { IndexView } from './index/index';
 import { QuizView } from './quizView/quizView';
 import { AnagramView } from './anagramView/anagramView';
 import { AllQuizView } from './quizView/allQuizView';
+import { FlashcardView } from './flashcard/flashcardView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -20,8 +21,9 @@ window.app_modules = {
     ReactDOM,  // Make ReactDOM accessible from the base template
 
     // Add all frontend views here
+    AllQuizView,
+    AnagramView,
+    FlashcardView,
     IndexView,
     QuizView,
-    AnagramView,
-    AllQuizView,
 };
