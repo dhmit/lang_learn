@@ -178,12 +178,16 @@ export class Navbar extends Component {
 }
 
 export class LoadingPage extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <>
                 <Navbar/>
                 <div className="loading">
-                    <div className="loading-text">{this.props.text}</div>
+                    <div className="loading-text">{this.props.loadingText}</div>
                     <div className="spinner-border loading-spinner" role="status" >
                         <span className="sr-only">Loading...</span>
                     </div>
@@ -194,5 +198,5 @@ export class LoadingPage extends Component {
     }
 }
 LoadingPage.propTypes = {
-    text: PropTypes.string,
+    loadingText: PropTypes.string,
 };
