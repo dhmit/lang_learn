@@ -1,19 +1,84 @@
 import React from 'react';
-// import * as PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
-function AnagramButton(props) {
-    // eslint-disable-next-line react/prop-types
-    const { id, pos } = props;
-    return (
-        <Button id="anagram-button" href={`/anagram/${id}/${pos}`} variant="outline-primary">
-            {pos} Anagram for Text {id}
-        </Button>
-    );
-}
+const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
+const QUIZ_TYPES = ['Anagrams', 'Flashcards'];
 
-const PARTS_OF_SPEECH = ['noun', 'verb', 'adjective', 'adverb'];
+class TextInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            quizType: 'Anagrams',
+            partOfSpeech: 'Noun',
+        };
+    }
+
+    handleQuiz = (e) => {
+        this.setState({ quizType: e.target.value });
+    }
+
+    handlePos = (e) => {
+        this.setState({ partOfSpeech: e.target.value });
+    }
+
+    render() {
+        // const posLink = pos.toLowerCase();
+        const {
+            title,
+            content,
+            textId,
+            modules,
+        } = this.props;
+        const { quizType, partOfSpeech } = this.state;
+
+        console.log(modules);
+        console.log(this.state.quizType.toLowerCase());
+        return (
+            <div className='text-info-div'>
+                <h1 className='text-title'>{title}</h1>
+                <p className='text-text'>{content}</p>
+                <div className='quiz-selection'>
+                    <label className='selection-label'>Quiz:</label>
+                    <select
+                        className='custom-select selection-select'
+                        onChange={this.handleQuiz}
+                        value={quizType}
+                    >
+                        {QUIZ_TYPES.map((quiz) => (
+                            <option value={quiz} key={quiz}>{quiz}</option>
+                        ))}
+                    </select>
+                    <label className='selection-label'>
+                        Part of Speech:
+                    </label>
+                    <select
+                        className='custom-select selection-select'
+                        onChange={this.handlePos}
+                        value={partOfSpeech}
+                    >
+                        {PARTS_OF_SPEECH.map((pos) => {
+                            if (modules[this.state.quizType.toLowerCase()][pos.toLowerCase()]) {
+                                return (<option value={pos} key={pos}>{pos}</option>);
+                            }
+                            return (<></>);
+                        })}
+                    </select>
+                    <a href={`/${quizType.toLowerCase()}/${textId}/${partOfSpeech.toLowerCase()}`}>
+                        <button className='btn btn-light selection-button'>Start!</button>
+                    </a>
+                </div>
+
+            </div>
+        );
+    }
+}
+TextInfo.propTypes = {
+    title: PropTypes.string,
+    content: PropTypes.string,
+    textId: PropTypes.number,
+    modules: PropTypes.object,
+};
 
 export class IndexView extends React.Component {
     constructor(props) {
@@ -43,30 +108,15 @@ export class IndexView extends React.Component {
         return (<React.Fragment>
             <Navbar />
             <div className="page">
-                <table border="2" width="1300px">
-                    <tbody>
-                        <tr>
-                            <th>Title</th>
-                            <th>Text</th>
-                            <th>Anagram Links</th>
-                        </tr>
-                        {this.state.data.map((text, k) => (
-                            <tr key={k}>
-                                <td>{text.title}</td>
-                                <td>{text.text}</td>
-                                <td>
-                                    {PARTS_OF_SPEECH.map((pos) => (
-                                        <AnagramButton
-                                            key={`${text.id}/${pos}`}
-                                            id={text.id}
-                                            pos={pos}
-                                        />
-                                    ))}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {this.state.data.map((text, k) => (
+                    <TextInfo
+                        key={k}
+                        title={text.title}
+                        content={text.content}
+                        textId={text.id}
+                        modules={text.modules}
+                    />
+                ))}
             </div>
             <Footer />
         </React.Fragment>);
