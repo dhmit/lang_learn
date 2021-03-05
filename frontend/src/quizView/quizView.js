@@ -69,11 +69,16 @@ export class QuizView extends React.Component {
     gradeQuiz() {
         let cSubmit;
         if (this.getUnanswered() === 0) {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
-                + ' answers are final.');
+            // eslint-disable-next-line no-alert
+            cSubmit = window.confirm(
+                'Are you sure that you want to submit your quiz? Your answers are final.',
+            );
         } else {
-            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
-                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
+            // eslint-disable-next-line no-alert
+            cSubmit = window.confirm(
+                'Are you sure that you want to submit your quiz? '
+                + `You have ${this.getUnanswered()} unanswered questions(s).`,
+            );
         }
         if (cSubmit === true) {
             this.setState({ graded: true });
