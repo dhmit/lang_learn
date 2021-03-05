@@ -12,6 +12,8 @@ try:
 except LookupError:
     nltk.download('wordnet', quiet=True)
 
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 CONTRACTIONS = {
     "ain't": "am not",  # / are not",
@@ -145,7 +147,7 @@ def remove_contractions(text):
     words = text.split(' ')
     for i, word in enumerate(words):
         expanded_contraction = CONTRACTIONS.get(word.lower(), word)
-        if expanded_contraction[0] != word[0]:
+        if expanded_contraction and expanded_contraction[0] != word[0]:
             expanded_contraction = word[0] + expanded_contraction[1:]
         words[i] = expanded_contraction.strip('\"')
     new_text = ' '.join(words)
