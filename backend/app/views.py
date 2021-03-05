@@ -113,7 +113,7 @@ def get_anagram(request, text_id, part_of_speech):
 
 
 @api_view(['GET'])
-def get_picturebook(request, text_id, part_of_speech):
+def get_picturebook_prompt(request, text_id, part_of_speech):
     """
     API endpoint for getting the necessary information for the picture book exercise
     given the id of the text and the part of speech. The words chosen will be random.

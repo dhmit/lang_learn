@@ -55,7 +55,7 @@ urlpatterns = [
     path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
     path('api/text/<int:text_id>', text),
-    path('api/get_picturebook/<int:text_id>/<str:part_of_speech>', get_picturebook),
+    path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook),
 
     # View paths
     react_view_path('', 'IndexView'),
