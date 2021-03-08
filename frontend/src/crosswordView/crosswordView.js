@@ -148,6 +148,10 @@ export class CrosswordView extends React.Component {
         }
     }
 
+    /**
+     * Given the row and column number, return the clue number associated with that
+     * cell only if that cell is the starting cell for a word. Otherwise, return null
+     */
     getClueNumber = (row, col) => {
         for (const [clueNum, clue] of this.state.crosswordData.clues.entries()) {
             if (clue.row === row && clue.col === col) {
@@ -155,6 +159,29 @@ export class CrosswordView extends React.Component {
             }
         }
         return null;
+    }
+
+    /**
+     * Given a row and column number, return true if this cell belongs to a word that has
+     * been found. Otherwise, return false.
+     */
+    isCorrect = (row, col) => {
+        const { found, crosswordData } = this.state;
+        for (let i = 0; i < found.length; i++) {
+            const curFound = found[i];
+            const curClue = crosswordData.clues[i];
+            // Checking for across clues
+            if (curFound.across && row === curClue.row
+                && col >= curClue.col && col < curClue.col + curClue.across.word.length) {
+                return true;
+            }
+            // Checking for down clues
+            if (curFound.down && col === curClue.col
+                && row >= curClue.row && row < curClue.row + curClue.down.word.length) {
+                return true;
+            }
+        }
+        return false;
     }
 
     updateCell = (e, row, col) => {
@@ -201,27 +228,28 @@ export class CrosswordView extends React.Component {
 
         const { found } = this.state;
 
-        const crossword = this.state.grid.map((row, k) => {
+        const crossword = this.state.grid.map((row, r) => {
             return (
-                <div className='crossword-row' key={k}>
-                    {row.map((cell, j) => {
+                <div className='crossword-row' key={r}>
+                    {row.map((cell, c) => {
                         if (cell === '#') {
                             return (
-                                <div className='blank-cell'/>
+                                <div className='blank-cell' key={c}/>
                             );
                         }
-                        const clueNum = this.getClueNumber(k, j);
+                        const clueNum = this.getClueNumber(r, c);
+                        const isCorrect = this.isCorrect(r, c);
                         return (
-                            <div className='crossword-cell' key={j}>
+                            <div className='crossword-cell' key={c}>
                                 <div className='clue-num'>
                                     {clueNum}
                                 </div>
                                 <input
-                                    className='cell-input'
+                                    className={`cell-input ${isCorrect ? 'correct-cell' : ''}`}
                                     type='text'
                                     value={cell}
                                     maxLength={1}
-                                    onChange={(e) => this.updateCell(e, k, j)}
+                                    onChange={(e) => this.updateCell(e, r, c)}
                                 />
                             </div>
                         );
