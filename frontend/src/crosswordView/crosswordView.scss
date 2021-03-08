@@ -9,10 +9,6 @@
     padding-bottom: 20px;
 }
 
-.correct-cell {
-    color: green;
-}
-
 .clue-header {
     margin: 10px 0;
 }
@@ -47,6 +43,10 @@ $cell-height: 60px;
     height: $cell-height;
     border: 1px solid #5941A9;
     position: relative;
+}
+
+.correct-cell {
+    color: green;
 }
 
 .clue-num {

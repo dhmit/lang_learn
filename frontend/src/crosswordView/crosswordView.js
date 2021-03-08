@@ -128,7 +128,16 @@ export class CrosswordView extends React.Component {
             crosswordData: null,
             grid: null,
             found: testData.clues.map((_) => ({ across: false, down: false })),
+            focusRow: null,
+            focusCol: null,
         };
+        /**
+         * cellRefs maps cell names in the form of cell-{row},{col} to the ref for that cell
+         * This is used for calling the .focus() method for each individual cell.
+         * The refs are created using callback refs
+         * (https://reactjs.org/docs/refs-and-the-dom.html#callback-refs)
+         */
+        this.cellRefs = {};
     }
 
     componentDidMount = async () => {
@@ -145,6 +154,48 @@ export class CrosswordView extends React.Component {
             });
         } catch (e) {
             console.log(e);
+        }
+        document.addEventListener('keydown', this.handleKeyDown, true);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown, false);
+    }
+
+    changeFocus = (r, c) => {
+        this.cellRefs[`cell-${r},${c}`].focus();
+        this.setState({ focusRow: r, focusCol: c });
+    }
+
+    changeFocusDelta = (dr, dc) => {
+        const { grid, focusRow, focusCol } = this.state;
+        const gridHeight = grid.length;
+        const gridWidth = grid[0].length;
+
+        let curR = (gridHeight + focusRow + dr) % gridHeight;
+        let curC = (gridWidth + focusCol + dc) % gridWidth;
+        for (let i = 0; i <= Math.max(gridHeight, gridWidth); i++) {
+            if (grid[curR][curC] !== '#') {
+                this.cellRefs[`cell-${curR},${curC}`].focus();
+                break;
+            }
+            curR = (gridHeight + curR + dr) % gridHeight;
+            curC = (gridWidth + curC + dc) % gridWidth;
+        }
+        this.setState({ focusRow: curR, focusCol: curC });
+    }
+
+    handleKeyDown = (e) => {
+        const deltas = {
+            ArrowLeft: [0, -1],
+            ArrowRight: [0, 1],
+            ArrowUp: [-1, 0],
+            ArrowDown: [1, 0],
+        };
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) {
+            e.preventDefault();
+            const { code } = e;
+            this.changeFocusDelta(deltas[code][0], deltas[code][1]);
         }
     }
 
@@ -249,6 +300,10 @@ export class CrosswordView extends React.Component {
                                     type='text'
                                     value={cell}
                                     maxLength={1}
+                                    ref={(instance) => {
+                                        this.cellRefs[`cell-${r},${c}`] = instance;
+                                    }}
+                                    onClick={() => this.changeFocus(r, c)}
                                     onChange={(e) => this.updateCell(e, r, c)}
                                 />
                             </div>
@@ -261,7 +316,11 @@ export class CrosswordView extends React.Component {
         return (
             <>
                 <Navbar/>
-                <div className='page' style={{ 'paddingBottom': '50px' }}>
+                <div
+                    className='page'
+                    style={{ 'paddingBottom': '50px' }}
+                    onKeyDown={this.handleKeyDown}
+                >
                     <h1 className='crossword-title'>Crossword</h1>
                     <div className='row'>
                         <div className='col-lg-6 col-12 clues-box'>
