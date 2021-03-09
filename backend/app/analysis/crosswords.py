@@ -64,6 +64,11 @@ def get_anagrams(anagram_freq):
 
 
 def rand_words(all_words, max):
+    """
+    :param all_words: list of words to be in crossword
+    :param max: number of words wanted in crossword
+    :return: list of max amt of random words from all_words
+    """
     words = set()
     for i in range(max + 1):
         indx = random.randint(0, len(all_words)-1)
@@ -90,11 +95,11 @@ def parse_cmdline_args():
                         dest="dim",
                         help="Dimensions of the grid to build.")
     parser.add_argument('-n', type=int,
-                        default=10,
+                        default=2,
                         dest="n_loops",
                         help="NUmber of execution loops to run.")
     parser.add_argument('-t', type=int,
-                        default=60,
+                        default=10,
                         dest="timeout",
                         help="Maximum execution time, in seconds, per execution loop.")
     parser.add_argument('-o', type=float,
@@ -144,9 +149,13 @@ def make_crossword(words, size):
     grid = generator.get_grid()
     words_in_grid = generator.get_words_in_grid()
     file_ops.write_grid_to_screen(grid, words_in_grid)
+    print(grid)
+    print(words_in_grid)
+
 
 
 def get_crosswords():
+
     all_words = ['regular', 'violent', 'rebel', 'handy', 'noxious', 'bare', 'rightful', 'chance',
                  'agonizing', 'mean', 'report', 'harmony', 'barbarous', 'rapid', 'memory',
                  'vegetable', 'excite', 'illustrious', 'burly', 'old-fashioned', 'field',
