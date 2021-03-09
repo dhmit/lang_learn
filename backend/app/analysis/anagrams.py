@@ -1,6 +1,3 @@
-"""
-Helper functions for generating and checking anagrams
-"""
 import os
 from django.conf import settings
 

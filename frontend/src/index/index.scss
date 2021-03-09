@@ -8,17 +8,25 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+#map-container {
+    margin: 10vh 0 15vh 0;
+}
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
 }
 
+.box {
+    border: 3px solid lightblue;
+    padding: 4px;
+    margin-bottom: 1px;
+}
+
 $header-padding: 10px;
-$footer-padding: 10px;
 $side-padding: 100px;
 
 .page {
-    padding: $header-padding $side-padding $footer-padding;
+    padding: $header-padding $side-padding 0;
     flex: 1 0 auto;
     background-color: #2D2155;
     color: white;
@@ -29,6 +37,7 @@ $side-padding: 100px;
         padding: $header-padding 0 0;
     }
 }
+
 
 .landing-title {
     font-size: 40px;
@@ -41,44 +50,16 @@ $side-padding: 100px;
     font-size: 20px;
 }
 
-/* CSS for Text Info Box on Home page */
-.text-info-div {
-    background: #5941A9;
-    border-radius: 40px;
-    padding: 30px;
-    color: white;
-    margin: 20px 0;
-}
-
-.text-title {
-    font-size: 50px;
+.map-square {
+    font-size: 25px;
     font-weight: bold;
+    margin-bottom: 0;
+    color: black;
 }
 
-.text-text {
-    padding: 0;
-    margin: 0 0 20px;
-    font-size: 20px;
+.map-square:hover {
+    color: black;
 }
 
-.quiz-selection {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-
-.selection-label {
-    margin: 0 10px 0 20px;
-    font-size: 22px;
-}
-
-.selection-select {
-    width: 20%;
-}
-
-.selection-button {
-    border-radius: 10px;
-    font-size: 18px;
-    margin-left: 20px;
-    border: black;
+#anagram-button {
 }

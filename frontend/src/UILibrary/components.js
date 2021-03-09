@@ -133,9 +133,7 @@ export class Footer extends React.Component {
     }
 }
 
-const navbarLinks = [
-    { name: 'Instructor\'s Page', link: '/instructor' },
-];
+const navbarLinks = [];
 
 export class Navbar extends Component {
     constructor(props) {
@@ -149,8 +147,7 @@ export class Navbar extends Component {
         const show = (this.state.showNav) ? 'show' : '';
         return (
             <div>
-                <nav className={`navbar navbar-expand-lg ${this.props.color === 'light'
-                    ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`}>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <div className="container-fluid">
                         <a className="navbar-brand" style={{ 'fontSize': '200%' }}
                             href="/"><b>Lang Learn</b></a>
@@ -165,15 +162,9 @@ export class Navbar extends Component {
                             <ul className="navbar-nav ml-auto">
                                 {
                                     navbarLinks.map((page) => (
-                                        <li key={page.name} className='nav-item'>
-                                            <a
-                                                key={page.name}
-                                                className={`nav-link ${this.props.color === 'light'
-                                                    ? 'text-light' : 'text-dark'}`}
-                                                href={page.link}
-                                            >
-                                                {page.name}
-                                            </a>
+                                        <li key={page.name} className="nav-item">
+                                            <a key={page.name} className="nav-link"
+                                                href={page.link}>{page.name}</a>
                                         </li>
                                     ))
                                 }
@@ -185,21 +176,14 @@ export class Navbar extends Component {
         );
     }
 }
-Navbar.propTypes = {
-    color: PropTypes.string,
-};
 
 export class LoadingPage extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <>
                 <Navbar/>
                 <div className="loading">
-                    <div className="loading-text">{this.props.loadingText}</div>
+                    <div className="loading-text">Creating Anagram Quiz...</div>
                     <div className="spinner-border loading-spinner" role="status" >
                         <span className="sr-only">Loading...</span>
                     </div>
@@ -209,6 +193,3 @@ export class LoadingPage extends Component {
         );
     }
 }
-LoadingPage.propTypes = {
-    loadingText: PropTypes.string,
-};
