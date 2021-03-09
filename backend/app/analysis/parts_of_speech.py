@@ -168,7 +168,13 @@ tags = {
     'noun': ['NN', 'NNS', 'NNP', 'NNPS'],
     'verb': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
     'adverb': ['RB', 'RBR', 'RBS'],
-    'adjective': ['JJ', 'JJR', 'JJS']
+    'adjective': ['JJ', 'JJR', 'JJS'],
+    'adposition': ['IN', 'TO', 'PRT'],
+    'conjunctive': ['CC', 'CONJ'],
+    'pronouns': ['PRP', 'PRON'],
+    'determiner': ['DT', 'DET'],
+    'numeral': ['NUM'],
+    'other': ['X']
 }
 
 
@@ -262,7 +268,7 @@ def punct_in_word(word):
     """
     Checks if there are punctuations in the word
     """
-    quotes = ["“", '"', "'", "’", ".", "?", "!"]
+    quotes = ["“", '"', "'", "’", ".", "?", "!", ":", ";", "-", ","]
     for quote in quotes:
         if quote in word:
             return True
