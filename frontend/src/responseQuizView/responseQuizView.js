@@ -26,27 +26,27 @@ export class ResponseQuizView extends React.Component {
     async componentDidMount() {
         try {
             // TODO: Run an API that pulls the quiz data from the backend.
-            // const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
-            // const data = await response.json();
-            const data = [
-                {
-                    'sentence': 'Hi! My name is Maria.',
-                    'answer': 'Hi! My name is Bob.',
-                    'options': ['Bye!', 'Hi! My name is Bob.', '76, actually.', 'You\'re weird.'],
-                    'type': 'mc',
-                },
-                {
-                    'sentence': 'How are you?',
-                    'answer': 'Great!',
-                    'options': ['No.', 'Hi! My name is Bob.', 'Bye!', 'Great!'],
-                    'type': 'mc',
-                },
-                {
-                    'sentence': 'What\'s your favorite color?',
-                    'answer': 'Purple.',
-                    'type': 'fr',
-                }
-            ];
+            const response = await fetch(`/api/get_quiz_data/${this.props.textID}/`);
+            const data = await response.json();
+            // const data = [
+            //     {
+            //         'sentence': 'Hi! My name is Maria.',
+            //         'answer': 'Hi! My name is Bob.',
+            //         'options': ['Bye!', 'Hi! My name is Bob.', '76, actually.', 'You\'re weird.'],
+            //         'type': 'mc',
+            //     },
+            //     {
+            //         'sentence': 'How are you?',
+            //         'answer': 'Great!',
+            //         'options': ['No.', 'Hi! My name is Bob.', 'Bye!', 'Great!'],
+            //         'type': 'mc',
+            //     },
+            //     {
+            //         'sentence': 'What\'s your favorite color?',
+            //         'answer': 'Purple.',
+            //         'type': 'fr',
+            //     }
+            // ];
             this.setState({ data: data });
         } catch (e) {
             console.log(e);
@@ -88,27 +88,27 @@ export class ResponseQuizView extends React.Component {
 
     gradeQuiz() {
         // TODO: Write the API request that will send the user's answers to the backend for grading
-        // let cSubmit;
-        // if (this.getUnanswered() === 0) {
-        //     cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
-        //         + ' answers are final.');
-        // } else {
-        //     cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
-        //         + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
-        // }
-        // if (cSubmit === true) {
-        //     this.setState({ graded: true });
-        //     let score = 0;
-        //     const answers = this.state.userAnswers;
-        //     for (let i = 0; i < this.state.data.length; i++) {
-        //         if (answers[i + 1] === this.state.data[i].answer) {
-        //             score += 1;
-        //         }
-        //     }
-        //     this.setState({ score: score });
-        // } else {
-        //     console.log();
-        // }
+        let cSubmit;
+        if (this.getUnanswered() === 0) {
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
+                + ' answers are final.');
+        } else {
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
+                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
+        }
+        if (cSubmit === true) {
+            this.setState({ graded: true });
+            let score = 0;
+            const answers = this.state.userAnswers;
+            for (let i = 0; i < this.state.data.length; i++) {
+                if (answers[i + 1] === this.state.data[i].answer) {
+                    score += 1;
+                }
+            }
+            this.setState({ score: score });
+        } else {
+            console.log();
+        }
     }
 
     onProgressBarClick = (event) => {
@@ -318,7 +318,7 @@ export class ResponseQuizView extends React.Component {
 }
 
 ResponseQuizView.propTypes = {
-    textId: PropTypes.number,
+    textID: PropTypes.number,
     sentence: PropTypes.string,
     answer: PropTypes.string,
 };

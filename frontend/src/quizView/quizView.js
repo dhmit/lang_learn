@@ -25,7 +25,7 @@ export class QuizView extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch(`/api/get_quiz_data/${this.props.textId}/`);
+            const response = await fetch(`/api/get_quiz_data/${this.props.textID}/`);
             const data = await response.json();
             this.setState({ data: data });
         } catch (e) {
@@ -279,7 +279,7 @@ export class QuizView extends React.Component {
 }
 
 QuizView.propTypes = {
-    textId: PropTypes.number,
+    textID: PropTypes.number,
     sentence: PropTypes.string,
     answer: PropTypes.string,
 };

@@ -63,7 +63,7 @@ urlpatterns = [
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
     react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('quiz/', 'AllQuizView'),
-    react_view_path('quiz/<int:textId>/', 'QuizView'),
+    react_view_path('quiz/<int:textID>/', 'QuizView'),
     react_view_path('response_quiz/', 'ResponseAllQuizView'),
     react_view_path('response_quiz/<int:textID>/', 'ResponseQuizView'),
 ]
