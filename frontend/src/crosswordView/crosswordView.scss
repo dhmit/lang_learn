@@ -6,7 +6,10 @@
 .clues-box {
     background: rgba(105, 64, 238, 0.25);
     border-radius: 10px;
-    padding-bottom: 20px;
+    padding: 0 10px 10px;
+    margin-bottom: 30px;
+    max-height: 300px;
+    overflow-y: scroll;
 }
 
 .clue-header {
@@ -20,6 +23,19 @@
 .clue-found {
     text-decoration: line-through;
     color: #a0a0a0;
+}
+
+// Definition Box
+.definitions {
+    background: rgba(105, 64, 238, 0.25);
+    border-radius: 10px;
+    padding-bottom: 20px;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.definition-title {
+
 }
 
 // Crossword Styles

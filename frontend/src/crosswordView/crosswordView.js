@@ -3,6 +3,22 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 const testData = {
+    definitions: [
+        'How you feel in Thanksgiving',
+        'When you shake your head up and down',
+        'Big gray animal, moto moto',
+        'A common greeting',
+        'A vehicle that allows you to travel by air',
+        'Orange soda that rhymes with santa',
+        'Frozen rain',
+        'Yellow particles found at the beach',
+        'A hardware device that converts data from a digital format into one suitable for a'
+        + ' transmission medium such as telephone lines or radio.',
+        'When you have no friends',
+        'Opposite of subtract',
+        'When you are finished with something',
+        'How one feels when they say "you too" in response to "happy birthday"',
+    ],
     clues: [
         {
             row: 2,
@@ -10,7 +26,8 @@ const testData = {
             across: null,
             down: {
                 word: 'THANKFUL',
-                clue: 'How you feel in Thanksgiving',
+                clue: 'As we ate turkey, we thought about the things we were ________ for in our'
+                       + ' lives.',
             },
         },
         {
@@ -18,7 +35,7 @@ const testData = {
             col: 0,
             across: {
                 word: 'NOD',
-                clue: 'When you shake your head up and down',
+                clue: 'They ___ their heads.',
             },
             down: null,
         },
@@ -27,11 +44,11 @@ const testData = {
             col: 3,
             across: {
                 word: 'HIPPO',
-                clue: 'Big gray animal, moto moto',
+                clue: 'The _____ has giant teeth that crushed watermelons.',
             },
             down: {
                 word: 'HELLO',
-                clue: 'A common greeting',
+                clue: 'When I picked up the phone, I said _____.',
             },
         },
         {
@@ -40,7 +57,7 @@ const testData = {
             across: null,
             down: {
                 word: 'PLANE',
-                clue: 'A vehicle that allows you to travel by air',
+                clue: 'Its a bird, its a _____, its superman!',
             },
         },
         {
@@ -48,7 +65,7 @@ const testData = {
             col: 0,
             across: {
                 word: 'FANTA',
-                clue: 'Orange soda that rhymes with santa',
+                clue: 'My friend loves to drink _____.',
             },
             down: null,
         },
@@ -57,11 +74,11 @@ const testData = {
             col: 4,
             across: {
                 word: 'SNOW',
-                clue: 'Frozen rain',
+                clue: 'Every christmas, there is always ____ outside.',
             },
             down: {
                 word: 'SAND',
-                clue: 'Yellow particles found at the beach',
+                clue: 'I felt the hot ____ between my toes.',
             },
         },
         {
@@ -70,8 +87,7 @@ const testData = {
             across: null,
             down: {
                 word: 'MODEM',
-                clue: 'A hardware device that converts data from a digital format into one'
-                    + ' suitable for a transmission medium such as telephone lines or radio.',
+                clue: 'I tried turning the _____ on and off but it didn’t work.',
             },
         },
         {
@@ -79,11 +95,11 @@ const testData = {
             col: 2,
             across: {
                 word: 'ALONE',
-                clue: 'When you have no friends',
+                clue: 'During quarantine, I felt quite _____.',
             },
             down: {
                 word: 'ADD',
-                clue: 'Opposite of subtract',
+                clue: 'When you ___ 2 and 2, you get 4.',
             },
         },
         {
@@ -91,7 +107,7 @@ const testData = {
             col: 2,
             across: {
                 word: 'DONE',
-                clue: 'When you are finished with something',
+                clue: 'At last, Bob was ____ with his homework.',
             },
             down: null,
         },
@@ -100,7 +116,7 @@ const testData = {
             col: 4,
             across: {
                 word: 'DUMB',
-                clue: 'How one feels when they say "you too" in response to "happy birthday"',
+                clue: 'After failing his test, Leo felt ____.',
             },
             down: null,
         },
@@ -279,6 +295,49 @@ export class CrosswordView extends React.Component {
 
         const { found } = this.state;
 
+        const clueBox = <div className='clues-box'>
+            <h2 className='clue-header'>Across:</h2>
+            {
+                this.state.crosswordData.clues.map((clue, k) => {
+                    if (clue.across) {
+                        return (
+                            <div
+                                className={
+                                    `clue ${found[k].across
+                                        ? 'clue-found'
+                                        : ''}`
+                                }
+                                key={k}
+                            >
+                                {k + 1}) {clue.across.clue}
+                            </div>
+                        );
+                    }
+                    return '';
+                })
+            }
+            <h2 className='clue-header'>Down:</h2>
+            {
+                this.state.crosswordData.clues.map((clue, k) => {
+                    if (clue.down) {
+                        return (
+                            <div
+                                className={
+                                    `clue ${found[k].down
+                                        ? 'clue-found'
+                                        : ''}`
+                                }
+                                key={k}
+                            >
+                                {k + 1}) {clue.down.clue}
+                            </div>
+                        );
+                    }
+                    return '';
+                })
+            }
+        </div>;
+
         const crossword = this.state.grid.map((row, r) => {
             return (
                 <div className='crossword-row' key={r}>
@@ -323,47 +382,19 @@ export class CrosswordView extends React.Component {
                 >
                     <h1 className='crossword-title'>Crossword</h1>
                     <div className='row'>
-                        <div className='col-lg-6 col-12 clues-box'>
-                            <h2 className='clue-header'>Across:</h2>
-                            {
-                                this.state.crosswordData.clues.map((clue, k) => {
-                                    if (clue.across) {
-                                        return (
-                                            <div
-                                                className={
-                                                    `clue ${found[k].across
-                                                        ? 'clue-found'
-                                                        : ''}`
-                                                }
-                                                key={k}
-                                            >
-                                                {k + 1}) {clue.across.clue}
-                                            </div>
-                                        );
-                                    }
-                                    return '';
-                                })
-                            }
-                            <h2 className='clue-header'>Down:</h2>
-                            {
-                                this.state.crosswordData.clues.map((clue, k) => {
-                                    if (clue.down) {
-                                        return (
-                                            <div
-                                                className={
-                                                    `clue ${found[k].down
-                                                        ? 'clue-found'
-                                                        : ''}`
-                                                }
-                                                key={k}
-                                            >
-                                                {k + 1}) {clue.down.clue}
-                                            </div>
-                                        );
-                                    }
-                                    return '';
-                                })
-                            }
+                        <div className='col-lg-6 col-12'>
+                            { clueBox }
+                            <div className='clues-box'>
+                                <h2 className='clue-header'>Definitions</h2>
+                                <ul>
+                                    {this.state.crosswordData.definitions.map((definition, k) => (
+                                        <li key={k}>
+                                            { definition }
+                                        </li>
+                                    ))}
+                                </ul>
+
+                            </div>
                         </div>
                         <div className='col-lg-6 col-12'>
                             <div className='crossword-grid'>
