@@ -41,7 +41,7 @@ export class ResponseAllQuizView extends React.Component {
             <div className="page">
                 <div className="row justify-content-between" id="top">
                     <div className="col">
-                        <h1 className="quiz-title">Verb Conjugation Quiz</h1>
+                        <h1 className="quiz-title">Dialogue Quiz</h1>
                         <p className="quiz-author"><i>by Takako Aikawa</i></p>
                     </div>
                     <div className="col text-right submit-button">

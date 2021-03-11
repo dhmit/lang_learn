@@ -25,7 +25,7 @@ from app.views import (
     add_text,
     get_flashcards,
     get_quiz_data,
-    text,
+    text, get_response_quiz_data,
 )
 
 
@@ -53,6 +53,7 @@ urlpatterns = [
     path('api/add_text', add_text),
     path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
+    path('api/get_response_quiz_data/<int:text_id>/', get_response_quiz_data),
     path('api/text/<int:text_id>', text),
 
     # View paths

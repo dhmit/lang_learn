@@ -7,6 +7,7 @@ import random
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .analysis.conversation_quiz import get_quiz_questions
 from .models import (
     Text
 )
@@ -164,4 +165,14 @@ def get_quiz_data(request, text_id):
     """
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.content)
+    return Response(res)
+
+@api_view(['GET'])
+def get_response_quiz_data(request, text_id):
+    """
+    API endpoint for getting the necessary information for the conversation quiz given
+    the id of the text. [add more important info]
+    """
+    text_obj = Text.objects.get(id=text_id)
+    res = get_quiz_questions(text_obj.content)
     return Response(res)
