@@ -185,5 +185,5 @@ def get_quiz_data(request, text_id):
     will be randomly selected and arranged.
     """
     text_obj = Text.objects.get(id=text_id)
-    res = get_quiz_sentences(text_obj.text)
+    res = get_quiz_sentences(text_obj.content)
     return Response(res)

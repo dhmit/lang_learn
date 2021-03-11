@@ -23,7 +23,13 @@ def default_module():
         },
         'quiz': {
             'conjugations': False,
-        }
+        },
+        'crossword': {
+            'noun': False,
+            'verb': False,
+            'adjective': False,
+            'adverb': False,
+        },
     }
     return mods
 
