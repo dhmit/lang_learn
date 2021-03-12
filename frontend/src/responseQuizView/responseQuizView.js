@@ -118,19 +118,30 @@ export class ResponseQuizView extends React.Component {
             const choices = this.state.data[this.state.question - 1].options;
 
             const radios = choices.map((choice, i) => {
-                console.log(choice);
+                const choiceText = choice['text'];
                 return (
                     <ToggleButton
                         key={i + 1}
                         variant="outline-light"
-                        value={choice}
+                        value={choiceText}
                         className="c-button"
                         onClick={this.onAnswerChoiceClick}
                     >
-                        {choice}
+                        {choiceText}
                     </ToggleButton>
                 );
             });
+
+            return (
+                <ToggleButtonGroup
+                    className="text-center"
+                    type="radio"
+                    name="options"
+                    value={this.state.userAnswers[this.state.question]}
+                >
+                    {radios}
+                </ToggleButtonGroup>
+            );
         };
 
         return (
