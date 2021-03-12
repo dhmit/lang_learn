@@ -24,6 +24,9 @@ from .analysis.anagrams import (
 from .analysis.textdata import (
     get_text_data,
 )
+from .analysis.new_crossword import {
+    get_crosswords,
+}
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
@@ -162,7 +165,13 @@ def get_crossword(request, text_id, part_of_speech):
     API endpoint for getting the necessary information for the crossword given
     the id of the text and the part of speech.
     """
-    # text_obj = Text.objects.get(id=text_id)
+    text_obj = Text.objects.get(id=text_id)
+    definitions = text_obj.definitons;
+    examples = text_obj.definitions;
+    words = get_valid_words(text_obj.content, part_of_speech)
+    crossword_data = get_crosswords(words)
+
+    print(crossword_data)
     # image_urls = text_obj.images
     # definitions = text_obj.definitions
     # examples = text_obj.examples

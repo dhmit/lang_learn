@@ -57,10 +57,11 @@ def is_valid(grid, word, row, col, direction):
     return True
 
 
-def is_within_bounds(word_len, line, column, direction, grid_width, grid_height):
+def is_within_bounds(word_len, row, column, direction, grid_width, grid_height):
     """ Returns whether the given word is withing the bounds of the grid.
     """
-    return (direction == "across" and column + word_len <= grid_width-1) or (direction == "down" and line + word_len <= grid_height-1)
+    return ((direction == "across" and column + word_len <= grid_width-1 )
+        or (direction == "down" and row + word_len <= grid_height-1)) and (row >= 0 and column >= 0)
 
 def is_cell_free(line, col, grid):
     """ Checks whether a cell is free.
@@ -154,13 +155,14 @@ def make_crossword(grid, word_list, grid_size):
             print(cur_row)
         print()
         # print(grid)
-        final_grid = find_possible_grid(grid, word_list[1:], grid_size) #might have bug of only having one item in list
-        return final_grid
+        clues = []
+        (final_grid, final_clues) = find_possible_grid(grid, word_list[1:], grid_size, clues) #might have bug of only having one item in list
+        return (final_grid, final_clues)
     return None
 
-def find_possible_grid(grid, word_list, grid_size):
+def find_possible_grid(grid, word_list, grid_size, clues):
     if len(word_list) == 0:
-        return grid
+        return (grid, clues)
 
     current_word = word_list[0]
     possible = [] #((i,j), direction)
@@ -174,16 +176,39 @@ def find_possible_grid(grid, word_list, grid_size):
         new_grid = copy.deepcopy(grid)
         if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1]):
             add_word_to_grid(new_grid, current_word, pos[0][0], pos[0][1], pos[1])
+            add_clue(clues, current_word, pos[0][0], pos[0][1], pos[1])
             for cur_row in new_grid:
                 print(cur_row)
             print()
             new_word_list = word_list.copy()
             new_word_list.pop(0)
-            final_grid = find_possible_grid(new_grid, new_word_list, grid_size)
-            if final_grid != None:
-                return final_grid
+            final = find_possible_grid(new_grid, new_word_list, grid_size, copy.deepcopy(clues))
+            if final != None:
+                return (final[0], final[1])
     return None
 
+def add_clue(clues, word, col, row, direction):
+    word_found = False
+    for clue in clues:
+        if clue["row"] == row and clue["col"] == col:
+            clue[direction] = {
+                "word" : word.upper(),
+                "clue" : None
+            }
+            word_found = True
+            break
+    if not word_found:
+        clue = {
+            "row" : row,
+            "col" : col,
+            "across" : None,
+            "down" : None,
+        }
+        clue[direction] = {
+            "word" : word,
+            "clue" : None
+        }
+        clues.append(clue)
 
 def write_grid_to_screen(grid, words_in_grid):
     # Print grid to the screen
@@ -197,12 +222,7 @@ def write_grid_to_screen(grid, words_in_grid):
     print(words_in_grid)
     # pprint.pprint(words_in_grid)
 
-def get_crosswords():
-    all_words = ['regular', 'violent', 'rebel', 'handy', 'noxious', 'bare', 'rightful', 'chance',
-                 'agonizing', 'mean', 'report', 'harmony', 'barbarous', 'rapid', 'memory',
-                 'vegetable', 'excite', 'illustrious', 'burly', 'fashion', 'field',
-                 'seashore', 'wild', 'skate', 'temporary', 'debonair', 'forgetful', 'film',
-                 'lavish', 'scary']
+def get_crosswords(all_words):
     max_word_amount = 10
     if len(all_words) > max_word_amount:
         words = rand_words(all_words, max_word_amount)
@@ -217,8 +237,27 @@ def get_crosswords():
             row.append(0)
         grid.append(row)
 
-    final_grid = make_crossword(grid, words, grid_size)
-    write_grid_to_screen(final_grid, words)
+    cross = make_crossword(grid, words, grid_size)
+
+    if cross == None:
+        return {
+            "clues" : None,
+            'solution': None,
+    }
+
+    for row in range(len(cross[0])):
+        for col in range(len(cross[0][row])):
+            if cross[0][row][col] != 0:
+                cross[0][row][col] = cross[0][row][col].upper()
+    cross_dict = {
+        "clues" : cross[1],
+        'solution': cross[0],
+    }
+
+    write_grid_to_screen(cross[0], words)
+    print(cross[1])
+
+    return cross_dict
 
     # placed_words = []
     # place_word_in_map(word, map, rand_x, rand_y, rand_direction, current_words)
@@ -226,11 +265,16 @@ def get_crosswords():
     # make_crossword(map, placed_words, words[1:])
 
 
-    print(words)
+    # print(words)
 
     # make_crossword(all_words, grid_size)
 
 
 if __name__ == "__main__":
     print("hello")
-    get_crosswords()
+    all_words = ['regular', 'violent', 'rebel', 'handy', 'noxious', 'bare', 'rightful', 'chance',
+                 'agonizing', 'mean', 'report', 'harmony', 'barbarous', 'rapid', 'memory',
+                 'vegetable', 'excite', 'illustrious', 'burly', 'fashion', 'field',
+                 'seashore', 'wild', 'skate', 'temporary', 'debonair', 'forgetful', 'film',
+                 'lavish', 'scary']
+    get_crosswords(all_words)
