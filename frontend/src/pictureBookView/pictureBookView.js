@@ -14,7 +14,7 @@ export class PictureBookView extends React.Component {
         this.state = {
             pictureData: null,
             showModal: false,
-            pictureBookData: null,
+            pictureBookStory: '',
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -30,6 +30,7 @@ export class PictureBookView extends React.Component {
 
     createPictureBook = async () => {
         try {
+            console.log(this.state.pictureBookStory);
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/get_picturebook_data';
 
@@ -43,7 +44,7 @@ export class PictureBookView extends React.Component {
                     'X-CSRFToken': csrftoken,
                 },
                 body: JSON.stringify({
-                    content: this.state.pictureBookData,
+                    content: this.state.pictureBookStory,
                 }),
             });
 
@@ -60,6 +61,13 @@ export class PictureBookView extends React.Component {
             showModal: !this.state.showModal,
         });
     }
+
+    handleInput = (event) => {
+        const inputValue = event.target.value;
+        this.setState({
+            pictureBookStory: inputValue,
+        });
+    };
 
     render() {
         if (!this.state.pictureData) {
@@ -115,8 +123,10 @@ export class PictureBookView extends React.Component {
                         </div>
                     </div>
                     <div className='col-xl-4 text-right bottom-align-text'>
-                        <button type="submit" className="btn btn-success submit-btn"
-                            form="picturebook-form">
+                        <button type="submit"
+                            className="btn btn-success submit-btn"
+                            form="picturebook-form"
+                            onClick={this.createPictureBook}>
                             Submit
                         </button>
                     </div>
@@ -129,7 +139,9 @@ export class PictureBookView extends React.Component {
                                     Make sure to use the given words.</label>
                                 <textarea className="form-control story-text-input"
                                     id="content"
-                                    rows="10">
+                                    rows="10"
+                                    onChange={this.handleInput}
+                                    value={this.pictureBookStory}>
                                 </textarea>
                             </div>
                         </form>
