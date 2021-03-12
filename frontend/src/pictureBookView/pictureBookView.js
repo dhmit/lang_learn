@@ -115,20 +115,28 @@ export class PictureBookView extends React.Component {
                         </div>
                     </div>
                     <div className='col-xl-4 text-right bottom-align-text'>
-                        <button type="submit" className="btn btn-success submit-btn" form="picturebook-form">
+                        <button type="submit" className="btn btn-success submit-btn"
+                            form="picturebook-form">
                             Submit
                         </button>
                     </div>
                 </div>
-                <div className='row-2'>
-                    <form>
-                        <div className="form-group" id="picturebook-form">
-                            <label>Please write a story based on the images above.
-                                Make sure to use the given words.</label>
-                            <textarea className="form-control story-text-input" id="content" rows="10">
-                            </textarea>
-                        </div>
-                    </form>
+                <div className='row'>
+                    <div className="col-9 box">
+                        <form>
+                            <div className="form-group">
+                                <label>Please write a story based on the images above.
+                                    Make sure to use the given words.</label>
+                                <textarea className="form-control story-text-input"
+                                    id="content"
+                                    rows="10">
+                                </textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="col box">
+                        <h4>Words Others Used:</h4>
+                    </div>
                 </div>
             </div>
             <Footer />
