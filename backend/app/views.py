@@ -24,9 +24,9 @@ from .analysis.anagrams import (
 from .analysis.textdata import (
     get_text_data,
 )
-from .analysis.new_crossword import {
+from .analysis.new_crosswords import (
     get_crosswords,
-}
+)
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
@@ -133,7 +133,7 @@ def update_text(request):
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(json.dumps(request.data))
     text_obj = Text.objects.get(id=body['id'])
     old_text = text_obj.content
 
@@ -166,11 +166,29 @@ def get_crossword(request, text_id, part_of_speech):
     the id of the text and the part of speech.
     """
     text_obj = Text.objects.get(id=text_id)
-    definitions = text_obj.definitons;
-    examples = text_obj.definitions;
+    definitions = text_obj.definitions
+    examples = text_obj.examples
     words = get_valid_words(text_obj.content, part_of_speech)
-    crossword_data = get_crosswords(words)
 
+    crossword_data = get_crosswords(words)
+    print("VIEWS.PY")
+    print(part_of_speech)
+    print(definitions)
+    print(examples)
+    print(words)
+    print(crossword_data)
+
+    word_defs = []
+    for clue in crossword_data['clues']:
+        for direction in ['across', 'down']:
+            if clue[direction]:
+                clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)
+                clue_definitions = definitions[clue[direction]['word']].get(part_of_speech, None)
+                clue[direction]['clue'] = clue_examples[0] if examples else None
+                if clue_definitions:
+                    word_defs.append(clue_definitions[0])
+
+    crossword_data['definitions'] = word_defs
     print(crossword_data)
     # image_urls = text_obj.images
     # definitions = text_obj.definitions
@@ -183,7 +201,7 @@ def get_crossword(request, text_id, part_of_speech):
     #         'example': examples[word].get(part_of_speech, []),
     #         'url': image_urls.get(word, '')}
     #        for word in words]
-    return Response("hi")
+    return Response(crossword_data)
 
 
 @api_view(['GET'])

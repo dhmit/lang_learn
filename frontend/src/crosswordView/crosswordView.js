@@ -158,10 +158,10 @@ export class CrosswordView extends React.Component {
 
     componentDidMount = async () => {
         try {
-            // const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
-            // const response = await fetch(apiURL);
-            // const data = await response.json();
-            const data = testData;
+            const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            // const data = testData;
             const emptyGrid = data.solution.map((row) => row
                 .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
             this.setState({
