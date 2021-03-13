@@ -6,6 +6,7 @@ import urllib
 import urllib.request
 import urllib.parse
 import tqdm
+from spellchecker import SpellChecker
 
 # Ours
 from app.analysis.parts_of_speech import (
@@ -91,3 +92,17 @@ def get_story_data(content):
             if image_url is not None:
                 word_urls[word.lower()] = image_url
     return word_urls
+
+
+def get_misspelled_words(content):
+    """
+    Given the body of a story, return a dictionary with the keys being the
+    misspelled word and the values the correct word.
+    """
+    correct_spelling = {}
+    spell = SpellChecker()
+    words_list = re.compile("([\w][\w]*'?\w?)").findall(content)
+    misspelled = spell.unknown(words_list)
+    for word in misspelled:
+        correct_spelling[word] = spell.correction(word)
+    return correct_spelling

@@ -24,6 +24,7 @@ from .analysis.anagrams import (
 from .analysis.textdata import (
     get_text_data,
     get_story_data,
+    get_misspelled_words,
 )
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
@@ -138,6 +139,7 @@ def get_picturebook_data(request):
     """
     body = request.data
     urls = get_story_data(body['content'])
+    misspelled_words = get_misspelled_words(body['content'])
     res = [{'word': word,
             'url': urls[word]}
            for word in urls]
