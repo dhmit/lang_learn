@@ -58,7 +58,12 @@ def verb_conjugation_error(question_option):
     """
     # Use convert the option text into a sentence struct to get fill-in text and erroneous verb
     # substitutions.
-    text_sentence = get_quiz_sentences(question_option['text'])[0]
+    text_sentences = get_quiz_sentences(question_option['text'])
+    # If a verb was not found in the sentence, return original and indicate that introducing
+    # the error failed.
+    if len(text_sentences) == 0:
+        return question_option, False
+    text_sentence = text_sentences[0]
 
     # Remove the answer from the sentence option (to randomly pick from the other incorrect ones)
     text_sentence['options'].remove(text_sentence['answer'])
@@ -71,10 +76,23 @@ def verb_conjugation_error(question_option):
             '___', random.choice(text_sentence['options'])
         ),
     }
-    return new_question_option
+    return new_question_option, True
 
 
-def apply_question_errors(quiz_question):
+# A temporary example function
+def backwards_error(question_option):
+    text = question_option['text']
+    try:
+        new_option = {
+            'error-types': question_option['error-types'] + ['backwards'],
+            'text': text[-2].upper() + text[1:-2][::-1] + text[0].lower() + text[-1]
+        }
+        return new_option, True
+    except IndexError:
+        return question_option, False
+
+
+def apply_question_option_errors(quiz_question):
     """
     Given a single quiz question (dict), induce a random error in 3 of its options.
     :param quiz_question:
@@ -88,8 +106,16 @@ def apply_question_errors(quiz_question):
 
     # Apply a random error to the last 3 options
     for i in range(1, 4):
-        error_function = random.choice(error_functions)
-        quiz_question['options'][i] = error_function(quiz_question['options'][i])
+        untested_error_functions = error_functions.copy()
+        error_applied = False
+        # Try to produce an error in the option
+        while not error_applied:
+            if len(untested_error_functions) == 0:
+                raise Exception(f"There are no functions available that can produce an error in "
+                                f"question: {quiz_question['question']}")
+            random.shuffle(untested_error_functions)
+            error_function = untested_error_functions.pop(-1)
+            quiz_question['options'][i], error_applied = error_function(quiz_question['options'][i])
 
     # Randomize positions of the choices
     random.shuffle(quiz_question['options'])

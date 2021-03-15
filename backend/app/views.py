@@ -7,7 +7,7 @@ import random
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .analysis.conversation_quiz import get_quiz_questions
+from .analysis.conversation_quiz import get_quiz_questions, apply_question_option_errors
 from .models import (
     Text
 )
@@ -112,6 +112,7 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
+
 @api_view(['POST'])
 def add_text(request):
     """
@@ -156,6 +157,7 @@ def delete_text(request):
     res = text_obj.delete()
     return Response(res)
 
+
 @api_view(['GET'])
 def get_quiz_data(request, text_id):
     """
@@ -167,6 +169,7 @@ def get_quiz_data(request, text_id):
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
+
 @api_view(['GET'])
 def get_response_quiz_data(request, text_id):
     """
@@ -175,4 +178,6 @@ def get_response_quiz_data(request, text_id):
     """
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_questions(text_obj.content)
+    for question in res:
+        apply_question_option_errors(question)
     return Response(res)
