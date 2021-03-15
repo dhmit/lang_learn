@@ -2,139 +2,6 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
-const testData = {
-    definitions: [
-        'How you feel in Thanksgiving',
-        'When you shake your head up and down',
-        'Big gray animal, moto moto',
-        'A common greeting',
-        'A vehicle that allows you to travel by air',
-        'Orange soda that rhymes with santa',
-        'Frozen rain',
-        'Yellow particles found at the beach',
-        'A hardware device that converts data from a digital format into one suitable for a'
-        + ' transmission medium such as telephone lines or radio.',
-        'When you have no friends',
-        'Opposite of subtract',
-        'When you are finished with something',
-        'How one feels when they say "you too" in response to "happy birthday"',
-    ],
-    clues: [
-        {
-            row: 2,
-            col: 0,
-            across: null,
-            down: {
-                word: 'THANKFUL',
-                clue: 'As we ate turkey, we thought about the things we were ________ for in our'
-                       + ' lives.',
-            },
-        },
-        {
-            row: 5,
-            col: 0,
-            across: {
-                word: 'NOD',
-                clue: 'They ___ their heads.',
-            },
-            down: null,
-        },
-        {
-            row: 0,
-            col: 3,
-            across: {
-                word: 'HIPPO',
-                clue: 'The _____ has giant teeth that crushed watermelons.',
-            },
-            down: {
-                word: 'HELLO',
-                clue: 'When I picked up the phone, I said _____.',
-            },
-        },
-        {
-            row: 0,
-            col: 5,
-            across: null,
-            down: {
-                word: 'PLANE',
-                clue: 'Its a bird, its a _____, its superman!',
-            },
-        },
-        {
-            row: 7,
-            col: 0,
-            across: {
-                word: 'FANTA',
-                clue: 'My friend loves to drink _____.',
-            },
-            down: null,
-        },
-        {
-            row: 6,
-            col: 4,
-            across: {
-                word: 'SNOW',
-                clue: 'Every christmas, there is always ____ outside.',
-            },
-            down: {
-                word: 'SAND',
-                clue: 'I felt the hot ____ between my toes.',
-            },
-        },
-        {
-            row: 5,
-            col: 6,
-            across: null,
-            down: {
-                word: 'MODEM',
-                clue: 'I tried turning the _____ on and off but it didn’t work.',
-            },
-        },
-        {
-            row: 3,
-            col: 2,
-            across: {
-                word: 'ALONE',
-                clue: 'During quarantine, I felt quite _____.',
-            },
-            down: {
-                word: 'ADD',
-                clue: 'When you ___ 2 and 2, you get 4.',
-            },
-        },
-        {
-            row: 4,
-            col: 2,
-            across: {
-                word: 'DONE',
-                clue: 'At last, Bob was ____ with his homework.',
-            },
-            down: null,
-        },
-        {
-            row: 9,
-            col: 4,
-            across: {
-                word: 'DUMB',
-                clue: 'After failing his test, Leo felt ____.',
-            },
-            down: null,
-        },
-    ],
-    solution: [
-        ['#', '#', '#', 'H', 'I', 'P', 'P', 'O'],
-        ['#', '#', '#', 'E', '#', 'L', '#', '#'],
-        ['T', '#', '#', 'L', '#', 'A', '#', '#'],
-        ['H', '#', 'A', 'L', 'O', 'N', 'E', '#'],
-        ['A', '#', 'D', 'O', 'N', 'E', '#', '#'],
-        ['N', 'O', 'D', '#', '#', '#', 'M', '#'],
-        ['K', '#', '#', '#', 'S', 'N', 'O', 'W'],
-        ['F', 'A', 'N', 'T', 'A', '#', 'D', '#'],
-        ['U', '#', '#', '#', 'N', '#', 'E', '#'],
-        ['L', '#', '#', '#', 'D', 'U', 'M', 'B'],
-    ],
-};
-
 const coverWord = (word, clue) => {
     return clue.replaceAll(word, '_'.repeat(word.length));
 };
@@ -159,7 +26,7 @@ export class CrosswordView extends React.Component {
         this.state = {
             crosswordData: null,
             grid: null,
-            found: testData.clues.map((_) => ({ across: false, down: false })),
+            found: null,
             focusRow: null,
             focusCol: null,
         };
@@ -184,6 +51,7 @@ export class CrosswordView extends React.Component {
             this.setState({
                 crosswordData: data,
                 grid: emptyGrid,
+                found: data.clues.map((_) => ({ across: false, down: false }))
             });
         } catch (e) {
             console.log(e);
@@ -311,6 +179,7 @@ export class CrosswordView extends React.Component {
         }
 
         const { found } = this.state;
+        console.log(this.state);
 
         const clueBox = <div className='clues-box'>
             <h2 className='clue-header'>Across:</h2>

@@ -171,6 +171,8 @@ def find_possible_grid(grid, word_list, grid_size, clues):
                 if grid[i][j] == let:
                     possible.append(((i, j - let_indx), "across"))
                     possible.append(((i - let_indx, j), "down"))
+
+    random.shuffle(possible)
     for pos in possible:
         new_grid = copy.deepcopy(grid)
         if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1]):
@@ -225,7 +227,7 @@ def write_grid_to_screen(grid, words_in_grid):
 
 
 def get_crosswords(all_words):
-    max_word_amount = 6
+    max_word_amount = 15
     solution = None
     clues = None
     words = []
