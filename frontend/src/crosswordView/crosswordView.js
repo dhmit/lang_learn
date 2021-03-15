@@ -173,6 +173,10 @@ export class CrosswordView extends React.Component {
         this.setState({ found });
     }
 
+    giveUp = () => {
+        this.setState({ grid: this.state.crosswordData.solution }, this.updateFound);
+    }
+
     render() {
         if (!this.state.crosswordData) {
             return (<LoadingPage />);
@@ -272,6 +276,7 @@ export class CrosswordView extends React.Component {
                     onKeyDown={this.handleKeyDown}
                 >
                     <h1 className='crossword-title'>Crossword</h1>
+                    <button onClick={this.giveUp}>Give Up</button>
                     <div className='row'>
                         <div className='col-xl-5 col-12'>
                             { clueBox }

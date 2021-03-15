@@ -172,13 +172,6 @@ def get_crossword(request, text_id, part_of_speech):
     words = get_valid_words(text_obj.content, part_of_speech)
 
     crossword_data = get_crosswords(words)
-    print("VIEWS.PY")
-    print(part_of_speech)
-    print(definitions)
-    print(examples)
-    print(words)
-    print(crossword_data)
-
     word_defs = []
     for clue in crossword_data['clues']:
         for direction in ['across', 'down']:
@@ -191,18 +184,6 @@ def get_crossword(request, text_id, part_of_speech):
                     word_defs.append(clue_definitions[0])
 
     crossword_data['definitions'] = word_defs
-    print(crossword_data)
-    # image_urls = text_obj.images
-    # definitions = text_obj.definitions
-    # examples = text_obj.examples
-    #
-    # words = get_valid_words(text_obj.content, part_of_speech)
-    #
-    # res = [{'word': word,
-    #         'definition': definitions[word].get(part_of_speech, []),
-    #         'example': examples[word].get(part_of_speech, []),
-    #         'url': image_urls.get(word, '')}
-    #        for word in words]
     return Response(crossword_data)
 
 

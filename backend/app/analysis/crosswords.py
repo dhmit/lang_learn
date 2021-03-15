@@ -261,6 +261,9 @@ def get_crosswords(all_words):
         for col in range(len(solution[row])):
             if solution[row][col] != 0:
                 solution[row][col] = solution[row][col].upper()
+            else:
+                solution[row][col] = '#'
+
     cross_dict = {
         "clues": clues,
         'solution': solution,
