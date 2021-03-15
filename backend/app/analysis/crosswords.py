@@ -7,7 +7,7 @@ import copy
 
 def rand_words(all_words, max):
     words = set()
-    for i in range(max + 1):
+    while len(words) < max:
         indx = random.randint(0, len(all_words) - 1)
         while all_words[indx] not in words:
             words.add(all_words[indx])
@@ -229,8 +229,9 @@ def get_crosswords(all_words):
     solution = None
     clues = None
     words = []
+    iterations = 5
 
-    for i in range(5):
+    for _ in range(iterations):
         if len(all_words) > max_word_amount:
             words = rand_words(all_words, max_word_amount)
         else:

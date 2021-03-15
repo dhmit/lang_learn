@@ -24,7 +24,7 @@ from .analysis.anagrams import (
 from .analysis.textdata import (
     get_text_data,
 )
-from .analysis.new_crosswords import (
+from .analysis.crosswords import (
     get_crosswords,
 )
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
