@@ -114,12 +114,13 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
+
 @api_view(['POST'])
 def add_text(request):
     """
     API endpoint for adding a piece of text
     """
-    body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(json.dumps(request.data))
     new_text_obj = Text(title=body['title'], content=body['content'])
     new_text_obj.save()
     get_text_data(new_text_obj)
@@ -185,6 +186,7 @@ def get_crossword(request, text_id, part_of_speech):
                 clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)
                 clue_definitions = definitions[clue[direction]['word']].get(part_of_speech, None)
                 clue[direction]['clue'] = clue_examples[0] if examples else None
+                clue[direction]['word'] = clue[direction]['word'].upper()
                 if clue_definitions:
                     word_defs.append(clue_definitions[0])
 

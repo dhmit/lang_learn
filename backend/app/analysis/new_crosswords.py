@@ -148,6 +148,7 @@ def make_crossword(grid, word_list, grid_size):
                     # print()
                     # print(grid)
                     clues = []
+                    add_clue(clues, first_word, start_col, start_row, start_direction)
                     # might have bug of only having one item in list
                     (final_grid, final_clues) = find_possible_grid(new_grid,
                                                                    word_list[1:],
@@ -174,7 +175,7 @@ def find_possible_grid(grid, word_list, grid_size, clues):
         new_grid = copy.deepcopy(grid)
         if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1]):
             add_word_to_grid(new_grid, current_word, pos[0][0], pos[0][1], pos[1])
-            add_clue(clues, current_word, pos[0][0], pos[0][1], pos[1])
+            add_clue(clues, current_word, pos[0][1], pos[0][0], pos[1])
             for cur_row in new_grid:
                 print(cur_row)
             print()
@@ -201,11 +202,11 @@ def add_clue(clues, word, col, row, direction):
             "row": row,
             "col": col,
             "across": None,
-            "down": None,
-            direction: {
-                "word": word,
-                "clue": None
-            }
+            "down": None
+        }
+        clue[direction] = {
+            "word": word,
+            "clue": None
         }
         clues.append(clue)
 
@@ -225,20 +226,27 @@ def write_grid_to_screen(grid, words_in_grid):
 
 def get_crosswords(all_words):
     max_word_amount = 6
-    if len(all_words) > max_word_amount:
-        words = rand_words(all_words, max_word_amount)
-    else:
-        words = all_words.copy()
-    words.sort(key=len, reverse=True)
-    grid_size = 15
-    grid = []
-    for i in range(grid_size):
-        row = []
-        for j in range(grid_size):
-            row.append(0)
-        grid.append(row)
+    solution = None
+    clues = None
+    words = []
 
-    solution, clues = make_crossword(grid, words, grid_size)
+    for i in range(5):
+        if len(all_words) > max_word_amount:
+            words = rand_words(all_words, max_word_amount)
+        else:
+            words = all_words.copy()
+        words.sort(key=len, reverse=True)
+        grid_size = 15
+        grid = []
+        for i in range(grid_size):
+            row = []
+            for j in range(grid_size):
+                row.append(0)
+            grid.append(row)
+
+        solution, clues = make_crossword(grid, words, grid_size)
+        if solution is not None:
+            break
 
     if solution is None:
         return {

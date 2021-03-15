@@ -135,6 +135,22 @@ const testData = {
     ],
 };
 
+const coverWord = (word, clue) => {
+    return clue.replaceAll(word, '_'.repeat(word.length));
+};
+
+// Remove words from all the clues
+const clearClues = (data) => {
+    data.clues.forEach((clue) => {
+        if (clue.across) {
+            clue.across.clue = coverWord(clue.across.word.toLowerCase(), clue.across.clue);
+        }
+        if (clue.down) {
+            clue.down.clue = coverWord(clue.down.word.toLowerCase(), clue.down.clue);
+        }
+    });
+};
+
 const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export class CrosswordView extends React.Component {
@@ -162,6 +178,7 @@ export class CrosswordView extends React.Component {
             const response = await fetch(apiURL);
             const data = await response.json();
             // const data = testData;
+            clearClues(data);
             const emptyGrid = data.solution.map((row) => row
                 .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
             this.setState({
@@ -344,7 +361,12 @@ export class CrosswordView extends React.Component {
                     {row.map((cell, c) => {
                         if (cell === '#') {
                             return (
-                                <div className='blank-cell' key={c}/>
+                                <div className='blank-cell' key={c}>
+                                    <input
+                                        className='blank-input'
+                                        readOnly
+                                    />
+                                </div>
                             );
                         }
                         const clueNum = this.getClueNumber(r, c);
@@ -382,7 +404,7 @@ export class CrosswordView extends React.Component {
                 >
                     <h1 className='crossword-title'>Crossword</h1>
                     <div className='row'>
-                        <div className='col-lg-6 col-12'>
+                        <div className='col-xl-5 col-12'>
                             { clueBox }
                             <div className='clues-box'>
                                 <h2 className='clue-header'>Definitions</h2>
@@ -396,7 +418,7 @@ export class CrosswordView extends React.Component {
 
                             </div>
                         </div>
-                        <div className='col-lg-6 col-12'>
+                        <div className='col-xl-7 col-12'>
                             <div className='crossword-grid'>
                                 {crossword}
                             </div>

@@ -50,8 +50,8 @@
     justify-content: center;
 }
 
-$cell-width: 40px;
-$cell-height: 40px;
+$cell-width: 43px;
+$cell-height: 43px;
 
 .crossword-cell {
     background: #E8C2FF;
@@ -94,5 +94,18 @@ $cell-height: 40px;
 
     &:focus {
         z-index: 2
+    }
+}
+
+.blank-input {
+    background: #2D2155;
+    height: $cell-height;
+    width: $cell-width;
+    position: relative;
+    border: none;
+    cursor: default;
+
+    &:focus {
+        outline: none;
     }
 }
