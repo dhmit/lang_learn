@@ -2,6 +2,10 @@
     font-size: 50px;
 }
 
+.give-up {
+    margin: 10px 10px 10px 0;
+}
+
 // Clue Styles
 .clues-box {
     background: rgba(105, 64, 238, 0.25);
@@ -42,7 +46,6 @@
 .crossword-grid {
     display: flex;
     flex-direction: column;
-
 }
 
 .crossword-row {
@@ -50,8 +53,8 @@
     justify-content: center;
 }
 
-$cell-width: 43px;
-$cell-height: 43px;
+$cell-width: 50px;
+$cell-height: 50px;
 
 .crossword-cell {
     background: #E8C2FF;

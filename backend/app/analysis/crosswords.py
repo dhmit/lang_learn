@@ -114,22 +114,10 @@ def add_word_to_grid(grid, word, row, col, direction):
         grid[row][col:len(list(word)) + col] = list(word)
 
     # Word is top-to-bottom
-    # (I can't seem to be able to use the slicing as above)
     if direction == "down":
-        # for index in range(len(word)):
-        #     grid[row + index][col] = word[index]
-        #     print(word[index])
-        #     for cur_row in grid:
-        #         print(cur_row)
         for index, a in enumerate(list(word)):
-            # print(a)
             grid[row + index][col] = a
-            # for cur_row in grid:
-            #     print(cur_row)
 
-
-# def place_word_in_map(word, map, x, y, direction, current_words):
-#     "direction: 0 for across, 1 for down"
 
 
 def make_crossword(grid, word_list, grid_size):
@@ -138,15 +126,10 @@ def make_crossword(grid, word_list, grid_size):
     for start_row in range(first_range):
         for start_col in range(first_range):
             for start_direction in ["across", "down"]:
-                print(word_list)
-                print(start_row, start_col, start_direction)
                 if is_valid(grid, first_word, start_row, start_col, start_direction):
                     new_grid = copy.deepcopy(grid)
                     add_word_to_grid(new_grid, first_word, start_row, start_col, start_direction)
-                    # for cur_row in new_grid:
-                    #     print(cur_row)
-                    # print()
-                    # print(grid)
+
                     clues = []
                     add_clue(clues, first_word, start_col, start_row, start_direction)
                     # might have bug of only having one item in list
@@ -178,9 +161,6 @@ def find_possible_grid(grid, word_list, grid_size, clues):
         if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1]):
             add_word_to_grid(new_grid, current_word, pos[0][0], pos[0][1], pos[1])
             add_clue(clues, current_word, pos[0][1], pos[0][0], pos[1])
-            for cur_row in new_grid:
-                print(cur_row)
-            print()
             new_word_list = word_list.copy()
             new_word_list.pop(0)
             final = find_possible_grid(new_grid, new_word_list, grid_size, copy.deepcopy(clues))
@@ -223,7 +203,6 @@ def write_grid_to_screen(grid, words_in_grid):
 
     print("Words:")
     print(words_in_grid)
-    # pprint.pprint(words_in_grid)
 
 
 def get_crosswords(all_words):
@@ -269,25 +248,4 @@ def get_crosswords(all_words):
         'solution': solution,
     }
 
-    write_grid_to_screen(solution, words)
-
     return cross_dict
-
-    # placed_words = []
-    # place_word_in_map(word, map, rand_x, rand_y, rand_direction, current_words)
-    #
-    # make_crossword(map, placed_words, words[1:])
-
-    # print(words)
-
-    # make_crossword(all_words, grid_size)
-
-
-if __name__ == "__main__":
-    print("hello")
-    test_words = ['regular', 'violent', 'rebel', 'handy', 'noxious', 'bare', 'rightful', 'chance',
-                 'agonizing', 'mean', 'report', 'harmony', 'barbarous', 'rapid', 'memory',
-                 'vegetable', 'excite', 'illustrious', 'burly', 'fashion', 'field',
-                 'seashore', 'wild', 'skate', 'temporary', 'debonair', 'forgetful', 'film',
-                 'lavish', 'scary']
-    get_crosswords(test_words)

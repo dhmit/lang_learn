@@ -276,7 +276,9 @@ export class CrosswordView extends React.Component {
                     onKeyDown={this.handleKeyDown}
                 >
                     <h1 className='crossword-title'>Crossword</h1>
-                    <button onClick={this.giveUp}>Give Up</button>
+                    <button className='btn btn-danger give-up' onClick={this.giveUp}>
+                        Give Up
+                    </button>
                     <div className='row'>
                         <div className='col-xl-5 col-12'>
                             { clueBox }
@@ -292,7 +294,9 @@ export class CrosswordView extends React.Component {
 
                             </div>
                         </div>
-                        <div className='col-xl-7 col-12'>
+                        <div
+                            className='col-xl-7 col-12 d-flex'
+                            style={{ overflowX: 'scroll', alignContent: 'center' }}>
                             <div className='crossword-grid'>
                                 {crossword}
                             </div>
