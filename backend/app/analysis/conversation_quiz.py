@@ -3,6 +3,7 @@ import random
 from django.conf import settings
 import copy
 import importlib
+from nltk.tokenize import sent_tokenize
 
 from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 
@@ -79,7 +80,6 @@ def verb_conjugation_error(question_option):
     return new_question_option, True
 
 
-# A temporary example function
 def backwards_error(question_option):
     text = question_option['text']
     try:
@@ -92,7 +92,39 @@ def backwards_error(question_option):
         return question_option, False
 
 
-def apply_question_option_errors(quiz_question):
+def comma_splice_error(question_option):
+    """
+    Creates a new option (dict) that has text with a comma splice error.
+    :param question_option:
+    :return:
+    """
+    # split answer up into sentences
+    # sentences = sent_tokenize(question_option['answer']['text'])
+    sentences = sent_tokenize(question_option)
+
+    # comma splice error can only be induced if text is more than one sentence
+    assert len(sentences) > 1
+
+    for i in range(len(sentences)):
+        # remove ending punctuation mark
+        sentence = sentences[i]
+        if i != len(sentences) - 1:
+            sentence = sentence[0:len(sentence) - 1]
+        if i != 0:
+            sentence = sentence[0].lower() + sentence[1:]
+        sentences[i] = sentence
+
+    splice_error_text = ', '.join(sentences)
+
+    new_question_option = {
+        'error-types': question_option['error-types'] + ['comma-splice'],
+        'text': splice_error_text
+    }
+
+    return new_question_option
+
+
+def apply_question_errors(quiz_question):
     """
     Given a single quiz question (dict), induce a random error in 3 of its options.
     :param quiz_question:
