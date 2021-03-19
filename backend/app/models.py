@@ -21,9 +21,8 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
-        'picture_book': {
+        'picturebook': {
             'noun': False,
-            'noun_word_list': [],
         },
         'quiz': {
             'conjugations': False,

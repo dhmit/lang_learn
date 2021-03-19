@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
 const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
-const QUIZ_TYPES = ['Anagrams', 'Flashcards'];
+const QUIZ_TYPES = ['Anagrams', 'Flashcards', 'Story Generator'];
 
 class TextInfo extends React.Component {
     constructor(props) {
@@ -15,7 +15,13 @@ class TextInfo extends React.Component {
     }
 
     handleQuiz = (e) => {
-        this.setState({ quizType: e.target.value });
+      let quizType;
+        if (e.target.value === 'Story Generator') {
+            quizType = 'Picturebook';
+        } else {
+            quizType = e.target.value;
+        }
+        this.setState({ quizType: quizType });
     }
 
     handlePos = (e) => {
@@ -31,7 +37,7 @@ class TextInfo extends React.Component {
             modules,
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
-
+        console.log(quizType);
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
@@ -41,7 +47,7 @@ class TextInfo extends React.Component {
                     <select
                         className='custom-select selection-select'
                         onChange={this.handleQuiz}
-                        value={quizType}
+                        value={quizType === 'Picturebook' ? 'Story Generator' : quizType}
                     >
                         {QUIZ_TYPES.map((quiz) => (
                             <option value={quiz} key={quiz}>{quiz}</option>

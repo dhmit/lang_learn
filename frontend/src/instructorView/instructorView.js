@@ -9,7 +9,12 @@ class Module extends React.Component {
         const { moduleInfo, moduleName } = this.props;
         return (
             <div className='col-md-4 col-6'>
-                <h2 className='module-header'>{capitalize(moduleName)}</h2>
+                <h2 className='module-header'>
+                    {
+                        moduleName === 'picturebook'
+                        ? 'Story Generator'
+                        : capitalize(moduleName)}
+                </h2>
                 {
                     Object.keys(moduleInfo).map((category, k) => (
                         <div className='module-category' key={k}>
