@@ -125,7 +125,7 @@ def comma_splice_error(question_option):
     return new_question_option, True
 
 
-def apply_question_errors(quiz_question):
+def apply_question_option_error(quiz_question):
     """
     Given a single quiz question (dict), induce a random error in 3 of its options.
     :param quiz_question:
