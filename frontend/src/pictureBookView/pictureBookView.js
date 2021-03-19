@@ -16,6 +16,7 @@ export class PictureBookView extends React.Component {
             showModal: false,
             pictureBookStory: '',
             pictureBookWords: null,
+            submitted: false,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -74,6 +75,12 @@ export class PictureBookView extends React.Component {
         }
     };
 
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState({ submitted: true });
+        this.createPictureBook();
+    }
+
     render() {
         if (!this.state.pictureData) {
             return (<LoadingPage text='Creating story generator...'/>);
@@ -131,7 +138,7 @@ export class PictureBookView extends React.Component {
                         <button type="submit"
                             className="btn btn-success submit-btn"
                             form="picturebook-form"
-                            onClick={this.createPictureBook}>
+                            onClick={this.handleSubmit}>
                             Submit
                         </button>
                     </div>
@@ -155,12 +162,20 @@ export class PictureBookView extends React.Component {
                             <div className="form-group">
                                 <label>Please write a story based on the images above.
                                     Make sure to use the given words.</label>
-                                <textarea className="form-control story-text-input"
-                                    id="content"
-                                    rows="10"
-                                    onChange={this.handleInput}
-                                    value={this.pictureBookStory}>
-                                </textarea>
+                                {(this.state.submitted)
+                                    ? <textarea className="form-control story-text-input"
+                                        id="content"
+                                        rows="10"
+                                        value={this.pictureBookStory}
+                                        disabled={true}>
+                                    </textarea>
+                                    : <textarea className="form-control story-text-input"
+                                        id="content"
+                                        rows="10"
+                                        onChange={this.handleInput}
+                                        value={this.pictureBookStory}>
+                                    </textarea>
+                                }
                             </div>
                         </form>
                     </div>
