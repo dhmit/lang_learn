@@ -15,6 +15,7 @@ export class PictureBookView extends React.Component {
             pictureData: null,
             showModal: false,
             pictureBookStory: '',
+            pictureBookWords: null,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -28,9 +29,8 @@ export class PictureBookView extends React.Component {
         document.addEventListener('keydown', this.handleKeyDown, true);
     }
 
-    createPictureBook = async () => {
+    createPictureBook = async (input) => {
         try {
-            console.log(this.state.pictureBookStory);
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/get_picturebook_data';
 
@@ -44,12 +44,14 @@ export class PictureBookView extends React.Component {
                     'X-CSRFToken': csrftoken,
                 },
                 body: JSON.stringify({
-                    content: this.state.pictureBookStory,
+                    content: input,
                 }),
             });
 
             const pictureBookImages = await response.json();
-            console.log(pictureBookImages);
+            this.setState({
+                pictureBookWords: pictureBookImages,
+            });
         } catch (e) {
             console.log(e);
         }
@@ -67,6 +69,7 @@ export class PictureBookView extends React.Component {
         this.setState({
             pictureBookStory: inputValue,
         });
+        this.createPictureBook(inputValue);
     };
 
     render() {
@@ -131,9 +134,18 @@ export class PictureBookView extends React.Component {
                         </button>
                     </div>
                 </div>
-                <div className='row'>
-                    <div className='col box'>
-                    </div>
+                <div className="row box">
+                    {
+                        this.state.pictureData
+                            ? this.state.pictureData.map((word, i) => (
+                                <div key={i} className="col-3 text-center">
+                                    <img className="picture-prompt"
+                                        src={word['url']} alt={word['word']}/>
+                                    <h5>{word['word']}</h5>
+                                </div>
+                            ))
+                            : null
+                    }
                 </div>
                 <div className='row'>
                     <div className="col-9 box">
@@ -153,6 +165,19 @@ export class PictureBookView extends React.Component {
                     <div className="col box">
                         <h4>Words Others Used:</h4>
                     </div>
+                </div>
+                <div className='row'>
+                    {
+                        this.state.pictureBookWords
+                            ? this.state.pictureBookWords.map((word, i) => (
+                                <div key={i} className="col-3 text-center">
+                                    <img className="picture-prompt"
+                                        src={word['url']} alt={word['word']}/>
+                                    <h5>{word['word']}</h5>
+                                </div>
+                            ))
+                            : null
+                    }
                 </div>
             </div>
             <Footer />

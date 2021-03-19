@@ -8,6 +8,12 @@
 .box {
     background: #5941A9;
     margin: 20px 12px 20px 12px;
-    padding-top: 10px;
+    padding: 10px;
     border-radius: 5px;
+    width: 100%;
+}
+
+.picture-prompt {
+    max-height: 20vh;
+    max-width: 100%;
 }
