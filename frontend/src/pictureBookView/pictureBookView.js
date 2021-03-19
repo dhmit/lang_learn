@@ -69,7 +69,9 @@ export class PictureBookView extends React.Component {
         this.setState({
             pictureBookStory: inputValue,
         });
-        this.createPictureBook(inputValue);
+        if (';,. '.includes(inputValue.slice(-1))) {
+            this.createPictureBook(inputValue);
+        }
     };
 
     render() {
