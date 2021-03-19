@@ -99,8 +99,7 @@ def comma_splice_error(question_option):
     :return:
     """
     # split answer up into sentences
-    # sentences = sent_tokenize(question_option['answer']['text'])
-    sentences = sent_tokenize(question_option)
+    sentences = sent_tokenize(question_option['text'])
 
     # comma splice error can only be induced if text is more than one sentence
     if len(sentences) == 1:
