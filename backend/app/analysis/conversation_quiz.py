@@ -103,7 +103,8 @@ def comma_splice_error(question_option):
     sentences = sent_tokenize(question_option)
 
     # comma splice error can only be induced if text is more than one sentence
-    assert len(sentences) > 1
+    if len(sentences) == 1:
+        return question_option, False
 
     for i in range(len(sentences)):
         # remove ending punctuation mark
@@ -121,7 +122,7 @@ def comma_splice_error(question_option):
         'text': splice_error_text
     }
 
-    return new_question_option
+    return new_question_option, True
 
 
 def apply_question_errors(quiz_question):
