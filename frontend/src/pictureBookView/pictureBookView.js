@@ -135,12 +135,21 @@ export class PictureBookView extends React.Component {
                         </div>
                     </div>
                     <div className='col-xl-4 text-right bottom-align-text' id="submit-btn-div">
-                        <button type="submit"
-                            className="btn btn-success submit-btn"
-                            form="picturebook-form"
-                            onClick={this.handleSubmit}>
-                            Submit
-                        </button>
+                        {(this.state.submitted)
+                            ? <button type="submit"
+                                className="btn btn-success submit-btn"
+                                form="picturebook-form"
+                                disabled={true}>
+                                Submit
+                            </button>
+                            : <button type="submit"
+                                className="btn btn-success submit-btn"
+                                form="picturebook-form"
+                                onClick={this.handleSubmit}>
+                                Submit
+                            </button>
+                        }
+
                     </div>
                 </div>
                 <div className="row box">
