@@ -5,15 +5,15 @@ import random
 import copy
 
 
-def rand_words(all_words, max):
+def rand_words(all_words, max_num_words):
     """
     generates a random sequence of words given a list of words and max entries
     :param all_words: datd structure containing all words to put into crossword
-    :param max: number of words that can be made into crossword
+    :param max_num_words: number of words that can be made into crossword
     :return: list of words to be used (in order of how they will be placed in the grid)
     """
     words = set()
-    while len(words) < max:
+    while len(words) < max_num_words:
         indx = random.randint(0, len(all_words) - 1)
         while all_words[indx] not in words:
             words.add(all_words[indx])
@@ -37,7 +37,7 @@ def is_valid(grid, word, row, col, direction):
     """
 
     # checks if word is within boundaries of grid
-    if not is_within_bounds(len(word), row, col, direction, len(grid[0]), len(grid)):
+    if not is_within_bounds(len(word), row, col, direction, (len(grid[0]), len(grid))):
         return False
 
     # checks for collisions between words
@@ -52,12 +52,12 @@ def is_valid(grid, word, row, col, direction):
     return True
 
 
-def is_within_bounds(word_len, row, column, direction, grid_width, grid_height):
+def is_within_bounds(word_len, row, column, direction, grid_dim):
     """ Returns whether the given word is withing the bounds of the grid.
     """
     # checks if word is in within grid boundaries
-    return ((direction == "across" and column + word_len <= grid_width - 1)
-            or (direction == "down" and row + word_len <= grid_height - 1)) and (
+    return ((direction == "across" and column + word_len <= grid_dim[0] - 1)
+            or (direction == "down" and row + word_len <= grid_dim[1] - 1)) and (
                row >= 0 and column >= 0)
 
 
@@ -124,8 +124,8 @@ def add_word_to_grid(grid, word, row, col, direction):
     # Word is top-to-bottom
     if direction == "down":
         # iterates over letters to place letters in correct rows
-        for index, a in enumerate(list(word)):
-            grid[row + index][col] = a
+        for index, letter in enumerate(list(word)):
+            grid[row + index][col] = letter
 
 
 def make_crossword(grid, word_list, grid_size):
