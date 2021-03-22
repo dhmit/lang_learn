@@ -6,6 +6,13 @@
     margin: 10px 10px 10px 0;
 }
 
+.difficulty-button {
+    height: 100px;
+    width: 200px;
+    font-size: 40px;
+
+}
+
 // Clue Styles
 .clues-box {
     background: rgba(105, 64, 238, 0.25);
@@ -21,7 +28,7 @@
 }
 
 .clue {
-    margin: 5px 0;
+    margin: 5px 0 5px 15px;
 }
 
 .clue-found {

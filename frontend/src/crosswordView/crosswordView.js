@@ -1,24 +1,20 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import Crossword from './crossword';
+
+// Given a word and the clue that it is part of, remove the word from the clue
 const coverWord = (word, clue) => {
+    word = word.toLowerCase();
     return clue.replaceAll(word, '_'.repeat(word.length));
 };
 
-// Remove words from all the clues
-const clearClues = (data) => {
-    data.clues.forEach((clue) => {
-        if (clue.across) {
-            clue.across.clue = coverWord(clue.across.word.toLowerCase(), clue.across.clue);
-        }
-        if (clue.down) {
-            clue.down.clue = coverWord(clue.down.word.toLowerCase(), clue.down.clue);
-        }
-    });
-};
-
 const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const EASY = 0;
+const MEDIUM = 1;
+const HARD = 2;
+const DIFFICULTY_NAMES = ['Easy', 'Medium', 'Hard'];
 
 export class CrosswordView extends React.Component {
     constructor(props) {
@@ -27,16 +23,10 @@ export class CrosswordView extends React.Component {
             crosswordData: null,
             grid: null,
             found: null,
-            focusRow: null,
-            focusCol: null,
+            showDifficulty: true,
+            showModal: true,
+            difficulty: -1,
         };
-        /**
-         * cellRefs maps cell names in the form of cell-{row},{col} to the ref for that cell
-         * This is used for calling the .focus() method for each individual cell.
-         * The refs are created using callback refs
-         * (https://reactjs.org/docs/refs-and-the-dom.html#callback-refs)
-         */
-        this.cellRefs = {};
     }
 
     componentDidMount = async () => {
@@ -44,59 +34,15 @@ export class CrosswordView extends React.Component {
             const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
             const response = await fetch(apiURL);
             const data = await response.json();
-            // const data = testData;
-            clearClues(data);
             const emptyGrid = data.solution.map((row) => row
                 .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
             this.setState({
                 crosswordData: data,
                 grid: emptyGrid,
-                found: data.clues.map((_) => ({ across: false, down: false }))
+                found: data.clues.map((_) => ({ across: false, down: false })),
             });
         } catch (e) {
             console.log(e);
-        }
-        document.addEventListener('keydown', this.handleKeyDown, true);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.handleKeyDown, false);
-    }
-
-    changeFocus = (r, c) => {
-        this.cellRefs[`cell-${r},${c}`].focus();
-        this.setState({ focusRow: r, focusCol: c });
-    }
-
-    changeFocusDelta = (dr, dc) => {
-        const { grid, focusRow, focusCol } = this.state;
-        const gridHeight = grid.length;
-        const gridWidth = grid[0].length;
-
-        let curR = (gridHeight + focusRow + dr) % gridHeight;
-        let curC = (gridWidth + focusCol + dc) % gridWidth;
-        for (let i = 0; i <= Math.max(gridHeight, gridWidth); i++) {
-            if (grid[curR][curC] !== '#') {
-                this.cellRefs[`cell-${curR},${curC}`].focus();
-                break;
-            }
-            curR = (gridHeight + curR + dr) % gridHeight;
-            curC = (gridWidth + curC + dc) % gridWidth;
-        }
-        this.setState({ focusRow: curR, focusCol: curC });
-    }
-
-    handleKeyDown = (e) => {
-        const deltas = {
-            ArrowLeft: [0, -1],
-            ArrowRight: [0, 1],
-            ArrowUp: [-1, 0],
-            ArrowDown: [1, 0],
-        };
-        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) {
-            e.preventDefault();
-            const { code } = e;
-            this.changeFocusDelta(deltas[code][0], deltas[code][1]);
         }
     }
 
@@ -177,13 +123,74 @@ export class CrosswordView extends React.Component {
         this.setState({ grid: this.state.crosswordData.solution }, this.updateFound);
     }
 
+    setDifficulty = (difficulty) => {
+        this.setState({ difficulty, showDifficulty: false });
+    }
+
+    getDefinitions = () => {
+        const { difficulty, crosswordData, found } = this.state;
+        switch (difficulty) {
+        case EASY:
+            return crosswordData.clues.flatMap((clue, k) => {
+                return ['across', 'down'].map((dir) => {
+                    if (clue[dir]) {
+                        return (
+                            <div className={`clue ${found[k][dir] ? 'clue-found' : ''}`}>
+                                {`${k + 1}${dir === 'across' ? 'A' : 'D'}) `}
+                                { clue[dir].definition ? clue[dir].definition : 'N/A' }
+                            </div>
+                        );
+                    }
+                    return '';
+                });
+            });
+        case MEDIUM:
+            return (
+                <ul>
+                    {crosswordData.clues.flatMap((clue, k) => {
+                        return ['across', 'down'].map((dir) => {
+                            if (clue[dir]) {
+                                return (
+                                    <li key={`${k}-${dir}`}>
+                                        { clue[dir].definition ? clue[dir].definition : 'N/A' }
+                                    </li>
+                                );
+                            }
+                            return '';
+                        });
+                    })}
+                </ul>
+            );
+        case HARD:
+            return (
+                <ul>
+                    {crosswordData.definitions.map((definition, k) => (
+                        <li key={k}>
+                            { definition }
+                        </li>
+                    ))}
+                </ul>
+            );
+        default:
+            return '';
+        }
+    }
+
+    modalHandler = () => {
+        this.setState({ showModal: !this.state.showModal });
+    }
+
     render() {
         if (!this.state.crosswordData) {
             return (<LoadingPage />);
         }
 
-        const { found } = this.state;
-        console.log(this.state);
+        const {
+            found,
+            grid,
+            showDifficulty,
+            showModal,
+        } = this.state;
 
         const clueBox = <div className='clues-box'>
             <h2 className='clue-header'>Across:</h2>
@@ -192,14 +199,13 @@ export class CrosswordView extends React.Component {
                     if (clue.across) {
                         return (
                             <div
-                                className={
-                                    `clue ${found[k].across
-                                        ? 'clue-found'
-                                        : ''}`
-                                }
+                                className={`clue ${found[k].across ? 'clue-found' : ''}`}
                                 key={k}
                             >
-                                {k + 1}) {clue.across.clue}
+                                {k + 1}) {found[k].across
+                                    ? clue.across.clue
+                                    : coverWord(clue.across.word, clue.across.clue)
+                                }
                             </div>
                         );
                     }
@@ -212,14 +218,13 @@ export class CrosswordView extends React.Component {
                     if (clue.down) {
                         return (
                             <div
-                                className={
-                                    `clue ${found[k].down
-                                        ? 'clue-found'
-                                        : ''}`
-                                }
+                                className={`clue ${found[k].down ? 'clue-found' : ''}`}
                                 key={k}
                             >
-                                {k + 1}) {clue.down.clue}
+                                {k + 1}) {found[k].down
+                                    ? clue.down.clue
+                                    : coverWord(clue.down.word, clue.down.clue)
+                                }
                             </div>
                         );
                     }
@@ -228,44 +233,46 @@ export class CrosswordView extends React.Component {
             }
         </div>;
 
-        const crossword = this.state.grid.map((row, r) => {
-            return (
-                <div className='crossword-row' key={r}>
-                    {row.map((cell, c) => {
-                        if (cell === '#') {
-                            return (
-                                <div className='blank-cell' key={c}>
-                                    <input
-                                        className='blank-input'
-                                        readOnly
-                                    />
-                                </div>
-                            );
-                        }
-                        const clueNum = this.getClueNumber(r, c);
-                        const isCorrect = this.isCorrect(r, c);
-                        return (
-                            <div className='crossword-cell' key={c}>
-                                <div className='clue-num'>
-                                    {clueNum}
-                                </div>
-                                <input
-                                    className={`cell-input ${isCorrect ? 'correct-cell' : ''}`}
-                                    type='text'
-                                    value={cell}
-                                    maxLength={1}
-                                    ref={(instance) => {
-                                        this.cellRefs[`cell-${r},${c}`] = instance;
-                                    }}
-                                    onClick={() => this.changeFocus(r, c)}
-                                    onChange={(e) => this.updateCell(e, r, c)}
-                                />
-                            </div>
-                        );
-                    })}
+        const definitionBox = (<div className='clues-box'>
+            <h2 className='clue-header'>Definitions</h2>
+            { this.getDefinitions() }
+        </div>);
+
+        const instructionModal = (<div>
+            {
+                showModal
+                    ? <div className="backdrop" onClick={this.modalHandler}>
+                    </div>
+                    : null
+            }
+            <div className="Modal modal-content" style={{
+                transform: showModal ? 'translateY(0)' : 'translateY(-100vh)',
+                opacity: showModal ? 1 : 0,
+            }}>
+                <div className="modal-header">
+                    <h5 className="modal-title">Instructions</h5>
+                    <button type="button" className="close" onClick={this.modalHandler}>
+                        <span>&times;</span>
+                    </button>
                 </div>
-            );
-        });
+                <div className="modal-body">
+                    <p>
+                        The goal is to solve the crossword. On the left side, you are given
+                        the clues and definitions for a specific word. On the right side,
+                        there is a crossword that you can fill in.
+                    </p>
+                    <p>
+                        You can navigate the crossword by clicking on a square and typing
+                        to fill it in. You can also use the arrow keys to move to different
+                        squares.
+                    </p>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary"
+                        onClick={this.modalHandler}>Close</button>
+                </div>
+            </div>
+        </div>);
 
         return (
             <>
@@ -273,35 +280,57 @@ export class CrosswordView extends React.Component {
                 <div
                     className='page'
                     style={{ 'paddingBottom': '50px' }}
-                    onKeyDown={this.handleKeyDown}
                 >
-                    <h1 className='crossword-title'>Crossword</h1>
-                    <button className='btn btn-danger give-up' onClick={this.giveUp}>
-                        Give Up
-                    </button>
-                    <div className='row'>
-                        <div className='col-xl-5 col-12'>
-                            { clueBox }
-                            <div className='clues-box'>
-                                <h2 className='clue-header'>Definitions</h2>
-                                <ul>
-                                    {this.state.crosswordData.definitions.map((definition, k) => (
-                                        <li key={k}>
-                                            { definition }
-                                        </li>
-                                    ))}
-                                </ul>
+                    { showDifficulty
+                        ? <div>
+                            <h1 className='crossword-title'>Select a Crossword Difficulty</h1>
+                            <div className='d-flex justify-content-between mt-5'>
+                                {[EASY, MEDIUM, HARD].map((difficulty) => (
+                                    <button
+                                        className='btn btn-light difficulty-button'
+                                        onClick={() => this.setDifficulty(difficulty)}
+                                        key={difficulty}
+                                    >
+                                        { DIFFICULTY_NAMES[difficulty] }
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        : <>
+                            {instructionModal}
+                            <h1 className='crossword-title'>
+                                Crossword
+                                <button className="btn btn-outline-light btn-circle mx-3"
+                                    style= {{ 'border': '3px solid', 'fontSize': '20px' }}
+                                    onClick={this.modalHandler}>
+                                    <b>?</b>
+                                </button>
+                            </h1>
+                            <button className='btn btn-danger give-up' onClick={this.giveUp}>
+                                Give Up
+                            </button>
+                            <div className='row'>
+                                <div className='col-xl-5 col-12'>
+                                    { clueBox }
+                                    { definitionBox }
+                                </div>
+                                <div
+                                    className='col-xl-7 col-12 d-flex'
+                                    style={{ overflowX: 'scroll', alignContent: 'center' }}
+                                >
+                                    <div className='crossword-grid'>
+                                        <Crossword
+                                            grid={grid}
+                                            isCorrect={this.isCorrect}
+                                            getClueNumber={this.getClueNumber}
+                                            updateCell={this.updateCell}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
 
-                            </div>
-                        </div>
-                        <div
-                            className='col-xl-7 col-12 d-flex'
-                            style={{ overflowX: 'scroll', alignContent: 'center' }}>
-                            <div className='crossword-grid'>
-                                {crossword}
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <Footer/>
             </>

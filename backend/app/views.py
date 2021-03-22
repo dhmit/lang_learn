@@ -172,18 +172,27 @@ def get_crossword(request, text_id, part_of_speech):
     words = get_valid_words(text_obj.content, part_of_speech)
 
     crossword_data = get_crosswords(words)
-    word_defs = []
+
+    # Add examples and definitions to every clue. Also capitalize the words
+    # TODO: For Instructor view people, please make a function in the text model for getting
+    #       definitions / examples given a word
     for clue in crossword_data['clues']:
         for direction in ['across', 'down']:
             if clue[direction]:
                 clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)
                 clue_definitions = definitions[clue[direction]['word']].get(part_of_speech, None)
-                clue[direction]['clue'] = clue_examples[0] if examples else None
+                clue[direction]['clue'] = clue_examples[0] if clue_examples else None
+                clue[direction]['definition'] = clue_definitions[0] if clue_definitions else None
                 clue[direction]['word'] = clue[direction]['word'].upper()
-                if clue_definitions:
-                    word_defs.append(clue_definitions[0])
 
-    crossword_data['definitions'] = word_defs
+    # Add all definitions from input text for hard difficulty
+    crossword_data['definitions'] = []
+    for defs in definitions.values():
+        pos_def = defs.get(part_of_speech, None)
+        if pos_def:
+            crossword_data['definitions'].append(pos_def[0])
+
+    random.shuffle(crossword_data['definitions'])
     return Response(crossword_data)
 
 
