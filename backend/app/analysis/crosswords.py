@@ -7,7 +7,7 @@ import copy
 
 def rand_words(all_words, max):
     """
-
+    generates a random sequence of words given a list of words and max entries
     :param all_words: datd structure containing all words to put into crossword
     :param max: number of words that can be made into crossword
     :return: list of words to be used (in order of how they will be placed in the grid)
