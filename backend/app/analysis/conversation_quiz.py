@@ -155,5 +155,5 @@ def apply_question_option_errors(quiz_question):
     # Reassign question answer based on the new position of the actual answer
     for i in range(4):
         if len(quiz_question['options'][i]['error-types']) == 0:
-            quiz_question['answer'] = i
+            quiz_question['answer'] = quiz_question['options'][i]['text']
             break

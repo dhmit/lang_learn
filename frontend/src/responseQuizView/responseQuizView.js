@@ -163,8 +163,8 @@ export class ResponseQuizView extends React.Component {
                                     Score:&nbsp;
                                     {this.state.score}/{this.state.data.length}
                                 </p>
-                                : <Button id="submit">
-                                    Submit
+                                : <Button id="submit" onClick={() => this.gradeQuiz()}>
+                                        Submit
                                 </Button>
                             }
                         </div>
