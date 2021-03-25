@@ -89,6 +89,9 @@ export class ResponseQuizView extends React.Component {
         } else {
             console.log();
         }
+
+        // Brings the user back to the first question (beginning of the quiz) upon submission.
+        this.setState({question: 1});
     }
 
     onProgressBarClick = (event) => {
@@ -113,6 +116,30 @@ export class ResponseQuizView extends React.Component {
         if (!this.state.data) {
             return (<LoadingPage />);
         }
+
+        const displayFeedback = () => {
+            // This function is only called if the user selects an answer.
+            const choices = this.state.data[this.state.question - 1].options;
+            const userChoice = this.state.userAnswers[this.state.question];
+            const choiceIndex = choices.findIndex((obj) => (obj.text) === userChoice);
+            const errorTypes = this.state.data[this.state.question - 1].options[choiceIndex]['error-types'];
+            if (errorTypes.length === 0) {
+                return (<>
+                    You chose the correct answer. Congratulations!
+                </>);
+            }
+            const errors = errorTypes.map((error, i) => {
+                return (
+                    <li key={i}>{error}</li>
+                );
+            });
+            return (<>
+                The answer choice you selected had the following errors:
+                <ul>
+                    {errors}
+                </ul>
+            </>);
+        };
 
         const displayQuestion = () => {
             const choices = this.state.data[this.state.question - 1].options;
@@ -231,7 +258,8 @@ export class ResponseQuizView extends React.Component {
                             <br />
                             <div className="row justify-content-center">
                                 {(this.state.graded)
-                                    ? <p className="results">
+                                    ? <div>
+                                        <p className="results">
                                         Your answer: {(Object.prototype.hasOwnProperty.call(
                                             this.state.userAnswers,
                                             this.state.question,
@@ -242,7 +270,16 @@ export class ResponseQuizView extends React.Component {
                                         Correct answer: {
                                             this.state.data[this.state.question - 1].answer
                                         }
-                                    </p>
+                                        </p>
+                                        <b>Machine-Generated Feedback</b>
+                                        <br />
+                                        {(Object.prototype.hasOwnProperty.call(
+                                            this.state.userAnswers,
+                                            this.state.question,
+                                        ))
+                                        ? <>{displayFeedback()}</>
+                                        : <i>No feedback--this question wasn't answered.</i>}
+                                    </div>
                                     : displayQuestion()
                                 }
                             </div>
