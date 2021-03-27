@@ -119,10 +119,11 @@ export class ResponseQuizView extends React.Component {
 
         const displayFeedback = () => {
             // This function is only called if the user selects an answer.
-            const choices = this.state.data[this.state.question - 1].options;
-            const userChoice = this.state.userAnswers[this.state.question];
+            const currQ = this.state.question;
+            const choices = this.state.data[currQ - 1].options;
+            const userChoice = this.state.userAnswers[currQ];
             const choiceIndex = choices.findIndex((obj) => (obj.text) === userChoice);
-            const errorTypes = this.state.data[this.state.question - 1].options[choiceIndex]['error-types'];
+            const errorTypes = this.state.data[currQ - 1].options[choiceIndex]['error-types'];
             if (errorTypes.length === 0) {
                 return (<>
                     You chose the correct answer. Congratulations!
@@ -263,37 +264,37 @@ export class ResponseQuizView extends React.Component {
                             </p>
                             <br />
                             {(this.state.graded)
-                            ? <div>
-                                <p>
-                                    <b className="results-header">Your Response</b>
+                                ? <div>
+                                    <p>
+                                        <b className="results-header">Your Response</b>
+                                        <br />
+                                        <p className="results-text">
+                                            Your answer: {(Object.prototype.hasOwnProperty.call(
+                                                this.state.userAnswers,
+                                                this.state.question,
+                                            ))
+                                                ? <>{this.state.userAnswers[this.state.question]}</>
+                                                : <i>Unanswered</i>}
+                                        </p>
+                                        <p className="results-text">
+                                            Correct answer: {
+                                                this.state.data[this.state.question - 1].answer
+                                            }
+                                        </p>
+                                    </p>
+                                    <b className="results-header">Machine-Generated Feedback</b>
                                     <br />
                                     <p className="results-text">
-                                        Your answer: {(Object.prototype.hasOwnProperty.call(
+                                        {(Object.prototype.hasOwnProperty.call(
                                             this.state.userAnswers,
                                             this.state.question,
                                         ))
-                                            ? <>{this.state.userAnswers[this.state.question]}</>
-                                            : <i>Unanswered</i>}
+                                            ? <>{displayFeedback()}</>
+                                            : <i>No feedback.</i>}
                                     </p>
-                                    <p className="results-text">
-                                        Correct answer: {
-                                        this.state.data[this.state.question - 1].answer
-                                        }
-                                    </p>
-                                </p>
-                                <b className="results-header">Machine-Generated Feedback</b>
-                                <br />
-                                <p className="results-text">
-                                    {(Object.prototype.hasOwnProperty.call(
-                                        this.state.userAnswers,
-                                        this.state.question,
-                                    ))
-                                    ? <>{displayFeedback()}</>
-                                    : <i>No feedback.</i>}
-                                </p>
-                            </div> : <div className="row justify-content-center">
-                                {displayQuestion()}
-                            </div>}
+                                </div> : <div className="row justify-content-center">
+                                    {displayQuestion()}
+                                </div>}
                         </div>
                     </div>
                     <div className="row justify-content-between">
