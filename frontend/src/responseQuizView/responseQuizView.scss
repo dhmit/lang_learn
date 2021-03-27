@@ -98,9 +98,13 @@
     max-height: inherit;
 }
 
-.results {
+.results-header {
     font-size: 25.2px;
-    text-align: center;
+}
+
+.results-text {
+    font-size: 22.4px;
+    margin-bottom: 0;
 }
 
 .feedback {

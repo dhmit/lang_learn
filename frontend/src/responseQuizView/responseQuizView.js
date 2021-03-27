@@ -91,7 +91,7 @@ export class ResponseQuizView extends React.Component {
         }
 
         // Brings the user back to the first question (beginning of the quiz) upon submission.
-        this.setState({question: 1});
+        this.setState({ question: 1 });
     }
 
     onProgressBarClick = (event) => {
@@ -129,8 +129,14 @@ export class ResponseQuizView extends React.Component {
                 </>);
             }
             const errors = errorTypes.map((error, i) => {
+                let errorText = error;
+                if (error === 'backwards') {
+                    errorText = 'The letters are reversed';
+                } else if (error === 'verb-conjugation') {
+                    errorText = 'One or more verbs are incorrectly conjugated';
+                }
                 return (
-                    <li key={i}>{error}</li>
+                    <li key={i}>{errorText}</li>
                 );
             });
             return (<>
@@ -256,33 +262,38 @@ export class ResponseQuizView extends React.Component {
                                 {this.state.data[this.state.question - 1].question}
                             </p>
                             <br />
-                            <div className="row justify-content-center">
-                                {(this.state.graded)
-                                    ? <div>
-                                        <p className="results">
+                            {(this.state.graded)
+                            ? <div>
+                                <p>
+                                    <b className="results-header">Your Response</b>
+                                    <br />
+                                    <p className="results-text">
                                         Your answer: {(Object.prototype.hasOwnProperty.call(
                                             this.state.userAnswers,
                                             this.state.question,
                                         ))
                                             ? <>{this.state.userAnswers[this.state.question]}</>
                                             : <i>Unanswered</i>}
-                                        <br />
+                                    </p>
+                                    <p className="results-text">
                                         Correct answer: {
-                                            this.state.data[this.state.question - 1].answer
+                                        this.state.data[this.state.question - 1].answer
                                         }
-                                        </p>
-                                        <b>Machine-Generated Feedback</b>
-                                        <br />
-                                        {(Object.prototype.hasOwnProperty.call(
-                                            this.state.userAnswers,
-                                            this.state.question,
-                                        ))
-                                        ? <>{displayFeedback()}</>
-                                        : <i>No feedback--this question wasn't answered.</i>}
-                                    </div>
-                                    : displayQuestion()
-                                }
-                            </div>
+                                    </p>
+                                </p>
+                                <b className="results-header">Machine-Generated Feedback</b>
+                                <br />
+                                <p className="results-text">
+                                    {(Object.prototype.hasOwnProperty.call(
+                                        this.state.userAnswers,
+                                        this.state.question,
+                                    ))
+                                    ? <>{displayFeedback()}</>
+                                    : <i>No feedback.</i>}
+                                </p>
+                            </div> : <div className="row justify-content-center">
+                                {displayQuestion()}
+                            </div>}
                         </div>
                     </div>
                     <div className="row justify-content-between">
