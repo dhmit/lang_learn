@@ -120,7 +120,7 @@ def add_text(request):
     """
     API endpoint for adding a piece of text
     """
-    body = json.loads(json.dumps(request.data))
+    body = json.loads(request.body.decode('utf-8'))
     new_text_obj = Text(title=body['title'], content=body['content'])
     new_text_obj.save()
     get_text_data(new_text_obj)
@@ -134,7 +134,7 @@ def update_text(request):
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    body = json.loads(json.dumps(request.data))
+    body = json.loads(request.body.decode('utf-8'))
     text_obj = Text.objects.get(id=body['id'])
     old_text = text_obj.content
 
@@ -176,7 +176,8 @@ def get_crossword(request, text_id, part_of_speech):
     # Add examples and definitions to every clue. Also capitalize the words
     # TODO: For Instructor view people, please make a function in the text model for getting
     #       definitions / examples given a word
-    for clue in crossword_data['clues']:
+    for num, clue in enumerate(crossword_data['clues']):
+        clue['num'] = num
         for direction in ['across', 'down']:
             if clue[direction]:
                 clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)

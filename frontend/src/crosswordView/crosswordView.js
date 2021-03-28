@@ -20,12 +20,15 @@ export class CrosswordView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            crosswordData: null,
+            clues: null,
+            definitions: null,
+            solution: null,
             grid: null,
             found: null,
             showDifficulty: true,
-            showModal: true,
+            showModal: false,
             difficulty: -1,
+            isLoading: true,
         };
     }
 
@@ -33,13 +36,22 @@ export class CrosswordView extends React.Component {
         try {
             const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
             const response = await fetch(apiURL);
-            const data = await response.json();
-            const emptyGrid = data.solution.map((row) => row
+            const { clues, definitions, solution } = await response.json();
+
+            const emptyGrid = solution.map((row) => row
                 .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
+
+            /**
+             * definitions contains the definitions of every word in the input text
+             * clues contains the individual definitions for each word that appears
+             */
             this.setState({
-                crosswordData: data,
+                clues,
+                definitions,
+                solution,
                 grid: emptyGrid,
-                found: data.clues.map((_) => ({ across: false, down: false })),
+                found: clues.map((_) => ({ across: false, down: false })),
+                isLoading: false,
             });
         } catch (e) {
             console.log(e);
@@ -51,7 +63,7 @@ export class CrosswordView extends React.Component {
      * cell only if that cell is the starting cell for a word. Otherwise, return null
      */
     getClueNumber = (row, col) => {
-        for (const [clueNum, clue] of this.state.crosswordData.clues.entries()) {
+        for (const [clueNum, clue] of this.state.clues.entries()) {
             if (clue.row === row && clue.col === col) {
                 return clueNum + 1;
             }
@@ -64,10 +76,10 @@ export class CrosswordView extends React.Component {
      * been found. Otherwise, return false.
      */
     isCorrect = (row, col) => {
-        const { found, crosswordData } = this.state;
+        const { found, clues } = this.state;
         for (let i = 0; i < found.length; i++) {
             const curFound = found[i];
-            const curClue = crosswordData.clues[i];
+            const curClue = clues[i];
             // Checking for across clues
             if (curFound.across && row === curClue.row
                 && col >= curClue.col && col < curClue.col + curClue.across.word.length) {
@@ -83,88 +95,103 @@ export class CrosswordView extends React.Component {
     }
 
     updateCell = (e, row, col) => {
-        const grid = this.state.grid;
         const curLetter = e.target.value.toUpperCase();
-        if (ALPHA.includes(curLetter)) {
-            grid[row][col] = curLetter;
-            // Check if a word has been found
-            this.setState({ grid }, this.updateFound);
+        if (!ALPHA.includes(curLetter)) {
+            return;
         }
+
+        // Check if a word has been found after adding the letter
+        this.setState((state) => ({
+            grid: state.grid.map((tempRow, tempRowIndex) => tempRow.map(
+                (tempCol, tempColIndex) => (
+                    row === tempRowIndex && col === tempColIndex
+                        ? curLetter
+                        : tempCol
+                ),
+            )),
+        }), this.updateFound);
     }
 
     updateFound = () => {
-        const { grid, found } = this.state;
-        this.state.crosswordData.clues.forEach((clue, k) => {
+        const { grid, found, clues } = this.state;
+        const newFound = found.map((clue) => ({ across: clue.across, down: clue.down }));
+
+        clues.forEach((clue, k) => {
             if (clue.across) {
                 let correct = true;
-                for (let c = 0; c < clue.across.word.length; c++) {
-                    if (grid[clue.row][clue.col + c] !== clue.across.word.charAt(c)) {
+                for (let dCol = 0; dCol < clue.across.word.length; dCol++) {
+                    if (grid[clue.row][clue.col + dCol] !== clue.across.word.charAt(dCol)) {
                         correct = false;
                         break;
                     }
                 }
-                found[k].across = correct;
+                newFound[k].across = correct;
             }
             if (clue.down) {
                 let correct = true;
-                for (let r = 0; r < clue.down.word.length; r++) {
-                    if (grid[clue.row + r][clue.col] !== clue.down.word.charAt(r)) {
+                for (let dRow = 0; dRow < clue.down.word.length; dRow++) {
+                    if (grid[clue.row + dRow][clue.col] !== clue.down.word.charAt(dRow)) {
                         correct = false;
                         break;
                     }
                 }
-                found[k].down = correct;
+                newFound[k].down = correct;
             }
         });
-        this.setState({ found });
+
+        this.setState({ found: newFound });
     }
 
     giveUp = () => {
-        this.setState({ grid: this.state.crosswordData.solution }, this.updateFound);
+        this.setState({ grid: this.state.solution }, this.updateFound);
     }
 
     setDifficulty = (difficulty) => {
-        this.setState({ difficulty, showDifficulty: false });
+        this.setState({ difficulty, showDifficulty: false, showModal: true });
     }
 
     getDefinitions = () => {
-        const { difficulty, crosswordData, found } = this.state;
+        const {
+            difficulty,
+            clues,
+            definitions,
+            found,
+        } = this.state;
+
         switch (difficulty) {
         case EASY:
-            return crosswordData.clues.flatMap((clue, k) => {
-                return ['across', 'down'].map((dir) => {
-                    if (clue[dir]) {
-                        return (
-                            <div className={`clue ${found[k][dir] ? 'clue-found' : ''}`}>
-                                {`${k + 1}${dir === 'across' ? 'A' : 'D'}) `}
-                                { clue[dir].definition ? clue[dir].definition : 'N/A' }
-                            </div>
-                        );
-                    }
-                    return '';
-                });
-            });
+            // Creates list of definitions where each one is paired with its clue
+            return clues.flatMap((clue, k) => (['across', 'down']
+                .filter((dir) => clue[dir])
+                .map((dir) => (
+                    <div
+                        className={`clue ${found[k][dir] ? 'clue-found' : ''}`}
+                        key={`${k}-${dir}`}
+                    >
+                        {`${k + 1}${dir === 'across' ? 'A' : 'D'}) `}
+                        { clue[dir].definition ? clue[dir].definition : 'N/A' }
+                    </div>
+                ))
+            ));
         case MEDIUM:
+            // Creates unordered list of definitions
             return (
                 <ul>
-                    {crosswordData.clues.flatMap((clue, k) => {
-                        return ['across', 'down'].map((dir) => {
-                            if (clue[dir]) {
-                                return (
-                                    <li key={`${k}-${dir}`}>
-                                        { clue[dir].definition ? clue[dir].definition : 'N/A' }
-                                    </li>
-                                );
-                            }
-                            return '';
-                        });
-                    })}
+                    {clues.flatMap((clue, k) => (['across', 'down']
+                        .filter((dir) => clue[dir])
+                        .map((dir) => (
+                            <li key={`${k}-${dir}`}>
+                                {clue[dir].definition ? clue[dir].definition : 'N/A'}
+                            </li>
+                        ))
+                    ))}
                 </ul>
             );
         case HARD:
+            // Creates unordered list of all definitions, some of which might not be used
             return (
                 <ul>
-                    {crosswordData.definitions.map((definition, k) => (
+                    {definitions.map((definition, k) => (
                         <li key={k}>
                             { definition }
                         </li>
@@ -177,68 +204,43 @@ export class CrosswordView extends React.Component {
     }
 
     modalHandler = () => {
-        this.setState({ showModal: !this.state.showModal });
+        this.setState((state) => ({ showModal: !state.showModal }));
     }
 
-    render() {
-        if (!this.state.crosswordData) {
-            return (<LoadingPage />);
-        }
+    /**
+     * Render Methods
+     */
 
-        const {
-            found,
-            grid,
-            showDifficulty,
-            showModal,
-        } = this.state;
-
-        const clueBox = <div className='clues-box'>
-            <h2 className='clue-header'>Across:</h2>
-            {
-                this.state.crosswordData.clues.map((clue, k) => {
-                    if (clue.across) {
-                        return (
-                            <div
-                                className={`clue ${found[k].across ? 'clue-found' : ''}`}
-                                key={k}
-                            >
-                                {k + 1}) {found[k].across
-                                    ? clue.across.clue
-                                    : coverWord(clue.across.word, clue.across.clue)
-                                }
-                            </div>
-                        );
-                    }
-                    return '';
-                })
-            }
-            <h2 className='clue-header'>Down:</h2>
-            {
-                this.state.crosswordData.clues.map((clue, k) => {
-                    if (clue.down) {
-                        return (
-                            <div
-                                className={`clue ${found[k].down ? 'clue-found' : ''}`}
-                                key={k}
-                            >
-                                {k + 1}) {found[k].down
-                                    ? clue.down.clue
-                                    : coverWord(clue.down.word, clue.down.clue)
-                                }
-                            </div>
-                        );
-                    }
-                    return '';
-                })
-            }
+    renderClueBox = () => {
+        const { found, clues } = this.state;
+        return <div className='clues-box'>
+            {['across', 'down'].map((dir) => (
+                <>
+                    <h2 className='clue-header'>{dir}:</h2>
+                    {clues.filter((clue) => clue[dir]).map((clue) => (
+                        <div
+                            className={`clue ${found[clue.num][dir] ? 'clue-found' : ''}`}
+                            key={clue.num}
+                        >
+                            {clue.num + 1}) {found[clue.num][dir]
+                                ? clue[dir].clue
+                                : coverWord(clue[dir].word, clue[dir].clue)
+                            }
+                        </div>
+                    ))}
+                </>
+            ))}
         </div>;
+    }
 
-        const definitionBox = (<div className='clues-box'>
-            <h2 className='clue-header'>Definitions</h2>
-            { this.getDefinitions() }
-        </div>);
+    renderDefinitionBox = () => (<div className='clues-box'>
+        <h2 className='clue-header'>Definitions</h2>
+        { this.getDefinitions() }
+    </div>)
 
-        const instructionModal = (<div>
+    renderInstructionModal = () => {
+        const { showModal } = this.state;
+        return <div>
             {
                 showModal
                     ? <div className="backdrop" onClick={this.modalHandler}>
@@ -250,7 +252,7 @@ export class CrosswordView extends React.Component {
                 opacity: showModal ? 1 : 0,
             }}>
                 <div className="modal-header">
-                    <h5 className="modal-title">Instructions</h5>
+                    <h2 className="modal-title">Instructions</h2>
                     <button type="button" className="close" onClick={this.modalHandler}>
                         <span>&times;</span>
                     </button>
@@ -272,65 +274,71 @@ export class CrosswordView extends React.Component {
                         onClick={this.modalHandler}>Close</button>
                 </div>
             </div>
-        </div>);
+        </div>;
+    }
+
+    renderDifficultySelection = () => (<form>
+        <label className='difficulty-label'>Please select a difficulty:</label>
+        <div className='d-flex justify-content-between mt-5'>
+            {[EASY, MEDIUM, HARD].map((difficulty) => (
+                <button
+                    className='btn btn-light difficulty-button'
+                    onClick={() => this.setDifficulty(difficulty)}
+                    key={difficulty}
+                >
+                    { DIFFICULTY_NAMES[difficulty] }
+                </button>
+            ))}
+        </div>
+    </form>)
+
+    renderCrosswordView = () => {
+        return <>
+            <button className='btn btn-danger give-up' onClick={this.giveUp}>
+                Give Up
+            </button>
+            <div className='row'>
+                <div className='col-xl-5 col-12'>
+                    { this.renderClueBox() }
+                    { this.renderDefinitionBox() }
+                </div>
+                <div className='col-xl-7 col-12 d-flex crossword-div'>
+                    <div className='crossword-grid'>
+                        <Crossword
+                            grid={this.state.grid}
+                            isCorrect={this.isCorrect}
+                            getClueNumber={this.getClueNumber}
+                            updateCell={this.updateCell}
+                        />
+                    </div>
+                </div>
+            </div>
+        </>;
+    }
+
+    render() {
+        if (this.state.isLoading) {
+            return (<LoadingPage />);
+        }
 
         return (
             <>
                 <Navbar/>
-                <div
-                    className='page'
-                    style={{ 'paddingBottom': '50px' }}
-                >
-                    { showDifficulty
-                        ? <div>
-                            <h1 className='crossword-title'>Select a Crossword Difficulty</h1>
-                            <div className='d-flex justify-content-between mt-5'>
-                                {[EASY, MEDIUM, HARD].map((difficulty) => (
-                                    <button
-                                        className='btn btn-light difficulty-button'
-                                        onClick={() => this.setDifficulty(difficulty)}
-                                        key={difficulty}
-                                    >
-                                        { DIFFICULTY_NAMES[difficulty] }
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        : <>
-                            {instructionModal}
-                            <h1 className='crossword-title'>
-                                Crossword
-                                <button className="btn btn-outline-light btn-circle mx-3"
-                                    style= {{ 'border': '3px solid', 'fontSize': '20px' }}
-                                    onClick={this.modalHandler}>
-                                    <b>?</b>
-                                </button>
-                            </h1>
-                            <button className='btn btn-danger give-up' onClick={this.giveUp}>
-                                Give Up
-                            </button>
-                            <div className='row'>
-                                <div className='col-xl-5 col-12'>
-                                    { clueBox }
-                                    { definitionBox }
-                                </div>
-                                <div
-                                    className='col-xl-7 col-12 d-flex'
-                                    style={{ overflowX: 'scroll', alignContent: 'center' }}
-                                >
-                                    <div className='crossword-grid'>
-                                        <Crossword
-                                            grid={grid}
-                                            isCorrect={this.isCorrect}
-                                            getClueNumber={this.getClueNumber}
-                                            updateCell={this.updateCell}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </>
+                <div className='page crossword-page'>
+                    {this.renderInstructionModal()}
+                    <h1 className='crossword-title'>
+                        Crossword
+                        <button
+                            className='btn btn-outline-light btn-circle mx-3 instruction-button'
+                            onClick={this.modalHandler}
+                        >
+                            <b>?</b>
+                        </button>
+                    </h1>
+                    {this.state.showDifficulty
+                        ? this.renderDifficultySelection()
+                        : this.renderCrosswordView()
                     }
-
                 </div>
                 <Footer/>
             </>
