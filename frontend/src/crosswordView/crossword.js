@@ -58,19 +58,19 @@ class Crossword extends React.Component {
         }
     }
 
-    changeFocus = (r, c) => {
-        this.cellRefs[`cell-${r},${c}`].focus();
-        this.setState({ focusRow: r, focusCol: c });
+    changeFocus = (row, col) => {
+        this.cellRefs[`cell-${row},${col}`].focus();
+        this.setState({ focusRow: row, focusCol: col });
     }
 
     render() {
-        return this.props.grid.map((row, r) => {
+        return this.props.grid.map((row, rowIndex) => {
             return (
-                <div className='crossword-row' key={r}>
-                    {row.map((cell, c) => {
+                <div className='crossword-row' key={rowIndex}>
+                    {row.map((cell, colIndex) => {
                         if (cell === '#') {
                             return (
-                                <div className='blank-cell' key={c}>
+                                <div className='blank-cell' key={colIndex}>
                                     <input
                                         className='blank-input'
                                         readOnly
@@ -78,10 +78,10 @@ class Crossword extends React.Component {
                                 </div>
                             );
                         }
-                        const clueNum = this.props.getClueNumber(r, c);
-                        const isCorrect = this.props.isCorrect(r, c);
+                        const clueNum = this.props.getClueNumber(rowIndex, colIndex);
+                        const isCorrect = this.props.isCorrect(rowIndex, colIndex);
                         return (
-                            <div className='crossword-cell' key={c}>
+                            <div className='crossword-cell' key={colIndex}>
                                 <div className='clue-num'>
                                     {clueNum}
                                 </div>
@@ -91,10 +91,10 @@ class Crossword extends React.Component {
                                     value={cell}
                                     maxLength={1}
                                     ref={(instance) => {
-                                        this.cellRefs[`cell-${r},${c}`] = instance;
+                                        this.cellRefs[`cell-${rowIndex},${colIndex}`] = instance;
                                     }}
-                                    onClick={() => this.changeFocus(r, c)}
-                                    onChange={(e) => this.props.updateCell(e, r, c)}
+                                    onClick={() => this.changeFocus(rowIndex, colIndex)}
+                                    onChange={(e) => this.props.updateCell(e, rowIndex, colIndex)}
                                 />
                             </div>
                         );

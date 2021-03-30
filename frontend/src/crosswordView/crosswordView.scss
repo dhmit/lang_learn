@@ -1,5 +1,22 @@
+$cell-width: 50px;
+$cell-height: 50px;
+
+.crossword-page {
+    padding-bottom: 50px;
+}
+
 .crossword-title {
     font-size: 50px;
+}
+
+.crossword-div {
+    align-content: center;
+    overflow-x: scroll;
+}
+
+.instruction-button {
+    font-size: 20px;
+    border: 3px solid;
 }
 
 .give-up {
@@ -7,24 +24,28 @@
 }
 
 .difficulty-button {
+    font-size: 40px;
     height: 100px;
     width: 200px;
-    font-size: 40px;
+}
 
+.difficulty-label {
+    font-size: 30px;
 }
 
 // Clue Styles
 .clues-box {
     background: rgba(105, 64, 238, 0.25);
     border-radius: 10px;
-    padding: 0 10px 10px;
     margin-bottom: 30px;
     max-height: 300px;
     overflow-y: scroll;
+    padding: 0 10px 10px;
 }
 
 .clue-header {
     margin: 10px 0;
+    text-transform: capitalize;
 }
 
 .clue {
@@ -32,22 +53,19 @@
 }
 
 .clue-found {
-    text-decoration: line-through;
     color: #a0a0a0;
+    text-decoration: line-through;
 }
 
 // Definition Box
 .definitions {
     background: rgba(105, 64, 238, 0.25);
     border-radius: 10px;
-    padding-bottom: 20px;
     max-height: 300px;
     overflow-y: scroll;
+    padding-bottom: 20px;
 }
 
-.definition-title {
-
-}
 
 // Crossword Styles
 .crossword-grid {
@@ -60,15 +78,12 @@
     justify-content: center;
 }
 
-$cell-width: 50px;
-$cell-height: 50px;
-
 .crossword-cell {
     background: #E8C2FF;
-    width: $cell-width;
-    height: $cell-height;
     border: 1px solid #5941A9;
+    height: $cell-height;
     position: relative;
+    width: $cell-width;
 }
 
 .correct-cell {
@@ -77,29 +92,29 @@ $cell-height: 50px;
 
 .clue-num {
     color: black;
-    position: absolute;
-    top: 1px;
-    left: 3px;
     font-size: 16px;
     font-weight: bold;
+    left: 3px;
+    position: absolute;
+    top: 1px;
     z-index: 3;
 }
 
 .blank-cell {
-    width: $cell-width;
-    height: $cell-height;
     background: #2D2155;
+    height: $cell-height;
+    width: $cell-width;
 }
 
 // Cell Input
 .cell-input {
     background: #E8C2FF;
+    font-size: 30px;
+    font-weight: bold;
     height: $cell-height;
-    width: $cell-width;
-    font-size: 35px;
     position: relative;
     text-align: center;
-    font-weight: bold;
+    width: $cell-width;
     z-index: 1;
 
     &:focus {
@@ -109,11 +124,11 @@ $cell-height: 50px;
 
 .blank-input {
     background: #2D2155;
-    height: $cell-height;
-    width: $cell-width;
-    position: relative;
     border: none;
     cursor: default;
+    height: $cell-height;
+    position: relative;
+    width: $cell-width;
 
     &:focus {
         outline: none;

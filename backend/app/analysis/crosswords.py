@@ -307,14 +307,14 @@ def get_crosswords(all_words):
             "solution": [],
         }
 
-    for row in range(len(solution)):
-        for col in range(len(solution[row])):
+    for i, row in enumerate(solution):
+        for j, col in enumerate(row):
             # converts letters in the word to uppercase
-            if solution[row][col] != 0:
-                solution[row][col] = solution[row][col].upper()
+            if col != 0:
+                row[j] = col.upper()
             # fills cells that need to be empty with a #
             else:
-                solution[row][col] = '#'
+                row[j] = '#'
 
     cross_dict = {
         "clues": clues,
