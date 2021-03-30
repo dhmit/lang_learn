@@ -5,14 +5,10 @@
     background-color: #278E73;
 }
 
-.submit-btn:hover {
-  background-color: #1b6451;
-}
-
 .box {
     background: #5941A9;
-    margin: 20px 12px 20px 12px;
-    padding: 10px;
+    margin: 30px 12px 20px 12px;
+    padding: 15px;
     border-radius: 5px;
     width: 100%;
 }
@@ -20,4 +16,7 @@
 .picture-prompt {
     max-height: 20vh;
     max-width: 100%;
+    border-radius: 5px;
+    border-style: solid;
 }
+

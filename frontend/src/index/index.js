@@ -15,7 +15,7 @@ class TextInfo extends React.Component {
     }
 
     handleQuiz = (e) => {
-      let quizType;
+        let quizType;
         if (e.target.value === 'Story Generator') {
             quizType = 'Picturebook';
         } else {

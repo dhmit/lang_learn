@@ -12,8 +12,8 @@ class Module extends React.Component {
                 <h2 className='module-header'>
                     {
                         moduleName === 'picturebook'
-                        ? 'Story Generator'
-                        : capitalize(moduleName)}
+                            ? 'Story Generator'
+                            : capitalize(moduleName)}
                 </h2>
                 {
                     Object.keys(moduleInfo).map((category, k) => (
