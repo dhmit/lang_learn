@@ -112,25 +112,27 @@ def collides_with_existing_words(word, row, column, direction, grid):
     # code to-be tested to deal with other types of word collisions (avoiding clues lining up)
 
     # for k, letter in enumerate(list(word)):
-        # for i in (-1, 0, 1):
-        #     if direction == "across":
-        #         # checks for collisions between words
-        #         if grid[row + i][column + k] != 0:
-        #             if i == 0 and grid[row][column + k] != letter:
-        #                 return True
-        #             else:
-        #                 for clue in clues:
-        #                     if clue["row"] == row + 1 and clue["col"] == column + k and clue["across"] != None:
-        #                         return True
-        #     if direction == "down":
-        #         # checks for collisions between words
-        #         if grid[row + k][column + i] != 0:
-        #             if i == 0 and grid[row + k][column] != letter:
-        #                 return True
-        #             else:
-        #                 for clue in clues:
-        #                     if clue["row"] == row + 1 and clue["col"] == column + k and clue["down"] != None:
-        #                         return True
+    # for i in (-1, 0, 1):
+    #     if direction == "across":
+    #         # checks for collisions between words
+    #         if grid[row + i][column + k] != 0:
+    #             if i == 0 and grid[row][column + k] != letter:
+    #                 return True
+    #             else:
+    #                 for clue in clues:
+    #                     if clue["row"] == row + 1 and clue["col"] == column + k and
+    #                     clue["across"] != None:
+    #                         return True
+    #     if direction == "down":
+    #         # checks for collisions between words
+    #         if grid[row + k][column + i] != 0:
+    #             if i == 0 and grid[row + k][column] != letter:
+    #                 return True
+    #             else:
+    #                 for clue in clues:
+    #                     if clue["row"] == row + 1 and clue["col"] == column + k and
+    #                     clue["down"] != None:
+    #                         return True
 
 
 
