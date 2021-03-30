@@ -12,12 +12,9 @@ def rand_words(all_words, max_num_words):
     :param max_num_words: number of words that can be made into crossword
     :return: list of words to be used (in order of how they will be placed in the grid)
     """
-    words = set()
-    while len(words) < max_num_words:
-        indx = random.randint(0, len(all_words) - 1)
-        while all_words[indx] not in words:
-            words.add(all_words[indx])
-    return list(words)
+    words_list = all_words.copy()
+    random.shuffle(words_list)
+    return words_list[:max_num_words]
 
 
 # HELPER FUNCTIONS
@@ -52,12 +49,12 @@ def is_valid(grid, word, row, col, direction):
     return True
 
 
-def is_within_bounds(word_len, row, column, direction, grid_dim):
+def is_within_bounds(word_len, row, column, direction, grid_size):
     """ Returns whether the given word is withing the bounds of the grid.
     """
     # checks if word is in within grid boundaries
-    return ((direction == "across" and column + word_len <= grid_dim[0] - 1)
-            or (direction == "down" and row + word_len <= grid_dim[1] - 1)) and (
+    return ((direction == "across" and column + word_len <= grid_size[0] - 1)
+            or (direction == "down" and row + word_len <= grid_size[1] - 1)) and (
                row >= 0 and column >= 0)
 
 
@@ -112,6 +109,32 @@ def collides_with_existing_words(word, row, column, direction, grid):
 
     return False
 
+    # code to-be tested to deal with other types of word collisions (avoiding clues lining up)
+
+    # for k, letter in enumerate(list(word)):
+        # for i in (-1, 0, 1):
+        #     if direction == "across":
+        #         # checks for collisions between words
+        #         if grid[row + i][column + k] != 0:
+        #             if i == 0 and grid[row][column + k] != letter:
+        #                 return True
+        #             else:
+        #                 for clue in clues:
+        #                     if clue["row"] == row + 1 and clue["col"] == column + k and clue["across"] != None:
+        #                         return True
+        #     if direction == "down":
+        #         # checks for collisions between words
+        #         if grid[row + k][column + i] != 0:
+        #             if i == 0 and grid[row + k][column] != letter:
+        #                 return True
+        #             else:
+        #                 for clue in clues:
+        #                     if clue["row"] == row + 1 and clue["col"] == column + k and clue["down"] != None:
+        #                         return True
+
+
+
+
 
 def add_word_to_grid(grid, word, row, col, direction):
     """ Adds a possibility to the given grid, which is modified in-place.
@@ -128,7 +151,7 @@ def add_word_to_grid(grid, word, row, col, direction):
             grid[row + index][col] = letter
 
 
-def make_crossword(grid, word_list, grid_size):
+def make_crossword(word_list):
     """
     Returns a grid with all the words in a crossword format and their corresponding
     clues.
@@ -136,7 +159,11 @@ def make_crossword(grid, word_list, grid_size):
             word_list (list): contains words to be placed into crossword
             grid_size (int): represents dimension of grid (grid is a square)
     """
+    # sorts words in order of decreasing length
+    word_list.sort(key=len, reverse=True)
     first_word = word_list[0]
+    grid_size = 15
+    grid = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
     # determines the amount of iterations needed to place word into grid
     # makes sure first word is properly placed on grid
     first_range = grid_size - len(first_word) - 1
@@ -270,16 +297,7 @@ def get_crosswords(all_words):
             words = rand_words(all_words, max_word_amount)
         else:
             words = all_words.copy()
-        words.sort(key=len, reverse=True)
-        grid_size = 15
-        grid = []
-        for i in range(grid_size):
-            row = []
-            for j in range(grid_size):
-                row.append(0)
-            grid.append(row)
-
-        solution, clues = make_crossword(grid, words, grid_size)
+        solution, clues = make_crossword(words)
         if solution is not None:
             break
 
