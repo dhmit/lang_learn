@@ -101,7 +101,7 @@ def get_misspelled_words(content):
     """
     correct_spelling = {}
     spell = SpellChecker()
-    words_list = re.compile("([\w][\w]*'?\w?)").findall(content)
+    words_list = re.compile("([\\w][\\w]*'?\\w?)").findall(content)
     misspelled = spell.unknown(words_list)
     for word in misspelled:
         correct_spelling[word] = spell.correction(word)

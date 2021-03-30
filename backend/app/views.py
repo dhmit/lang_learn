@@ -143,6 +143,7 @@ def get_picturebook_data(request):
     res = [{'word': word,
             'url': urls[word]}
            for word in urls]
+    res.append(misspelled)
     return Response(res)
 
 

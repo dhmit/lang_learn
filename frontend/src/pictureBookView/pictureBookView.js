@@ -50,6 +50,7 @@ export class PictureBookView extends React.Component {
             });
 
             const pictureBookImages = await response.json();
+            pictureBookImages.pop(-1);
             this.setState({
                 pictureBookWords: pictureBookImages,
             });
