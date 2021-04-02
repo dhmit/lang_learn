@@ -8,7 +8,7 @@ import copy
 def rand_words(all_words, max_num_words):
     """
     generates a random sequence of words given a list of words and max entries
-    :param all_words: datd structure containing all words to put into crossword
+    :param all_words: data structure containing all words to put into crossword
     :param max_num_words: number of words that can be made into crossword
     :return: list of words to be used (in order of how they will be placed in the grid)
     """
@@ -20,7 +20,7 @@ def rand_words(all_words, max_num_words):
 # HELPER FUNCTIONS
 
 
-def is_valid(grid, word, row, col, direction):
+def is_valid(grid, word, row, col, direction, clues):
     """ This function determines whether a possibility is still valid in the
     given grid. (see generate_grid)
     A possibility is deemed invalid if:
@@ -38,7 +38,7 @@ def is_valid(grid, word, row, col, direction):
         return False
 
     # checks for collisions between words
-    if collides_with_existing_words(word, row, col, direction, grid):
+    if collides_with_existing_words(word, row, col, direction, grid, clues):
         return False
 
     # makes sure word is not directly after/before another word
@@ -93,49 +93,53 @@ def ends_are_isolated(word, row, column, direction, grid):
     return True
 
 
-def collides_with_existing_words(word, row, column, direction, grid):
+def collides_with_existing_words(word, row, column, direction, grid, clues):
     """ Returns whether the given word collides with an existing one.
     """
     # iterate over letters and their indices
-    for k, letter in enumerate(list(word)):
-        if direction == "across":
-            # checks for collisions between words
-            if grid[row][column + k] != 0 and grid[row][column + k] != letter:
-                return True
-        if direction == "down":
-            # checks for collisions between words
-            if grid[row + k][column] != 0 and grid[row + k][column] != letter:
-                return True
-
-    return False
+    # for k, letter in enumerate(list(word)):
+    #     if direction == "across":
+    #         # checks for collisions between words
+    #         if grid[row][column + k] != 0 and grid[row][column + k] != letter:
+    #             return True
+    #     if direction == "down":
+    #         # checks for collisions between words
+    #         if grid[row + k][column] != 0 and grid[row + k][column] != letter:
+    #             return True
+    #
+    # return False
 
     # code to-be tested to deal with other types of word collisions (avoiding clues lining up)
 
-    # for k, letter in enumerate(list(word)):
-    # for i in (-1, 0, 1):
-    #     if direction == "across":
-    #         # checks for collisions between words
-    #         if grid[row + i][column + k] != 0:
-    #             if i == 0 and grid[row][column + k] != letter:
-    #                 return True
-    #             else:
-    #                 for clue in clues:
-    #                     if clue["row"] == row + 1 and clue["col"] == column + k and
-    #                     clue["across"] != None:
-    #                         return True
-    #     if direction == "down":
-    #         # checks for collisions between words
-    #         if grid[row + k][column + i] != 0:
-    #             if i == 0 and grid[row + k][column] != letter:
-    #                 return True
-    #             else:
-    #                 for clue in clues:
-    #                     if clue["row"] == row + 1 and clue["col"] == column + k and
-    #                     clue["down"] != None:
-    #                         return True
-
-
-
+    for k, letter in enumerate(list(word)):
+        # checks around and at word to see if invalid words or collisions
+        # are being made
+        for i in (-1, 0, 1):
+            if direction == "across":
+                if grid[row + i][column + k] != 0:
+                    if i == 0:
+                        # checks for collisions at word placement
+                        if grid[row][column + k] != letter:
+                            return True
+                    else:
+                        # checks if any words above or below current word create invalid word
+                        for clue in clues:
+                            if clue["across"] is not None and clue["col"] <= (column + k) <= (clue[
+                                "col"] + len(clue["across"]["word"])) and clue["row"] == (row + i):
+                                return True
+            if direction == "down":
+                if grid[row + k][column + i] != 0:
+                    if i == 0:
+                        # checks for collisions at words placement
+                        if grid[row + k][column] != letter:
+                            return True
+                    else:
+                        # checks if any words to left or right of current word create invalid word
+                        for clue in clues:
+                            if clue["down"] is not None and clue["row"] <= (row + k) <= (clue[
+                                "row"] + len(clue["down"]["word"])) and clue["col"] == (column + i):
+                                return True
+    return False
 
 
 def add_word_to_grid(grid, word, row, col, direction):
@@ -173,7 +177,7 @@ def make_crossword(word_list):
         for start_col in range(first_range):
             for start_direction in ["across", "down"]:
                 # creates copy of grid and adds word/clue in if word can be placed
-                if is_valid(grid, first_word, start_row, start_col, start_direction):
+                if is_valid(grid, first_word, start_row, start_col, start_direction, []):
                     new_grid = copy.deepcopy(grid)
                     add_word_to_grid(new_grid, first_word, start_row, start_col, start_direction)
 
@@ -218,7 +222,7 @@ def find_possible_grid(grid, word_list, grid_size, clues):
     for pos in possible:
         new_grid = copy.deepcopy(grid)
         # checks if word can be added at this location and appends
-        if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1]):
+        if is_valid(grid, current_word, pos[0][0], pos[0][1], pos[1], clues):
             add_word_to_grid(new_grid, current_word, pos[0][0], pos[0][1], pos[1])
             add_clue(clues, current_word, pos[0][1], pos[0][0], pos[1])
             new_word_list = word_list.copy()
@@ -317,7 +321,8 @@ def get_crosswords(all_words):
             # fills cells that need to be empty with a #
             else:
                 row[j] = '#'
-
+    # sort the clues according to the ascending row and col for collisions
+    clues.sort(key=lambda x: (x["row"], x["col"]))
     cross_dict = {
         "clues": clues,
         'solution': solution,
