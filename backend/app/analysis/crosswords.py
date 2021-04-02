@@ -100,6 +100,7 @@ def collides_with_existing_words(word, coord, direction, grid, clues):
     for k, letter in enumerate(list(word)):
         # checks around and at word to see if invalid words or collisions
         # are being made
+        # collisions = []
         for i in (-1, 0, 1):
             if direction == "across":
                 # checks for collisions at word placement
@@ -107,22 +108,24 @@ def collides_with_existing_words(word, coord, direction, grid, clues):
                     return True
                 elif grid[row + i][column + k] != 0 and i != 0:
                     # checks if any words above or below current word create invalid word
-                    for clue in clues:
-                        if clue["across"] is not None and clue["col"] <= (column + k) <= (clue[
-                                                                                              "col"] + len(
-                            clue["across"]["word"])) and clue["row"] == (row + i):
-                            return True
+                    collisions = [clue for clue in clues if (
+                        clue["across"] is not None and clue["col"] <= (column + k) <= (
+                            clue["col"] + len(clue["across"]["word"])) and clue["row"] == (
+                                row + i))]
+                    if collisions:
+                        return True
             if direction == "down":
                 # checks for collisions at words placement
                 if grid[row + k][column + i] != 0 and i == 0 and grid[row + k][column] != letter:
                     return True
                 elif grid[row + k][column + i] != 0 and i != 0:
                     # checks if any words to left or right of current word create invalid word
-                    for clue in clues:
-                        if clue["down"] is not None and clue["row"] <= (row + k) <= (clue[
-                                                                                         "row"] + len(
-                            clue["down"]["word"])) and clue["col"] == (column + i):
-                            return True
+                    collisions = [clue for clue in clues if (
+                            clue["down"] is not None and clue["row"] <= (row + k) <= (
+                                clue["row"] + len(clue["down"]["word"])) and clue["col"] == (
+                                    column + i))]
+                    if collisions:
+                        return True
     return False
 
 
@@ -268,10 +271,11 @@ def write_grid_to_screen(grid, words_in_grid):
     print(words_in_grid)
 
 
-def attach_definition_and_examples(clues, examples, definitions, part_of_speech):
+def attach_definition_and_examples(clues, word_data):
     """
     Adds examples and definitions to every clue. Also capitalize the words
     """
+    examples, definitions, part_of_speech = word_data
     for num, clue in enumerate(clues):
         clue['num'] = num
         for direction in ['across', 'down']:
@@ -283,7 +287,7 @@ def attach_definition_and_examples(clues, examples, definitions, part_of_speech)
                 clue[direction]['word'] = clue[direction]['word'].upper()
 
 
-def get_crosswords(all_words, examples, definitions, part_of_speech):
+def get_crosswords(all_words, word_data):
     """
     produces a dictionary containing the clues associated with the words put into the crossword
     and a solution grid to the crossword
@@ -321,7 +325,7 @@ def get_crosswords(all_words, examples, definitions, part_of_speech):
     # sort the clues according to the ascending row and col for collisions
     clues.sort(key=lambda x: (x["row"], x["col"]))
 
-    attach_definition_and_examples(clues, examples, definitions, part_of_speech)
+    attach_definition_and_examples(clues, word_data)
 
     cross_dict = {
         "clues": clues,
@@ -331,8 +335,8 @@ def get_crosswords(all_words, examples, definitions, part_of_speech):
     }
 
     # Add all definitions from input text for hard difficulty
-    for defs in definitions.values():
-        pos_def = defs.get(part_of_speech, None)
+    for defs in word_data[1].values():
+        pos_def = defs.get(word_data[2], None)
         if pos_def:
             cross_dict['definitions'].append(pos_def[0])
 

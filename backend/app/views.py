@@ -173,7 +173,7 @@ def get_crossword(request, text_id, part_of_speech):
 
     # TODO: For Instructor view people, please make a function in the text model for getting
     #       definitions / examples given a word
-    crossword_data = get_crosswords(words, examples, definitions, part_of_speech)
+    crossword_data = get_crosswords(words, (examples, definitions, part_of_speech))
 
     return Response(crossword_data)
 
