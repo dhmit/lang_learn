@@ -135,7 +135,7 @@ class MainTests(TestCase):
         self.assertEqual(crossword_output, solution)
 
         words_2 = ["embezzle", "blackjack", "strawberries"]
-        crossword_output_2, clues_2 = crosswords.make_crossword(words_2)
+        crossword_output = crosswords.make_crossword(words_2)
         solution_2 = [['s', 't', 'r', 'a', 'w', 'b', 'e', 'r', 'r', 'i', 'e', 's', 0, 0, 0],
                       [0, 0, 0, 0, 0, 'l', 0, 0, 0, 0, 'm', 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 'a', 0, 0, 0, 0, 'b', 0, 0, 0, 0],
@@ -151,7 +151,7 @@ class MainTests(TestCase):
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-        self.assertEqual(crossword_output_2, solution_2)
+        self.assertEqual(crossword_output[0], solution_2)
 
         self.assertEqual(crosswords.is_valid(solution, 'colon', (5, 0), 'across', clues), True)
         self.assertEqual(crosswords.is_valid(solution, 'colon', (0, 1), 'across', clues), False)
