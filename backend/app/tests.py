@@ -4,7 +4,7 @@ Tests for the main app.
 
 from django.test import TestCase
 
-from app.analysis import anagrams
+from app.analysis import anagrams, crosswords
 from app.quiz_creation import conjugation_quiz
 
 
@@ -110,3 +110,53 @@ class MainTests(TestCase):
                 self.assertIn('___', sentence['sentence'])
                 self.assertIn('options', sentence)
                 self.assertEqual(type(sentence['options']), list)
+
+    def test_crossword(self):
+        """
+        Tests the function make_crossword
+        """
+        words = ["technology", "strawberry"]
+        crossword_output, clues = crosswords.make_crossword(words)
+        solution = [['s', 't', 'r', 'a', 'w', 'b', 'e', 'r', 'r', 'y', 0, 0, 0, 0, 0],
+                    [0, 'e', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'c', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'h', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'n', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'o', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'l', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'o', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'g', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 'y', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.assertEqual(crossword_output, solution)
+
+        words_2 = ["embezzle", "blackjack", "strawberries"]
+        crossword_output_2, clues_2 = crosswords.make_crossword(words_2)
+        solution_2 = [['s', 't', 'r', 'a', 'w', 'b', 'e', 'r', 'r', 'i', 'e', 's', 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'l', 0, 0, 0, 0, 'm', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'a', 0, 0, 0, 0, 'b', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'c', 0, 0, 0, 0, 'e', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'k', 0, 0, 0, 0, 'z', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'j', 0, 0, 0, 0, 'z', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'a', 0, 0, 0, 0, 'l', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'c', 0, 0, 0, 0, 'e', 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 'k', 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.assertEqual(crossword_output_2, solution_2)
+
+        self.assertEqual(crosswords.is_valid(solution, 'colon', (5, 0), 'across', clues), True)
+        self.assertEqual(crosswords.is_valid(solution, 'colon', (0, 1), 'across', clues), False)
+        self.assertEqual(crosswords.is_valid(solution, 'colon', (1, 3), 'across', clues), False)
+        self.assertEqual(crosswords.is_valid(solution, 'answer', (0, 3), 'down', clues), True)
+        self.assertEqual(crosswords.is_valid(solution, 'rotation', (0, 2), 'down', clues), False)
+        self.assertEqual(crosswords.is_valid(solution, 'colon', (-3, 4), 'down', clues), False)
+        self.assertEqual(crosswords.is_valid(solution, 'colon', (14, 4), 'down', clues), False)

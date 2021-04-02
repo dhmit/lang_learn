@@ -197,7 +197,6 @@ def find_possible_grid(grid, word_list, grid_size, clues):
             clues (list): list of clues associated with the words in word_list
     :returns: grid (list): 2D list representing the final crossword grid
               clues (list): contains clues associated with the words in grid
-
     """
     # word_list has no words left
     if len(word_list) == 0:
@@ -302,7 +301,7 @@ def get_crosswords(all_words, word_data):
     :param: all_words (list): list of all words that can be put into a crossword
     """
     # initializes max number of words that can be made into crossword
-    max_word_amount = 15
+    max_word_amount = 10
     # initializes values to be placed in cross_dict
     iterations = 5
 
