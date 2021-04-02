@@ -112,6 +112,10 @@ def collides_with_existing_words(word, coord, direction, grid, clues):
                         clue["across"] is not None and clue["col"] <= (column + k) <= (
                             clue["col"] + len(clue["across"]["word"])) and clue["row"] == (
                                 row + i))]
+                    if i == 1:
+                        collisions += [clue for clue in clues if (clue["row"] == row + i and
+                                                                  clue["col"] == column + k and
+                                                                  clue["down"] is not None)]
                     if collisions:
                         return True
             if direction == "down":
@@ -124,6 +128,10 @@ def collides_with_existing_words(word, coord, direction, grid, clues):
                             clue["down"] is not None and clue["row"] <= (row + k) <= (
                                 clue["row"] + len(clue["down"]["word"])) and clue["col"] == (
                                     column + i))]
+                    if i == 1:
+                        collisions += [clue for clue in clues if (clue["row"] == row + k and
+                                                                  clue["col"] == column + i and
+                                                                  clue["across"] is not None)]
                     if collisions:
                         return True
     return False
