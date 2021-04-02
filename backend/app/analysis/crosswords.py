@@ -284,7 +284,7 @@ def write_grid_to_screen(grid, words_in_grid):
     print(words_in_grid)
 
 
-def get_crosswords(all_words):
+def get_crosswords(all_words, examples, definitions, part_of_speech):
     """
     produces a dictionary containing the clues associated with the words put into the crossword
     and a solution grid to the crossword
@@ -323,9 +323,30 @@ def get_crosswords(all_words):
                 row[j] = '#'
     # sort the clues according to the ascending row and col for collisions
     clues.sort(key=lambda x: (x["row"], x["col"]))
+
+    # Add examples and definitions to every clue. Also capitalize the words
+    for num, clue in enumerate(clues):
+        clue['num'] = num
+        for direction in ['across', 'down']:
+            if clue[direction]:
+                clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)
+                clue_definitions = definitions[clue[direction]['word']].get(part_of_speech, None)
+                clue[direction]['clue'] = clue_examples[0] if clue_examples else None
+                clue[direction]['definition'] = clue_definitions[0] if clue_definitions else None
+                clue[direction]['word'] = clue[direction]['word'].upper()
     cross_dict = {
         "clues": clues,
-        'solution': solution,
+        "solution": solution,
+        "definitions": []
+
     }
+
+    # Add all definitions from input text for hard difficulty
+    for defs in definitions.values():
+        pos_def = defs.get(part_of_speech, None)
+        if pos_def:
+            cross_dict['definitions'].append(pos_def[0])
+
+    random.shuffle(cross_dict['definitions'])
 
     return cross_dict
