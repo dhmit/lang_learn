@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
 const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
-const QUIZ_TYPES = ['Anagrams', 'Flashcards', 'Story Generator'];
+const QUIZ_TYPES = {'Anagrams': 'anagrams', 'Flashcards': 'flashcards', 'Story Generator': 'picturebook'};
 
 class TextInfo extends React.Component {
     constructor(props) {
@@ -15,13 +15,7 @@ class TextInfo extends React.Component {
     }
 
     handleQuiz = (e) => {
-        let quizType;
-        if (e.target.value === 'Story Generator') {
-            quizType = 'Picturebook';
-        } else {
-            quizType = e.target.value;
-        }
-        this.setState({ quizType: quizType });
+        this.setState({ quizType: e.target.value });
     }
 
     handlePos = (e) => {
@@ -37,7 +31,6 @@ class TextInfo extends React.Component {
             modules,
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
-        console.log(quizType);
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
@@ -47,9 +40,9 @@ class TextInfo extends React.Component {
                     <select
                         className='custom-select selection-select'
                         onChange={this.handleQuiz}
-                        value={quizType === 'Picturebook' ? 'Story Generator' : quizType}
+                        value={quizType}
                     >
-                        {QUIZ_TYPES.map((quiz) => (
+                        {Object.keys(QUIZ_TYPES).map((quiz) => (
                             <option value={quiz} key={quiz}>{quiz}</option>
                         ))}
                     </select>
@@ -68,7 +61,7 @@ class TextInfo extends React.Component {
                             return (<></>);
                         })}
                     </select>
-                    <a href={`/${quizType.toLowerCase()}/${textId}/${partOfSpeech.toLowerCase()}`}>
+                    <a href={`/${QUIZ_TYPES[quizType]}/${textId}/${partOfSpeech.toLowerCase()}`}>
                         <button className='btn btn-light selection-button'>Start!</button>
                     </a>
                 </div>

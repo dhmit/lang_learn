@@ -21,7 +21,7 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
-        'picturebook': {
+        'story generator': {
             'noun': False,
         },
         'quiz': {
