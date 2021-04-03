@@ -126,7 +126,7 @@ class MainTests(TestCase):
                 {'error-types': [], 'text': 'I am doing well. How are you?'},
                 {'error-types': [], 'text': 'I am doing well. How are you?'},
             ],
-            'answer': 0,
+            'answer': 'I am doing well. How are you?',
         }]
         self.assertEqual(questions, expected)
 
