@@ -4,7 +4,7 @@ from django.conf import settings
 import copy
 import importlib
 from nltk.tokenize import sent_tokenize
-
+import similar_sounding_words
 from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 
 """
@@ -111,12 +111,13 @@ def comma_splice_error(question_option):
 
     return new_question_option, True
 
+
 def run_on_error(question_option):
     """
     Creates a new option (dict) that contains a run-on sentence error by removing a period from
     two independent clauses
-    tests:
-
+    :param: question option
+    :return: question option with run on error
     """
     # Get all sentences
     sentences = sent_tokenize(question_option['text'])
@@ -143,6 +144,42 @@ def run_on_error(question_option):
         'text': out_text
     }
     return question_option_with_error, True
+
+
+def homophone_error(question_option):
+    """
+    Creates a new question option, but replacing one of the words with a homograph
+    :param question_option:
+    :return: dict new question option with homophone error
+    """
+    applied = False
+    # split text into sentences
+    sentences = sent_tokenize(question_option['text'])
+
+    # randomly select a sentence
+    selected_sentence_index = random.randint(0, len(sentences) - 1)
+    selected_sentence = sentences[selected_sentence_index]
+
+    # replace a word with a homophone the first chance there is
+    words = selected_sentence.split()
+    for word_index, word in enumerate(words):
+        if word in similar_sounding_words.index:
+            replacement = random.choice(similar_sounding_words.index[word])
+            words[word_index] = replacement
+            applied = True
+            break
+    # create a new sentence and set it to be a part of sentences
+    new_sentence = ' '.join(words)
+    sentences[selected_sentence_index] = new_sentence
+
+    # return new question option if error was applied, else the original
+    if not applied:
+        return question_option, False
+    return {
+        'error-types': question_option['error-types'] + ['homophone'],
+        'text': ' '.join(sentences)
+    }, True
+
 
 def apply_question_option_errors(quiz_question):
     """
