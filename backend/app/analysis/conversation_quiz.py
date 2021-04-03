@@ -111,6 +111,38 @@ def comma_splice_error(question_option):
 
     return new_question_option, True
 
+def run_on_error(question_option):
+    """
+    Creates a new option (dict) that contains a run-on sentence error by removing a period from
+    two independent clauses
+    tests:
+
+    """
+    # Get all sentences
+    sentences = sent_tokenize(question_option['text'])
+    # Run ons can only occur with over 1 sentence
+    if len(sentences) <= 1:
+        return question_option, False
+    # There is only one possible period to change for 2 sentences.
+    if len(sentences) == 2:
+        selected_sentence_index = 0
+    else:
+        # otherwise, choose any from first to second to last
+        selected_sentence_index = random.randint(0, len(sentences)-2)
+    # get sentence at selected index
+    selected_sentence = sentences[selected_sentence_index]
+    # take out the period
+    new_sentence = selected_sentence.replace('.', '')
+    sentences[selected_sentence_index] = new_sentence
+    # lowercase the next sentence
+    sentences[selected_sentence_index+1] = sentences[selected_sentence_index+1].lower()
+    out_text = ' '.join(sentences)
+
+    question_option_with_error = {
+        'error-types': question_option['error-types'] + ['run-on'],
+        'text': out_text
+    }
+    return question_option_with_error, True
 
 def apply_question_option_errors(quiz_question):
     """
