@@ -41,10 +41,10 @@ def get_quiz_questions(text):
     for i in range(0, len(q_and_a), 2):
         answer = {
             'error-types': [],
-            'text': q_and_a[i + 1],
+            'text': q_and_a[i + 1].strip(' '),
         }
         new_question = {
-            'question': q_and_a[i],
+            'question': q_and_a[i].strip(' '),
             'options': [copy.deepcopy(answer)] * 4,
             'answer': 0,
         }
@@ -78,18 +78,6 @@ def verb_conjugation_error(question_option):
         ),
     }
     return new_question_option, True
-
-
-def backwards_error(question_option):
-    text = question_option['text']
-    try:
-        new_option = {
-            'error-types': question_option['error-types'] + ['backwards'],
-            'text': text[-2].upper() + text[1:-2][::-1] + text[0].lower() + text[-1]
-        }
-        return new_option, True
-    except IndexError:
-        return question_option, False
 
 
 def comma_splice_error(question_option):

@@ -2,9 +2,10 @@
 Tests for the main app.
 """
 
+from textwrap import dedent
 from django.test import TestCase
 
-from app.analysis import anagrams
+from app.analysis import anagrams, conversation_quiz
 from app.quiz_creation import conjugation_quiz
 
 
@@ -110,3 +111,24 @@ class MainTests(TestCase):
                 self.assertIn('___', sentence['sentence'])
                 self.assertIn('options', sentence)
                 self.assertEqual(type(sentence['options']), list)
+
+    def test_get_quiz_questions(self):
+        test_text = """
+        Hello, how are you today?
+        I am doing well. How are you?
+        """
+        questions = conversation_quiz.get_quiz_questions(dedent(test_text))
+        expected = [{
+            'question': 'Hello, how are you today?',
+            'options': [
+                {'error-types': [], 'text': 'I am doing well. How are you?'},
+                {'error-types': [], 'text': 'I am doing well. How are you?'},
+                {'error-types': [], 'text': 'I am doing well. How are you?'},
+                {'error-types': [], 'text': 'I am doing well. How are you?'},
+            ],
+            'answer': 0,
+        }]
+        self.assertEqual(questions, expected)
+
+    # def test_apply_question_option_errors(self):
+    #     questions[{}]
