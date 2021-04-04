@@ -3,7 +3,11 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
 const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
-const QUIZ_TYPES = {'Anagrams': 'anagrams', 'Flashcards': 'flashcards', 'Story Generator': 'picturebook'};
+const QUIZ_TYPES = {
+    'Anagrams': 'anagrams',
+    'Flashcards': 'flashcards',
+    'Story Generator': 'picturebook',
+};
 
 class TextInfo extends React.Component {
     constructor(props) {
