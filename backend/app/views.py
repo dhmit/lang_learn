@@ -106,16 +106,19 @@ def get_anagram(request, text_id, part_of_speech):
     }
     return Response(res)
 
-<<<<<<< HEAD
 
 word_set = get_word_set()
 
 
 @api_view(['GET'])
 def check_word(request, word, pos):
+    """
+    API endpoint for checking whether an extra word is part of the extra word set
+    """
     words = get_part_of_speech_words(word, pos)  # Used to check for part of speech in extra words
     return Response(len(word) >= 3 and len(words) > 0 and word in word_set)
-=======
+
+
 @api_view(['POST'])
 def add_text(request):
     """
@@ -160,6 +163,7 @@ def delete_text(request):
     res = text_obj.delete()
     return Response(res)
 
+
 @api_view(['GET'])
 def get_quiz_data(request, text_id):
     """
@@ -170,4 +174,3 @@ def get_quiz_data(request, text_id):
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
->>>>>>> master
