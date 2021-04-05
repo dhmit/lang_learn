@@ -16,7 +16,7 @@ const ErrorDescriptions = {
     'verb-conjugation': 'One or more verbs are incorrectly conjugated',
     'comma-splice': 'Two independent clauses are incorrectly joined by a comma',
     'run-on': 'There is a run on sentence',
-    'homophone': 'Misuse of a similar sounding word (homophone)'
+    'homophone': 'Misuse of a similar sounding word (homophone)',
 };
 
 export class ResponseQuizView extends React.Component {
