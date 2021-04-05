@@ -162,6 +162,7 @@ class MainTests(TestCase):
         self.assertEqual(crosswords.is_valid(solution, 'rotation', (0, 2), 'down', clues), False)
         self.assertEqual(crosswords.is_valid(solution, 'colon', (-3, 4), 'down', clues), False)
         self.assertEqual(crosswords.is_valid(solution, 'colon', (14, 4), 'down', clues), False)
+
     def test_get_quiz_questions(self):
         test_text = """
         Hello, how are you today?
@@ -179,6 +180,3 @@ class MainTests(TestCase):
             'answer': 'I am doing well. How are you?',
         }]
         self.assertEqual(questions, expected)
-
-    # def test_apply_question_option_errors(self):
-    #     questions[{}]
