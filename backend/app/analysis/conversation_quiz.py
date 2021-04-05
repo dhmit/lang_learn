@@ -68,6 +68,7 @@ def apply_question_option_errors(quiz_question):
             print(f'{error_name} error is not available.')
 
     # Apply a random error to the last 3 options
+    seen_choices = {quiz_question['options'][0]['text'], }
     for i in range(1, 4):
         untested_functions = usable_functions.copy()
         error_applied = False
@@ -81,6 +82,9 @@ def apply_question_option_errors(quiz_question):
             quiz_question['options'][i], error_applied = error_function.apply(
                 quiz_question['options'][i]
             )
+            new_text = quiz_question['options'][i]['text']
+            error_applied = error_applied and new_text not in seen_choices
+            seen_choices.add(new_text)
 
     # Randomize positions of the choices
     random.shuffle(quiz_question['options'])

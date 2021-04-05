@@ -24,7 +24,10 @@ def apply(question_option):
     # get sentence at selected index
     selected_sentence = sentences[selected_sentence_index]
     # take out the period
-    new_sentence = selected_sentence.replace('.', '')
+    if selected_sentence[-1] in ['.', '?', '!']:
+        new_sentence = selected_sentence.replace(selected_sentence[-1], '')
+    else:
+        return question_option, False
     sentences[selected_sentence_index] = new_sentence
     # lowercase the next sentence
     sentences[selected_sentence_index+1] = sentences[selected_sentence_index+1].lower()
