@@ -49,11 +49,9 @@ export class PictureBookView extends React.Component {
                 }),
             });
 
-            const pictureBookImages = await response.json();
-            pictureBookImages.pop(-1);
-            this.setState({
-                pictureBookWords: pictureBookImages,
-            });
+            const pictureBookWords = await response.json();
+            pictureBookWords.pop(-1);
+            this.setState({ pictureBookWords });
         } catch (e) {
             console.log(e);
         }
@@ -61,9 +59,9 @@ export class PictureBookView extends React.Component {
 
     modalHandler = (event) => {
         event.preventDefault();
-        this.setState({
-            showModal: !this.state.showModal,
-        });
+        this.setState((prevState) => ({
+            showModal: !prevState.showModal,
+        }));
     }
 
     handleInput = (event) => {
@@ -97,16 +95,14 @@ export class PictureBookView extends React.Component {
                             onClick={this.modalHandler}>
                             <b>?</b>
                         </button>
-                        <h4 className='flashcard-category'>
+                        <h2 className='flashcard-category'>
                             Category: {capitalize(this.props.partOfSpeech) + 's'}
-                        </h4>
+                        </h2>
                     </div>
                     <div>
                         {
                             this.state.showModal
-                                ? <div className="backdrop" onClick={this.modalHandler}>
-                                </div>
-                                : null
+                            && <div className="backdrop" onClick={this.modalHandler}></div>
                         }
                         <div className="Modal modal-content" style={{
                             transform: this.state.showModal
