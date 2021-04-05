@@ -59,7 +59,6 @@ class TextInfo extends React.Component {
     }
 
     saveText = async () => {
-        console.log('HIII');
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/update_text';

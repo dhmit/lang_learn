@@ -13,6 +13,7 @@ import { AnagramView } from './anagramView/anagramView';
 import { InstructorView } from './instructorView/instructorView';
 import { AllQuizView } from './quizView/allQuizView';
 import { FlashcardView } from './flashcard/flashcardView';
+import { CrosswordView } from './crosswordView/crosswordView';
 import { ResponseAllQuizView } from './responseQuizView/responseAllQuizView';
 import { ResponseQuizView } from './responseQuizView/responseQuizView';
 
@@ -28,6 +29,7 @@ window.app_modules = {
     AnagramView,
     InstructorView,
     FlashcardView,
+    CrosswordView,
     IndexView,
     QuizView,
     ResponseAllQuizView,

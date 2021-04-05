@@ -1,0 +1,136 @@
+$cell-width: 50px;
+$cell-height: 50px;
+
+.crossword-page {
+    padding-bottom: 50px;
+}
+
+.crossword-title {
+    font-size: 50px;
+}
+
+.crossword-div {
+    align-content: center;
+    overflow-x: scroll;
+}
+
+.instruction-button {
+    font-size: 20px;
+    border: 3px solid;
+}
+
+.give-up {
+    margin: 10px 10px 10px 0;
+}
+
+.difficulty-button {
+    font-size: 40px;
+    height: 100px;
+    width: 200px;
+}
+
+.difficulty-label {
+    font-size: 30px;
+}
+
+// Clue Styles
+.clues-box {
+    background: rgba(105, 64, 238, 0.25);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    max-height: 300px;
+    overflow-y: scroll;
+    padding: 0 10px 10px;
+}
+
+.clue-header {
+    margin: 10px 0;
+    text-transform: capitalize;
+}
+
+.clue {
+    margin: 5px 0 5px 15px;
+}
+
+.clue-found {
+    color: #a0a0a0;
+    text-decoration: line-through;
+}
+
+// Definition Box
+.definitions {
+    background: rgba(105, 64, 238, 0.25);
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+}
+
+
+// Crossword Styles
+.crossword-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.crossword-row {
+    display: flex;
+    justify-content: center;
+}
+
+.crossword-cell {
+    background: #E8C2FF;
+    border: 1px solid #5941A9;
+    height: $cell-height;
+    position: relative;
+    width: $cell-width;
+}
+
+.correct-cell {
+    color: green;
+}
+
+.clue-num {
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    left: 3px;
+    position: absolute;
+    top: 1px;
+    z-index: 3;
+}
+
+.blank-cell {
+    background: #2D2155;
+    height: $cell-height;
+    width: $cell-width;
+}
+
+// Cell Input
+.cell-input {
+    background: #E8C2FF;
+    font-size: 30px;
+    font-weight: bold;
+    height: $cell-height;
+    position: relative;
+    text-align: center;
+    width: $cell-width;
+    z-index: 1;
+
+    &:focus {
+        z-index: 2
+    }
+}
+
+.blank-input {
+    background: #2D2155;
+    border: none;
+    cursor: default;
+    height: $cell-height;
+    position: relative;
+    width: $cell-width;
+
+    &:focus {
+        outline: none;
+    }
+}
