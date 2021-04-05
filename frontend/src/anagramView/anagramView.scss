@@ -1,4 +1,14 @@
 /* Styles for Anagram */
+.anagram-selection {
+    font-size: 28px;
+}
+
+.anagram-mode-button {
+    font-size: 20px;
+    padding: 10px;
+    margin-right: 10px;
+}
+
 .anagram-category {
     font-size: 28px;
     padding-bottom: 10px;
@@ -38,6 +48,10 @@ li span {
     line-height: 1.33;
     padding: 10px 16px;
     width: 50px;
+}
+
+.scrambled-li {
+    cursor: pointer;
 }
 
 /* Modal Styles */

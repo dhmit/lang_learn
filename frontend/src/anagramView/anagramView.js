@@ -44,23 +44,30 @@ const generateFreq = (word) => {
     return freq;
 };
 
+// Modes
+const UNSELECTED = 0;
+const SINGLE = 1;
+const COMBINED = 2;
+
 export class AnagramView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            targetWordDefs: null,
-            targetWords: [],
-            targetExamples: [],
-            userInput: '',
-            targetWordsFound: [],
             extraWordsFound: [],
-            score: 0,
-            letters: [],
             gameOver: false,
-            timeLeft: 90,
-            showModal: true,
+            letters: [],
+            mode: UNSELECTED,
+            score: 0,
             shake: false,
             showConfetti: false,
+            showModal: false,
+            scrambled: [],
+            targetExamples: [],
+            targetWords: [],
+            targetWordDefs: null,
+            targetWordsFound: [],
+            timeLeft: 90,
+            userInput: '',
         };
         this.timer = 0;
     }
@@ -152,18 +159,21 @@ export class AnagramView extends React.Component {
 
     reset = () => {
         this.setState({
-            targetWordDefs: null,
-            targetWords: [],
-            targetExamples: [],
-            userInput: '',
-            targetWordsFound: [],
             extraWordsFound: [],
-            score: 0,
-            letters: [],
             gameOver: false,
-            timeLeft: 90,
+            letters: [],
+            mode: UNSELECTED,
+            score: 0,
+            scrambled: [],
             shake: false,
             showConfetti: false,
+            showModal: false,
+            targetExamples: [],
+            targetWords: [],
+            targetWordDefs: null,
+            targetWordsFound: [],
+            timeLeft: 90,
+            userInput: '',
         });
         this.timer = 0;
     }
@@ -178,6 +188,7 @@ export class AnagramView extends React.Component {
             let letters = [];
             const targetWordDefs = [];
             const targetExamples = [];
+            const scrambled = [];
             const wordData = data['word_data'];
             for (let i = 0; i < wordData.length; i++) {
                 const curData = wordData[i];
@@ -185,6 +196,7 @@ export class AnagramView extends React.Component {
                 const examples = curData['example'];
                 targetWords.push(word);
                 targetWordDefs.push(curData['definition']);
+                scrambled.push(curData['scrambled']);
                 if (examples.length === 0) {
                     targetExamples.push(['N/A']);
                 } else {
@@ -196,10 +208,11 @@ export class AnagramView extends React.Component {
             }
             letters = shuffleArray(letters);
             this.setState({
-                targetWordDefs: targetWordDefs,
-                targetWords: targetWords,
-                letters: letters,
-                targetExamples: targetExamples,
+                targetWordDefs,
+                targetWords,
+                letters,
+                targetExamples,
+                scrambled,
             });
         } catch (e) {
             console.log(e);
@@ -395,7 +408,7 @@ export class AnagramView extends React.Component {
         </div>
     </div>;
 
-    renderHeader = () => <>
+    renderAnagramHeader = () => <>
         <div className="row">
             <div className="col-md-6 col-12">
                 <h1>
@@ -418,6 +431,9 @@ export class AnagramView extends React.Component {
                 <h2>Time Left: {this.state.timeLeft}</h2>
             </div>
         </div>
+    </>
+
+    renderHeader = () => <>
         {
             this.state.gameOver
                 ? <div className="alert alert-success" role="alert">
@@ -443,19 +459,44 @@ export class AnagramView extends React.Component {
         </div>
     </>;
 
+    renderExtraWords = () => <>
+        <h3>Extra Words</h3>
+        <ul>
+            {
+                this.state.extraWordsFound.map((word, i) => (
+                    <li key={i}>
+                        {word.toUpperCase()}
+                    </li>
+                ))
+            }
+        </ul>
+    </>;
+
+    renderScrambled = () => <>
+        <h3>Scrambed Words (Click One)</h3>
+        <ol>
+            {
+                this.state.scrambled.map((scrambledWord, k) => (
+                    <li
+                        className='scrambled-li'
+                        onClick={() => { this.setState({ letters: [...scrambledWord] }); }}
+                        key={k}
+                    >
+                        { scrambledWord }
+                    </li>
+                ))
+            }
+        </ol>
+    </>;
+
     renderAnagramInfo = () => <div className="row">
         <div className="col-lg-3 col-6 pr-lg-4 pr-2 mb-4" >
             <div className="anagram-shaded-box">
-                <h3>Extra Words</h3>
-                <ul>
-                    {
-                        this.state.extraWordsFound.map((word, i) => (
-                            <li key={i}>
-                                {word.toUpperCase()}
-                            </li>
-                        ))
-                    }
-                </ul>
+                {
+                    this.state.mode === SINGLE
+                        ? this.renderScrambled()
+                        : this.renderExtraWords()
+                }
             </div>
         </div>
         <div className="col-lg-3 col-6 pr-lg-4 pr-0 mb-4">
@@ -547,6 +588,28 @@ export class AnagramView extends React.Component {
         </>;
     }
 
+    renderModeSelection = () => <>
+        <h2 className='anagram-selection'>Please select a mode:</h2>
+        <button
+            className='btn btn-light anagram-mode-button'
+            onClick={() => {
+                this.setState({
+                    mode: SINGLE,
+                    showModal: true,
+                    letters: [...this.state.scrambled[0]],
+                });
+            }}
+        >
+            Single Word Anagrams
+        </button>
+        <button
+            className='btn btn-light anagram-mode-button'
+            onClick={() => { this.setState({ mode: COMBINED, showModal: true }); }}
+        >
+            Combined Anagrams
+        </button>
+    </>;
+
     render() {
         if (!this.state.targetWordDefs) {
             return (<LoadingPage loadingText='Creating Anagram Quiz...' />);
@@ -555,9 +618,16 @@ export class AnagramView extends React.Component {
         return (<React.Fragment>
             <Navbar />
             <div className="page">
-                { this.renderHeader() }
-                { this.renderAnagramInfo() }
-                { this.renderInput() }
+                { this.renderAnagramHeader() }
+                {
+                    this.state.mode === UNSELECTED
+                        ? this.renderModeSelection()
+                        : <>
+                            { this.renderHeader() }
+                            { this.renderAnagramInfo() }
+                            { this.renderInput() }
+                        </>
+                }
             </div>
             <Footer />
         </React.Fragment>);

@@ -20,6 +20,7 @@ from .analysis.parts_of_speech import (
 from .analysis.anagrams import (
     get_letter_freq,
     get_word_set,
+    scramble_word,
 )
 from .analysis.textdata import (
     get_text_data,
@@ -101,7 +102,8 @@ def get_anagram(request, text_id, part_of_speech):
         'letters': scrambled_letters,
         'word_data': [{'word': word,
                        'definition': definitions[word].get(part_of_speech, []),
-                       'example': examples[word].get(part_of_speech, [])}
+                       'example': examples[word].get(part_of_speech, []),
+                       'scrambled': scramble_word(word)}
                       for word in words]
     }
     return Response(res)
