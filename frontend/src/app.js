@@ -13,6 +13,7 @@ import { AnagramView } from './anagramView/anagramView';
 import { InstructorView } from './instructorView/instructorView';
 import { AllQuizView } from './quizView/allQuizView';
 import { FlashcardView } from './flashcard/flashcardView';
+import { CrosswordView } from './crosswordView/crosswordView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -26,6 +27,7 @@ window.app_modules = {
     AnagramView,
     InstructorView,
     FlashcardView,
+    CrosswordView,
     IndexView,
     QuizView,
 };
