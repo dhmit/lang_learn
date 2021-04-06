@@ -33,21 +33,8 @@ export class PictureBookView extends React.Component {
     createPictureBook = async (input) => {
         try {
             const csrftoken = getCookie('csrftoken');
-            const apiURL = '/api/get_picturebook_data';
-
-            const response = await fetch(apiURL, {
-                credentials: 'include',
-                method: 'POST',
-                mode: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-                body: JSON.stringify({
-                    content: input,
-                }),
-            });
+            const apiURL = '/api/get_picturebook_data?content=' + input;
+            const response = await fetch(apiURL);
 
             const pictureBookWords = await response.json();
             pictureBookWords.pop(-1);

@@ -132,14 +132,13 @@ def get_picturebook_prompt(request, text_id, part_of_speech):
     return Response(res)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def get_picturebook_data(request):
     """
     API endpoint for getting the picture book images given the story the user wrote.
     """
-    body = request.data
-    urls = get_story_data(body['content'])
-    misspelled = get_misspelled_words(body['content'])
+    urls = get_story_data(request.GET.get('content'))
+    misspelled = get_misspelled_words(request.GET.get('content'))
     res = [{'word': word,
             'url': urls[word]}
            for word in urls]
