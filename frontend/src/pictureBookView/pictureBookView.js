@@ -92,7 +92,8 @@ export class PictureBookView extends React.Component {
                             this.state.showModal
                             && <div className="backdrop" onClick={this.modalHandler}></div>
                         }
-                        <div className={`Modal modal-content ${this.state.showModal ? 'modal-show' : 'modal-hide'}`}>
+                        <div className={`Modal modal-content ${this.state.showModal
+                            ? 'modal-show' : 'modal-hide'}`}>
                             <div className="modal-header">
                                 <h5 className="modal-title">Instructions</h5>
                                 <button type="button" className="close"
