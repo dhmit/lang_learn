@@ -13,6 +13,17 @@
     width: 100%;
 }
 
+.modal-show {
+    translateY: 0;
+    opacity: 1;
+}
+
+.modal-hide {
+    translateY: -100vh;
+    opacity: 0;
+    z-index: -1;
+}
+
 .picture-prompt {
     border-radius: 1vh;
     border-style: solid;
@@ -23,4 +34,3 @@
 h2 {
     font-size: 1.5rem;
 }
-

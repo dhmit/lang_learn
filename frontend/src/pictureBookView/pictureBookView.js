@@ -2,7 +2,6 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
-import { getCookie } from '../common';
 
 const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -22,20 +21,22 @@ export class PictureBookView extends React.Component {
     }
 
     componentDidMount = async () => {
-        const apiURL = `/api/get_picturebook_prompt/${this.props.textID}/`
-            + `${this.props.partOfSpeech}`;
-        const response = await fetch(apiURL);
-        const pictureData = await response.json();
-        this.setState({ pictureData });
-        document.addEventListener('keydown', this.handleKeyDown, true);
+        try {
+            const apiURL = `/api/get_picturebook_prompt/${this.props.textID}/`
+                + `${this.props.partOfSpeech}`;
+            const response = await fetch(apiURL);
+            const pictureData = await response.json();
+            this.setState({ pictureData });
+            document.addEventListener('keydown', this.handleKeyDown, true);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     createPictureBook = async (input) => {
         try {
-            const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/get_picturebook_data?content=' + input;
             const response = await fetch(apiURL);
-
             const pictureBookWords = await response.json();
             pictureBookWords.pop(-1);
             this.setState({ pictureBookWords });
@@ -78,7 +79,7 @@ export class PictureBookView extends React.Component {
                     <div className='col-xl-8 text-left'>
                         <h1 className='flashcard-title'>Story Generator</h1>
                         <button
-                            className="btn btn-outline-light btn-circle flashcard-instruction"
+                            className="btn btn-outline-light btn-circle instruction"
                             onClick={this.modalHandler}>
                             <b>?</b>
                         </button>
@@ -91,14 +92,11 @@ export class PictureBookView extends React.Component {
                             this.state.showModal
                             && <div className="backdrop" onClick={this.modalHandler}></div>
                         }
-                        <div className="Modal modal-content" style={{
-                            transform: this.state.showModal
-                                ? 'translateY(0)' : 'translateY(-100vh)',
-                            opacity: this.state.showModal ? 1 : 0,
-                        }}>
+                        <div className={`Modal modal-content ${this.state.showModal ? 'modal-show' : 'modal-hide'}`}>
                             <div className="modal-header">
                                 <h5 className="modal-title">Instructions</h5>
                                 <button type="button" className="close"
+                                    disabled={!this.state.showModal}
                                     onClick={this.modalHandler}>
                                     <span>&times;</span>
                                 </button>
