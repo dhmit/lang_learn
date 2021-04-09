@@ -151,7 +151,7 @@ export class PictureBookView extends React.Component {
                 </div>
                 <div className='row'>
                     <div className="col box">
-                        <form>
+                        <form id='picturebook-form'>
                             <div className="form-group">
                                 <label>Please write a story based on the images above.
                                     Make sure to use the given words.</label>
