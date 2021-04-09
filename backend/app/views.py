@@ -137,8 +137,9 @@ def get_picturebook_data(request):
     """
     API endpoint for getting the picture book images given the story the user wrote.
     """
-    urls = get_story_data(request.GET.get('content'))
-    misspelled = get_misspelled_words(request.GET.get('content'))
+    story_content = request.query_params.get('content')
+    urls = get_story_data(story_content)
+    misspelled = get_misspelled_words(story_content)
     res = [{'word': word,
             'url': urls[word]}
            for word in urls]
