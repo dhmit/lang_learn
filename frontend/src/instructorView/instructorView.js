@@ -63,6 +63,7 @@ class TextInfo extends React.Component {
         this.setState({ textData });
     }
 
+    // TODO: Find a way to display feedback upon saving or deleting a text.
     saveText = async () => {
         try {
             const csrftoken = getCookie('csrftoken');
