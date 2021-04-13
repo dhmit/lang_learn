@@ -11,7 +11,7 @@ import {
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
 // This dictionary maps specific error types to their respective error message.
-const ErrorDescriptions = {
+const ERROR_DESCRIPTIONS = {
     'backwards': 'The letters are reversed',
     'verb-conjugation': 'One or more verbs are incorrectly conjugated',
     'comma-splice': 'Two independent clauses are incorrectly joined by a comma',
@@ -34,8 +34,8 @@ export class ResponseQuizView extends React.Component {
     async componentDidMount() {
         try {
             const response = await fetch(`/api/get_response_quiz_data/${this.props.textID}/`);
-            const data = await response.json();
-            this.setState({ data: data });
+            const questionData = await response.json();
+            this.setState({ data: questionData });
         } catch (e) {
             console.log(e);
         }
@@ -138,8 +138,8 @@ export class ResponseQuizView extends React.Component {
             }
             const errors = errorTypes.map((error, i) => {
                 let errorText = error;
-                if (errorText in ErrorDescriptions) {
-                    errorText = ErrorDescriptions[errorText];
+                if (errorText in ERROR_DESCRIPTIONS) {
+                    errorText = ERROR_DESCRIPTIONS[errorText];
                 }
                 return (
                     <li key={i}>{errorText}</li>
