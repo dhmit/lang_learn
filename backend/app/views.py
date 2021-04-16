@@ -188,3 +188,10 @@ def get_quiz_data(request, text_id):
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
+
+@api_view(['GET'])
+def get_picturequiz(request):
+    """
+    API endpoint for getting the necessary information for the picture quiz.
+    """
+    return Response('')

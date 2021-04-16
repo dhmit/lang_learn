@@ -14,6 +14,7 @@ import { InstructorView } from './instructorView/instructorView';
 import { AllQuizView } from './quizView/allQuizView';
 import { FlashcardView } from './flashcard/flashcardView';
 import { CrosswordView } from './crosswordView/crosswordView';
+import { PictureQuizView } from './pictureQuizView/pictureQuizView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -30,4 +31,5 @@ window.app_modules = {
     CrosswordView,
     IndexView,
     QuizView,
+    PictureQuizView,
 };

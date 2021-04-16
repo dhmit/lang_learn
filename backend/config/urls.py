@@ -27,6 +27,7 @@ from app.views import (
     get_crossword,
     get_quiz_data,
     text,
+    get_picturequiz,
 )
 
 
@@ -56,6 +57,7 @@ urlpatterns = [
     path('api/get_crossword/<int:text_id>/<str:part_of_speech>', get_crossword),
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
     path('api/text/<int:text_id>', text),
+    path('api/get_picturequiz', get_picturequiz),
 
     # View paths
     react_view_path('', 'IndexView'),
@@ -67,4 +69,5 @@ urlpatterns = [
     react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('quiz/', 'AllQuizView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
+    react_view_path('picturequiz/', 'PictureQuizView')
 ]
