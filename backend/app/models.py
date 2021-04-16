@@ -77,13 +77,13 @@ class Text(models.Model):
         if word not in self.word_data:
             return []
 
-        definitions = self.word_data[word]["definition"]
+        definitions = self.word_data[word]["definitions"]
         output = []
         if part_of_speech is None:
             for pos in definitions:
                 output.extend(definitions[pos])
         else:
-            output = definitions[part_of_speech]
+            output = definitions[part_of_speech] if part_of_speech in definitions else []
 
         return output
 
@@ -100,11 +100,11 @@ class Text(models.Model):
 
         examples = self.word_data[word]["examples"]
         output = []
+        # TODO: Maybe make separate part of speech for examples
         if part_of_speech is None:
-            for pos in examples:
-                output.extend(examples[pos])
+            output.extend(examples)
         else:
-            output = examples[part_of_speech]
+            output = examples
 
         return output
 

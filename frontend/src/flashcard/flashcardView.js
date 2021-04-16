@@ -242,10 +242,10 @@ export class FlashcardView extends Component {
                                             {card.word.toUpperCase()}
                                         </h1>
                                         <h2 className="flashcard-info">
-                                            <b><u>Definition:</u></b> {card.definition[0]}
+                                            <b><u>Definition:</u></b> {card.definition}
                                         </h2>
                                         <h2 className="flashcard-info">
-                                            <b><u>Example:</u></b> <i>"{card.example[0]}"</i>
+                                            <b><u>Example:</u></b> <i>"{card.example}"</i>
                                         </h2>
                                     </div>
                                     <div className="col-1 mx-2">

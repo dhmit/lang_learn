@@ -58,16 +58,12 @@ def get_flashcards(request, text_id, part_of_speech):
     the id of the text and the part of speech.
     """
     text_obj = Text.objects.get(id=text_id)
-    image_urls = text_obj.images
-    definitions = text_obj.definitions
-    examples = text_obj.examples
-
     words = get_valid_words(text_obj.content, part_of_speech)
 
     res = [{'word': word,
-            'definition': definitions[word].get(part_of_speech, []),
-            'example': examples[word].get(part_of_speech, []),
-            'url': image_urls.get(word, '')}
+            'definition': text_obj.get_definition(word),
+            'example': text_obj.get_example(word),
+            'url': text_obj.get_image(word)}
            for word in words]
     return Response(res)
 
@@ -79,8 +75,6 @@ def get_anagram(request, text_id, part_of_speech):
     the id of the text and the part of speech. The anagrams will be random.
     """
     text_obj = Text.objects.get(id=text_id)
-    definitions = text_obj.definitions
-    examples = text_obj.examples
     words = get_valid_words(text_obj.content, part_of_speech)
     random.shuffle(words)
     words = words[:5]
@@ -107,8 +101,8 @@ def get_anagram(request, text_id, part_of_speech):
     res = {
         'letters': scrambled_letters,
         'word_data': [{'word': word,
-                       'definition': definitions[word].get(part_of_speech, []),
-                       'example': examples[word].get(part_of_speech, [])}
+                       'definition': text_obj.get_definitions(word, part_of_speech),
+                       'example': text_obj.get_examples(word, part_of_speech)}
                       for word in words],
         'extra_words': extra_words
     }
@@ -135,7 +129,8 @@ def update_text(request):
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    body = json.loads(request.body.decode('utf-8'))
+    # body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(json.dumps(request.data))
     text_obj = Text.objects.get(id=body['id'])
     old_text = text_obj.content
 
@@ -155,7 +150,8 @@ def delete_text(request):
     """
     API endpoint for deleting a text.
     """
-    body = json.loads(request.body.decode('utf-8'))
+    # body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(json.dumps(request.data))
     text_obj = Text.objects.get(id=body)
     res = text_obj.delete()
     return Response(res)
