@@ -172,21 +172,22 @@ tags = {
 }
 
 
-def get_part_of_speech_words(text, part):
+def get_part_of_speech_words(text, part=None):
     """
     Filters a piece of text by part of speech
     :param text: A body of text as a string
     :param part: The part of speech to search for in the text
-    :return: List of words that match the part of speech
+    :return: List of words that match the part of speech or a list of all the words
+             if part is None
     """
     text = remove_contractions(text)
-    part = part.lower()
+    part = part.lower() if part is not None else None
 
-    if part not in tags:
+    if part is not None and part not in tags:
         return []
 
     tokens = get_parts_of_speech_tags(text)
-    return [token[0] for token in tokens if token[1] in tags[part]]
+    return [token[0] for token in tokens if part is None or token[1] in tags[part]]
 
 
 def filter_pos(word_list, part):
@@ -201,27 +202,38 @@ def filter_pos(word_list, part):
     return [word[0].lower() for word in token_list if word[1] in tags[part] and len(word[0]) >= 3]
 
 
-def get_word_definition(word_list, pos):
+def get_word_definitions(word_list, pos=None):
     """
-    Find the definitions of words from a list
+    Find the definitions of words from a list given a part of speech
     :param word_list: A list of words to get the definition of
     :param pos: The part of speech that is desired from the definitions
-    :return: A dictionary of word:definition pairs
+    :return: A dictionary of word:definition pairs if a pos is specified
+             or a dictionary of word:dictionary of part of speech to definitions
     """
-    pos = pos.capitalize()
+    pos = pos.capitalize() if pos is not None else pos
     defs = PyDictionary(*word_list)
-    meanings = defs.getMeanings()
+    meanings = {}
+    for term in defs.args:
+        meanings[term] = defs.meaning(term, True)
+    # meanings = defs.getMeanings()
     word_def = {}
     for word, meanings in meanings.items():
-        if meanings is not None and pos in meanings:
-            word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]
-                              if word not in meaning]
+        if meanings is not None:
+            if pos is None:
+                cleaned_meanings = dict()
+                for part_of_speech, word_meanings in meanings.items():
+                    cleaned_meanings[part_of_speech.lower()] = [re.sub("[()]", "", meaning)
+                                                                for meaning in word_meanings]
+                word_def[word] = cleaned_meanings
+            elif pos in meanings:
+                word_def[word] = [re.sub("[()]", "", meaning) for meaning in meanings[pos]
+                                  if word not in meaning]
         else:
-            word_def[word] = []
+            word_def[word] = dict() if pos is None else []
     return word_def
 
 
-def get_word_examples(word_list, part_of_speech, text):
+def get_word_examples(word_list, text, part_of_speech=None):
     """
     Find examples of words used in a sentence given a word list, the part of speech,
     and the original text
@@ -244,7 +256,7 @@ def get_word_examples(word_list, part_of_speech, text):
         syns = wn.synsets(word)
         if len(syns) > 0:
             for net in syns:
-                if pos_tags[part_of_speech] != net.pos():
+                if part_of_speech is not None and pos_tags[part_of_speech] != net.pos():
                     continue
                 for example in net.examples():
                     if word.lower() in example.lower():
@@ -269,7 +281,7 @@ def punct_in_word(word):
     return False
 
 
-def get_valid_words(text, pos):
+def get_valid_words(text, pos=None):
     """
     Retrieves all the valid words of length 3 or more with a specific part of speech from a piece
     of text

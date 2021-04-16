@@ -9,7 +9,7 @@ import tqdm
 
 # Ours
 from app.analysis.parts_of_speech import (
-    get_word_definition,
+    get_word_definitions,
     get_word_examples,
     get_valid_words,
 )
@@ -26,12 +26,12 @@ def get_bing_image_url(query):
     }
     # Parse the page source and download pics
     request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
-                  + '&first=0&count=1&adlt=off'
+                  + '&first=0&count=10&adlt=off'
     request = urllib.request.Request(request_url, None, headers=headers)
     response = urllib.request.urlopen(request)
     html = response.read().decode('utf8')
     links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
-    return links[0]
+    return links
 
 
 def get_text_data(text_obj):
@@ -40,39 +40,39 @@ def get_text_data(text_obj):
     in this text.
     :param text_obj: the Text object that we want to get data for
     """
-    part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
+    # part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
 
-    # Reused the old image url dictionary if we are not getting all of the urls
-    word_urls = {}
-    word_definitions = {}
-    word_examples = {}
+    word_data = dict()
 
-    for pos in part_of_speech:
-        print("Getting definitions and examples for " + pos + " in the text " +
-              text_obj.title + "... (This might take a while)")
-        words = get_valid_words(text_obj.content.lower(), pos)
-        definitions = get_word_definition(words, pos)
-        examples = get_word_examples(words, pos, text_obj.content.lower())
+    # TODO: optimizations for update to not refetch data for words that already exist
+    words = get_valid_words(text_obj.content.lower())
+    print(f"Getting definitions for \"{text_obj.title}\"...")
+    definitions = get_word_definitions(words)
+    print(f"Getting examples for \"{text_obj.title}\"...")
+    examples = get_word_examples(words, text_obj.content.lower())
 
-        print("Updating database for " + pos + " in the text " + text_obj.title)
-        for word in tqdm.tqdm(words):
-            word = word.lower()
-            if word not in word_urls:
-                image_url = get_bing_image_url(word)
-                if image_url is not None:
-                    word_urls[word.lower()] = image_url
+    for word in words:
+        chosen_definition = ""
+        if len(definitions[word].keys()) > 0:
+            # Pick some part of speech and use the first definition
+            pos = list(definitions[word].keys())[0]
+            chosen_definition = definitions[word][pos][0]
 
-            if word not in word_definitions:
-                word_definitions[word] = {pos: definitions[word]}
-            else:
-                word_definitions[word][pos] = definitions[word]
+        word_data[word] = {
+            "definitions": definitions[word],
+            "examples": examples[word],
+            "chosen_definition": chosen_definition,
+            "chosen_example": examples[word][0] if len(examples[word]) > 0 else "",
+        }
 
-            if word not in word_examples:
-                word_examples[word] = {pos: examples[word]}
-            else:
-                word_examples[word][pos] = examples[word]
+    print(f"Getting images for \"{text_obj.title}\"...")
+    for word in tqdm.tqdm(words):
+        image_urls = get_bing_image_url(word)
+        print(image_urls)
+        word_data[word]["images"] = image_urls
+        word_data[word]["chosen_image"] = image_urls[0] if len(image_urls) > 0 else ""
 
-    text_obj.images = word_urls
-    text_obj.definitions = word_definitions
-    text_obj.examples = word_examples
+    print(word_data)
+
+    text_obj.word_data = word_data
     text_obj.save()

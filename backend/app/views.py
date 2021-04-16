@@ -120,7 +120,8 @@ def add_text(request):
     """
     API endpoint for adding a piece of text
     """
-    body = json.loads(request.body.decode('utf-8'))
+    # body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(json.dumps(request.data))
     new_text_obj = Text(title=body['title'], content=body['content'])
     new_text_obj.save()
     get_text_data(new_text_obj)
