@@ -1,6 +1,9 @@
 """
 Models for the lang_learn app.
 """
+import numpy as np
+from PIL import Image
+
 from django.db import models
 
 
@@ -45,3 +48,16 @@ class Text(models.Model):
     images = models.JSONField(null=True, blank=True, default=dict)
     examples = models.JSONField(null=True, blank=True, default=dict)
     definitions = models.JSONField(null=True, blank=True, default=dict)
+
+
+class Photo(models.Model):
+    """
+    This model will hold the piece of text that will be used to generate exercises
+    such as the anagram and quiz.
+    """
+    title = models.CharField(max_length=252, null=True)
+    image = models.ImageField(upload_to='data/local_photos')
+
+    def get_image_data(self):
+        with self.image as image_file:
+            return np.array(Image.open(image_file))

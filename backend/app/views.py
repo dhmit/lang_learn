@@ -8,10 +8,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import (
-    Text
+    Text,
+    Photo
 )
 from .serializers import (
-    TextSerializer
+    TextSerializer,
+    PhotoSerializer
 )
 from .analysis.parts_of_speech import (
     filter_pos,
@@ -189,9 +191,12 @@ def get_quiz_data(request, text_id):
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
+
 @api_view(['GET'])
-def get_picturequiz(request):
+def get_picturequiz(request, photo_id):
     """
     API endpoint for getting the necessary information for the picture quiz.
     """
-    return Response('')
+    photo_obj = Photo.objects.get(id=photo_id)
+    serializer = PhotoSerializer(photo_obj)
+    return Response(serializer.data)

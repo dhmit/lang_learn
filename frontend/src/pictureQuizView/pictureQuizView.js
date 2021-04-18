@@ -1,4 +1,5 @@
 import React from 'react';
+import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer } from '../UILibrary/components';
 
@@ -10,6 +11,7 @@ export class PictureQuizView extends React.Component {
             gameOver: false,
             timeLeft: 30,
             showModal: false,
+            photo: null,
         };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
@@ -37,8 +39,16 @@ export class PictureQuizView extends React.Component {
     }
 
     startNewGame = async () => {
-        this.timer = 0;
-        this.startTimer();
+        try {
+            const apiURL = `/api/get_picturequiz/${this.props.photoID}/`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            console.log(data);
+            this.timer = 0;
+            this.startTimer();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     giveUp = () => {
@@ -137,3 +147,7 @@ export class PictureQuizView extends React.Component {
         </React.Fragment>);
     }
 }
+
+PictureQuizView.propTypes = {
+    photoID: PropTypes.number,
+};

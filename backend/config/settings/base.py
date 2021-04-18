@@ -17,6 +17,8 @@ SETTINGS_DIR = os.path.join(CONFIG_DIR, 'settings')
 DB_PATH = os.path.join(BACKEND_DIR, 'db.sqlite3')
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 NLTK_WORD_DIR = os.path.join(BACKEND_DIR, 'app/analysis/nltk_data/words')
+ANALYSIS_DIR = os.path.join(BACKEND_DIR, 'app/analysis')
+YOLO_DIR = os.path.join(ANALYSIS_DIR, 'yolo_files')
 
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
