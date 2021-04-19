@@ -363,7 +363,7 @@ export class InstructorView extends React.Component {
     renderAddButton = () => <button className='add-text-button' onClick={this.modalHandler}>
         <div className='plus-icon'>
             <div className="plus-1" />
-            <div className="plus-2"/>
+            <div className="plus-2" />
         </div>
         Add Text
     </button>
@@ -373,8 +373,8 @@ export class InstructorView extends React.Component {
         style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
         role="alert"
     >
-        Currently adding {this.state.addingText} text(s)! (Do
-            not close this page.)
+        Currently adding {this.state.addingText} {this.state.addingText > 1 ? ' texts' : ' text'}!
+        (Do not close this page.)
     </div>
 
     render() {

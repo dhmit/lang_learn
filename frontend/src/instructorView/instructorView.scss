@@ -230,14 +230,17 @@ label {
     &:focus {
         outline: none;
     }
+
+    &:hover {
+        background: white;
+        cursor: pointer;
+    }
 }
 
 .save-button {
     background: #2D2155;
-    cursor: pointer;
 
     &:hover {
-        background: white;
         border: #2D2155 2px solid;
         color: #2D2155;
     }
@@ -245,10 +248,8 @@ label {
 
 .delete-button {
     background: #933A3A;
-    cursor: pointer;
 
     &:hover {
-        background: white;
         border: #933A3A 2px solid;
         color: #933A3A;
     }
