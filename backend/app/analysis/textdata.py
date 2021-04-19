@@ -40,16 +40,26 @@ def get_text_data(text_obj):
     in this text.
     :param text_obj: the Text object that we want to get data for
     """
-    word_data = dict()
-
-    # TODO: optimizations for update to not refetch data for words that already exist
+    word_data = text_obj.word_data
     words = get_valid_words(text_obj.content.lower())
-    print(f"Getting definitions for \"{text_obj.title}\"...")
-    definitions = get_word_definitions(words)
-    print(f"Getting examples for \"{text_obj.title}\"...")
-    examples = get_word_examples(words, text_obj.content.lower())
 
-    for word in words:
+    # Only find the data for words that are new
+    old_words_set = set(word_data.keys())
+    new_words_set = set(words)
+    diff_words = new_words_set - old_words_set
+    delete_words = old_words_set - new_words_set
+
+    # Remove word data for old words
+    for word in delete_words:
+        word_data.pop(word)
+
+    print(f"Getting definitions for \"{text_obj.title}\"...")
+    definitions = get_word_definitions(diff_words)
+    print(f"Getting examples for \"{text_obj.title}\"...")
+    examples = get_word_examples(diff_words, text_obj.content.lower())
+
+    # Add examples and definitions to word_data
+    for word in diff_words:
         chosen_definition = ""
         if len(definitions[word].keys()) > 0:
             # Pick some part of speech and use the first definition
@@ -64,7 +74,7 @@ def get_text_data(text_obj):
         }
 
     print(f"Getting images for \"{text_obj.title}\"...")
-    for word in tqdm.tqdm(words):
+    for word in tqdm.tqdm(diff_words):
         image_urls = get_bing_image_url(word)
         word_data[word]["images"] = image_urls
         word_data[word]["chosen_image"] = image_urls[0] if len(image_urls) > 0 else ""
