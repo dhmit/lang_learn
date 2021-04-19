@@ -87,26 +87,13 @@ class Text(models.Model):
 
         return output
 
-    def get_examples(self, word, part_of_speech=None):
+    def get_examples(self, word):
         """
         :param word: the target word that you want the examples for
-        :param part_of_speech: the part of speech of the word, or None if it doesn't matter
-        :return: a list of the examples of the word for the part of speech. If
-                 the part of speech is None, then the list will have examples for
-                 all parts of speech. If the word is not in the text, return an empty list
+        :return: a list of the examples of the target word. If the word isn't in the input text,
+                 then return an empty list.
         """
-        if word not in self.word_data:
-            return []
-
-        examples = self.word_data[word]["examples"]
-        output = []
-        # TODO: Maybe make separate part of speech for examples
-        if part_of_speech is None:
-            output.extend(examples)
-        else:
-            output = examples
-
-        return output
+        return [] if word not in self.word_data else self.word_data[word]["examples"]
 
     def get_image(self, word):
         """

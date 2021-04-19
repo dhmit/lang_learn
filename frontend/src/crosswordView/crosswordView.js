@@ -37,7 +37,6 @@ export class CrosswordView extends React.Component {
             const apiURL = `/api/get_crossword/${this.props.textID}/${this.props.partOfSpeech}`;
             const response = await fetch(apiURL);
             const { clues, definitions, solution } = await response.json();
-
             const emptyGrid = solution.map((row) => row
                 .map((cell) => (ALPHA.includes(cell) ? '' : '#')));
 
@@ -215,7 +214,7 @@ export class CrosswordView extends React.Component {
         const { found, clues } = this.state;
         return <div className='clues-box'>
             {['across', 'down'].map((dir) => (
-                <>
+                <React.Fragment key={dir}>
                     <h2 className='clue-header'>{dir}:</h2>
                     {clues.filter((clue) => clue[dir]).map((clue) => (
                         <div
@@ -228,7 +227,7 @@ export class CrosswordView extends React.Component {
                             }
                         </div>
                     ))}
-                </>
+                </React.Fragment>
             ))}
         </div>;
     }

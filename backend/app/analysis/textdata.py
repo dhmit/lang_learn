@@ -40,8 +40,6 @@ def get_text_data(text_obj):
     in this text.
     :param text_obj: the Text object that we want to get data for
     """
-    # part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
-
     word_data = dict()
 
     # TODO: optimizations for update to not refetch data for words that already exist
@@ -68,11 +66,8 @@ def get_text_data(text_obj):
     print(f"Getting images for \"{text_obj.title}\"...")
     for word in tqdm.tqdm(words):
         image_urls = get_bing_image_url(word)
-        print(image_urls)
         word_data[word]["images"] = image_urls
         word_data[word]["chosen_image"] = image_urls[0] if len(image_urls) > 0 else ""
-
-    print(word_data)
 
     text_obj.word_data = word_data
     text_obj.save()

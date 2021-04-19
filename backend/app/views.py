@@ -114,8 +114,7 @@ def add_text(request):
     """
     API endpoint for adding a piece of text
     """
-    # body = json.loads(request.body.decode('utf-8'))
-    body = json.loads(json.dumps(request.data))
+    body = request.data
     new_text_obj = Text(title=body['title'], content=body['content'])
     new_text_obj.save()
     get_text_data(new_text_obj)
@@ -129,8 +128,7 @@ def update_text(request):
     API endpoint for updating title, content, and modules for a given piece of text given
     the id of the text.
     """
-    # body = json.loads(request.body.decode('utf-8'))
-    body = json.loads(json.dumps(request.data))
+    body = request.data
     text_obj = Text.objects.get(id=body['id'])
     old_text = text_obj.content
 
@@ -150,8 +148,7 @@ def delete_text(request):
     """
     API endpoint for deleting a text.
     """
-    # body = json.loads(request.body.decode('utf-8'))
-    body = json.loads(json.dumps(request.data))
+    body = request.data
     text_obj = Text.objects.get(id=body)
     res = text_obj.delete()
     return Response(res)
@@ -164,14 +161,8 @@ def get_crossword(request, text_id, part_of_speech):
     the id of the text and the part of speech.
     """
     text_obj = Text.objects.get(id=text_id)
-    definitions = text_obj.definitions
-    examples = text_obj.examples
     words = get_valid_words(text_obj.content, part_of_speech)
-
-    # TODO: For Instructor view people, please make a function in the text model for getting
-    #       definitions / examples given a word
-    crossword_data = get_crosswords(words, (examples, definitions, part_of_speech))
-
+    crossword_data = get_crosswords(words, text_obj)
     return Response(crossword_data)
 
 

@@ -278,23 +278,22 @@ def write_grid_to_screen(grid, words_in_grid):
     print(words_in_grid)
 
 
-def attach_definition_and_examples(clues, word_data):
+def attach_definition_and_examples(clues, text_obj):
     """
     Adds examples and definitions to every clue. Also capitalize the words
     """
-    examples, definitions, part_of_speech = word_data
     for num, clue in enumerate(clues):
         clue['num'] = num
         for direction in ['across', 'down']:
             if clue[direction]:
-                clue_examples = examples[clue[direction]['word']].get(part_of_speech, None)
-                clue_definitions = definitions[clue[direction]['word']].get(part_of_speech, None)
-                clue[direction]['clue'] = clue_examples[0] if clue_examples else None
-                clue[direction]['definition'] = clue_definitions[0] if clue_definitions else None
+                clue_examples = text_obj.get_example(clue[direction]['word'])
+                clue_definitions = text_obj.get_definition(clue[direction]['word'])
+                clue[direction]['clue'] = clue_examples if clue_examples else None
+                clue[direction]['definition'] = clue_definitions if clue_definitions else None
                 clue[direction]['word'] = clue[direction]['word'].upper()
 
 
-def get_crosswords(all_words, word_data):
+def get_crosswords(all_words, text_obj):
     """
     produces a dictionary containing the clues associated with the words put into the crossword
     and a solution grid to the crossword
@@ -332,7 +331,7 @@ def get_crosswords(all_words, word_data):
     # sort the clues according to the ascending row and col for collisions
     clues.sort(key=lambda x: (x["row"], x["col"]))
 
-    attach_definition_and_examples(clues, word_data)
+    attach_definition_and_examples(clues, text_obj)
 
     cross_dict = {
         "clues": clues,
@@ -342,10 +341,10 @@ def get_crosswords(all_words, word_data):
     }
 
     # Add all definitions from input text for hard difficulty
-    for defs in word_data[1].values():
-        pos_def = defs.get(word_data[2], None)
-        if pos_def:
-            cross_dict['definitions'].append(pos_def[0])
+    for word in text_obj.word_data:
+        word_def = text_obj.get_definition(word)
+        if word_def != "":
+            cross_dict['definitions'].append(word_def)
 
     random.shuffle(cross_dict['definitions'])
 
