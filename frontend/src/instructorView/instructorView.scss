@@ -207,7 +207,16 @@ label {
 
 /* Card Buttons */
 .card-button-div {
-    text-align: right;
+    align-items: center;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.card-spinner {
+    border-color: black;
+    border-right-color: transparent;
+    height: 2rem !important;
+    width: 2rem !important;
 }
 
 .card-buttons {

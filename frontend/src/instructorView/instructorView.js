@@ -175,19 +175,22 @@ class TextInfo extends React.Component {
                     </div>
                     <div className="card-button-div">
                         <button
-                            onClick={this.saveText}
-                            className={`card-buttons save-button ${editing ? 'disabled' : ''}`}
-                            disabled={editing}
-                        >
-                            Save
-                        </button>
-                        <button
                             onClick={this.deleteText}
                             className={`card-buttons delete-button ${editing ? 'disabled' : ''}`}
                             disabled={editing}
                         >
                             Delete
                         </button>
+                        <button
+                            onClick={this.saveText}
+                            className={`card-buttons save-button ${editing ? 'disabled' : ''}`}
+                            disabled={editing}
+                        >
+                            Save
+                        </button>
+                        { editing && <div className='card-loading'>
+                            <div className="spinner-border card-spinner" role="status"/>
+                        </div>}
                     </div>
                 </div>
             </div>
