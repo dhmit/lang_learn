@@ -48,7 +48,7 @@ def get_text_data(text_obj):
     new_words_set = set(words)
     diff_words = new_words_set - old_words_set
     delete_words = old_words_set - new_words_set
-
+    print(diff_words, delete_words)
     # Remove word data for old words
     for word in delete_words:
         word_data.pop(word)
