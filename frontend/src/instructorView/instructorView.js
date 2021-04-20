@@ -58,6 +58,9 @@ class TextInfo extends React.Component {
         this.setState({ textData });
     }
 
+    // NOTE: This is pretty slow for medium-sized blocks of text.
+    // TODO: Should the save button be disabled if nothing has changed?
+    // (i.e., pressing the submit button over and over again)
     saveText = async () => {
         try {
             const csrftoken = getCookie('csrftoken');
@@ -74,7 +77,11 @@ class TextInfo extends React.Component {
                 },
                 body: JSON.stringify(this.state.textData),
             });
-            this.setState({ editing: false });
+            // this.setState({ editing: false });
+            // Add a delay to this.setState to ensure users see the spinner when saving text
+            setTimeout(() => {
+                this.setState({editing: false});
+            }, 200);
         } catch (e) {
             console.log(e);
         }

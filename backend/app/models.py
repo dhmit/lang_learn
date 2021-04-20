@@ -46,7 +46,7 @@ word_data is of the form:
         "definitions": {
             "noun": [noun_def_1, noun_def_2, ...],
             "adjective": [adjective_def_1, ...]
-        }
+        },
         "chosen_image": chosen_image_url,
         "chosen_example": chosen_example,
         "chosen_definition": chosen_definition

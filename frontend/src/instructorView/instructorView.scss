@@ -258,7 +258,7 @@ label {
 .disabled {
     background: #d3d3d3;
     color: black;
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 
     &:hover {
         background: #d3d3d3;
