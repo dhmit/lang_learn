@@ -15,13 +15,13 @@ export class SpeechToTextView extends React.Component {
     }
 
     render() {
-        return (<>
+        return (<React.Fragment>
             <Navbar />
             <div className="page">
                 Hello World!
             </div>
             <Footer />
-        </>);
+        </React.Fragment>);
     }
 }
 
