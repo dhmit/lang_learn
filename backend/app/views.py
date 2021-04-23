@@ -27,7 +27,13 @@ from .analysis.textdata import (
 from .analysis.crosswords import (
     get_crosswords,
 )
-from .quiz_creation.conjugation_quiz import get_quiz_sentences
+from .quiz_creation.conjugation_quiz import (
+    get_quiz_sentences,
+)
+from .analysis.text_parser import (
+    get_sentences,
+)
+
 
 
 @api_view(['GET'])
@@ -188,3 +194,12 @@ def get_quiz_data(request, text_id):
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
+
+@api_view(['GET'])
+def get_indiv_sentences(request, text_id):
+    """
+    API endpoint for getting the individual sentences from the given text.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    sentences = get_sentences(text_obj)
+    return Response(sentences)
