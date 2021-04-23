@@ -80,7 +80,7 @@ class TextInfo extends React.Component {
             // this.setState({ editing: false });
             // Add a delay to this.setState to ensure users see the spinner when saving text
             setTimeout(() => {
-                this.setState({editing: false});
+                this.setState({ editing: false });
             }, 200);
         } catch (e) {
             console.log(e);
@@ -247,6 +247,7 @@ export class InstructorView extends React.Component {
             const apiURL = '/api/all_text';
             const response = await fetch(apiURL);
             const data = await response.json();
+            console.log(data);
             this.setState({
                 textData: data,
             });
