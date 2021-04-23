@@ -12,6 +12,7 @@ class TextInfo extends React.Component {
             editing: false,
             currentModule: Object.keys(this.props.text.modules)[0],
             textData: this.props.text,
+            selectedWord: '',
         };
     }
 
@@ -170,6 +171,11 @@ class TextInfo extends React.Component {
         </div>;
     }
 
+    // WE'RE CODING HERE
+    renderWordSelection = () => {
+      console.log(this.textData);
+    }
+
     renderCardButtons = () => {
         const { editing } = this.state;
         return <div className="card-button-div">
@@ -197,9 +203,11 @@ class TextInfo extends React.Component {
         const { collapse } = this.state;
         return <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
             { this.renderCardInfo() }
+            { this.renderWordSelection() }
             { this.renderCardButtons() }
         </div>;
     }
+
 
     render() {
         return (
