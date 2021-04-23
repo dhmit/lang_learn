@@ -27,7 +27,14 @@ from .analysis.textdata import (
 from .analysis.crosswords import (
     get_crosswords,
 )
-from .quiz_creation.conjugation_quiz import get_quiz_sentences
+from .quiz_creation.conjugation_quiz import (
+    get_quiz_sentences
+)
+from .analysis.speech_to_text import (
+    sentence_feeder
+)
+
+
 
 
 @api_view(['GET'])
@@ -187,4 +194,14 @@ def get_quiz_data(request, text_id):
     """
     text_obj = Text.objects.get(id=text_id)
     res = get_quiz_sentences(text_obj.content)
+    return Response(res)
+
+@api_view(['GET'])
+def get_text_sentences(request, text_id):
+    """
+    API endpoint to get a single piece of text based on the ID (maybe we want to change this).
+    """
+    text_obj = Text.objects.get(id=text_id)
+    print(sentence_feeder(text_obj.content))
+    res = [{'sentence': sentence} for sentence in sentence_feeder(text_obj.content)]
     return Response(res)

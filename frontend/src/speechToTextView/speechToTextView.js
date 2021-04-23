@@ -11,7 +11,14 @@ export class SpeechToTextView extends React.Component {
     }
 
     async componentDidMount() {
-        console.log('Hi');
+        try {
+            const apiURL = `/api/get_text_sentences/${this.props.textID}`;
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            console.log(data);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render() {
