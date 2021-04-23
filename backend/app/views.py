@@ -26,6 +26,9 @@ from .analysis.textdata import (
     get_story_data,
     get_misspelled_words,
 )
+from .analysis.crosswords import (
+    get_crosswords,
+)
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
@@ -114,6 +117,7 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
+
 @api_view(['GET'])
 def get_picturebook_prompt(request, text_id, part_of_speech):
     """
@@ -190,6 +194,25 @@ def delete_text(request):
     text_obj = Text.objects.get(id=body)
     res = text_obj.delete()
     return Response(res)
+
+
+@api_view(['GET'])
+def get_crossword(request, text_id, part_of_speech):
+    """
+    API endpoint for getting the necessary information for the crossword given
+    the id of the text and the part of speech.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    definitions = text_obj.definitions
+    examples = text_obj.examples
+    words = get_valid_words(text_obj.content, part_of_speech)
+
+    # TODO: For Instructor view people, please make a function in the text model for getting
+    #       definitions / examples given a word
+    crossword_data = get_crosswords(words, (examples, definitions, part_of_speech))
+
+    return Response(crossword_data)
+
 
 @api_view(['GET'])
 def get_quiz_data(request, text_id):

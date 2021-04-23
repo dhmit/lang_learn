@@ -2,10 +2,17 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { Navbar, Footer } from '../UILibrary/components';
 
-const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb'];
+
+// Functions to use to generate links for different formats
+const posLink = (textId, pos) => `${textId}/${pos.toLowerCase()}`;
+const idLink = (textId) => `${textId}`;
+
+const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Conjugations'];
 const QUIZ_TYPES = {
-    'Anagrams': 'anagrams',
-    'Flashcards': 'flashcards',
+    'Anagrams': posLink,
+    'Flashcards': posLink,
+    'Quiz': idLink,
+    'Crossword': posLink,
     'Story Generator': 'picturebook',
 };
 
@@ -35,6 +42,7 @@ class TextInfo extends React.Component {
             modules,
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
+        const currentLink = QUIZ_TYPES[quizType](textId, partOfSpeech);
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
@@ -65,7 +73,7 @@ class TextInfo extends React.Component {
                             return (<></>);
                         })}
                     </select>
-                    <a href={`/${QUIZ_TYPES[quizType]}/${textId}/${partOfSpeech.toLowerCase()}`}>
+                    <a href={`/${quizType.toLowerCase()}/${currentLink}`}>
                         <button className='btn btn-light selection-button'>Start!</button>
                     </a>
                 </div>
