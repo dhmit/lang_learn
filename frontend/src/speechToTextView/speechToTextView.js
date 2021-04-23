@@ -1,7 +1,7 @@
 import React from 'react';
-import './speechToTextView.scss';
 import * as PropTypes from 'prop-types';
-import { Footer, Navbar } from '../UILibrary/components';
+
+import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
 
 export class SpeechToTextView extends React.Component {
     constructor(props) {
