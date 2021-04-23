@@ -31,4 +31,5 @@ window.app_modules = {
     CrosswordView,
     IndexView,
     QuizView,
+    SpeechToTextView,
 };
