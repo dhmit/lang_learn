@@ -187,7 +187,19 @@ class TextInfo extends React.Component {
 
     // WE'RE CODING HERE
     renderWordSelection = () => {
-      console.log(this.textData);
+      // RIGHT HERE YEEEEET
+      const wordsInText = Object.keys(this.state.textData.word_data).filter((word) => word.includes('b'));
+      console.log(wordsInText);
+
+      options = wordsInText.map((text) => (
+        <option value = text.word/>
+      ))
+      return (<>
+        <label for="word-select"></label>
+        <select name='word-select'>
+          {options}
+        </select>
+      </>)
     }
 
     renderCardButtons = () => {
