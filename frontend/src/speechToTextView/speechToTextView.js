@@ -1,5 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
+
+import { ReactMic } from 'react-mic';
 import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
 
 export class SpeechToTextView extends React.Component {
