@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
 import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
 
 export class SpeechToTextView extends React.Component {
@@ -26,4 +25,6 @@ export class SpeechToTextView extends React.Component {
     }
 }
 
-export default SpeechToTextView;
+SpeechToTextView.propTypes = {
+    textID: PropTypes.number,
+};
