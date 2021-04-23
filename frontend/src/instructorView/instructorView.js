@@ -49,6 +49,7 @@ class TextInfo extends React.Component {
             collapse: true,
             editing: false,
             textData: this.props.text,
+            selectedWord: '',
         };
     }
 
@@ -184,6 +185,11 @@ class TextInfo extends React.Component {
         </div>;
     }
 
+    // WE'RE CODING HERE
+    renderWordSelection = () => {
+      console.log(this.textData);
+    }
+
     renderCardButtons = () => {
         const { editing } = this.state;
         return <div className="card-button-div">
@@ -211,9 +217,11 @@ class TextInfo extends React.Component {
         const { collapse } = this.state;
         return <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
             { this.renderCardInfo() }
+            { this.renderWordSelection() }
             { this.renderCardButtons() }
         </div>;
     }
+
 
     render() {
         return (
@@ -247,7 +255,6 @@ export class InstructorView extends React.Component {
             const apiURL = '/api/all_text';
             const response = await fetch(apiURL);
             const data = await response.json();
-            console.log(data);
             this.setState({
                 textData: data,
             });
