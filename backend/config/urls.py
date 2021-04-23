@@ -67,4 +67,5 @@ urlpatterns = [
     react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('quiz/', 'AllQuizView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
+    react_view_path('stt/<int:textId>/', 'SpeechToTextView'),
 ]
