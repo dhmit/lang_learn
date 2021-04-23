@@ -9,11 +9,11 @@ const idLink = (textId) => `${textId}`;
 
 const PARTS_OF_SPEECH = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Conjugations'];
 const QUIZ_TYPES = {
-    'Anagrams': posLink,
-    'Flashcards': posLink,
-    'Quiz': idLink,
-    'Crossword': posLink,
-    'Story Generator': 'picturebook',
+    'Anagrams': ['anagrams', posLink],
+    'Flashcards': ['flashcards', posLink],
+    'Quiz': ['quiz', idLink],
+    'Crossword': ['crossword', posLink],
+    'Story Generator': ['picturebook', posLink],
 };
 
 class TextInfo extends React.Component {
@@ -42,7 +42,7 @@ class TextInfo extends React.Component {
             modules,
         } = this.props;
         const { quizType, partOfSpeech } = this.state;
-        const currentLink = QUIZ_TYPES[quizType](textId, partOfSpeech);
+        const currentLink = QUIZ_TYPES[quizType][1](textId, partOfSpeech);
         return (
             <div className='text-info-div'>
                 <h1 className='text-title'>{title}</h1>
@@ -73,7 +73,7 @@ class TextInfo extends React.Component {
                             return (<></>);
                         })}
                     </select>
-                    <a href={`/${quizType.toLowerCase()}/${currentLink}`}>
+                    <a href={`/${QUIZ_TYPES[quizType][0]}/${currentLink}`}>
                         <button className='btn btn-light selection-button'>Start!</button>
                     </a>
                 </div>
