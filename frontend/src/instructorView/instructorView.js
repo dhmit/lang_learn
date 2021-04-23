@@ -4,64 +4,24 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 import { capitalize, getCookie } from '../common';
 
-class Module extends React.Component {
-    render() {
-        const { moduleInfo, moduleName } = this.props;
-        return (
-            <div className='col-md-4 col-6'>
-                <h2 className='module-header'>{capitalize(moduleName)}</h2>
-                {
-                    Object.keys(moduleInfo).map((category, k) => (
-                        <div className='module-category' key={k}>
-                            <input
-                                className='module-category-checkbox'
-                                type='checkbox'
-                                name={category}
-                                checked={moduleInfo[category]}
-                                onChange={() => {
-                                    this.props.updateModule(
-                                        moduleName,
-                                        category,
-                                        !moduleInfo[category],
-                                    );
-                                }}
-                            />
-                            <label className='module-category-label'>
-                                {capitalize(category)}
-                            </label>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    }
-}
-Module.propTypes = {
-    moduleName: PropTypes.string,
-    moduleInfo: PropTypes.object,
-    updateModule: PropTypes.func,
-};
-
 class TextInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             collapse: true,
             editing: false,
+            currentModule: Object.keys(this.props.text.modules)[0],
             textData: this.props.text,
             selectedWord: '',
         };
     }
 
-    updateModule = (module, category, value) => {
+    updateModule = (category, value) => {
         const textData = this.state.textData;
-        textData.modules[module][category] = value;
+        textData.modules[this.state.currentModule][category] = value;
         this.setState({ textData });
     }
 
-    // NOTE: This is pretty slow for medium-sized blocks of text.
-    // TODO: Should the save button be disabled if nothing has changed?
-    // (i.e., pressing the submit button over and over again)
     saveText = async () => {
         try {
             const csrftoken = getCookie('csrftoken');
@@ -78,7 +38,6 @@ class TextInfo extends React.Component {
                 },
                 body: JSON.stringify(this.state.textData),
             });
-            // this.setState({ editing: false });
             // Add a delay to this.setState to ensure users see the spinner when saving text
             setTimeout(() => {
                 this.setState({ editing: false });
@@ -126,6 +85,10 @@ class TextInfo extends React.Component {
         this.setState({ textData });
     }
 
+    handleModuleChange = (e) => {
+        this.setState({ currentModule: e.target.value });
+    }
+
     /* Render Methods */
     renderHeader = () => {
         const { collapse } = this.state;
@@ -159,28 +122,51 @@ class TextInfo extends React.Component {
     }
 
     renderCardInfo = () => {
+        const { currentModule } = this.state;
         const { modules, content } = this.state.textData;
-        return <div className="row">
-            <div className="col-xl-5 col-12 mb-4 mb-xl-0">
+        return <div className="row mb-4">
+            <div className="col-xl-9 col-12 mb-4 mb-xl-0">
                 <textarea
                     className="text-content"
                     value={content}
                     onChange={this.editText}
                 />
             </div>
-            <div className="col-xl-7 col-12 module-selection">
-                <div className="row">
+            <div className="col-xl-3 col-12 module-selection">
+                <select
+                    className='module-select'
+                    value={currentModule}
+                    onChange={this.handleModuleChange}
+                >
                     {
                         Object.keys(modules).map((module, k) => (
-                            <Module
-                                key={k}
-                                moduleName={module}
-                                moduleInfo={modules[module]}
-                                updateModule={this.updateModule}
-                            />
+                            <option key={k} value={module}>
+                                {capitalize(module)}
+                            </option>
                         ))
                     }
-                </div>
+                </select>
+                {
+                    Object.keys(modules[currentModule]).map((category, k) => (
+                        <div className='module-category' key={k}>
+                            <input
+                                className='module-category-checkbox'
+                                type='checkbox'
+                                name={category}
+                                checked={modules[currentModule][category]}
+                                onChange={() => {
+                                    this.updateModule(
+                                        category,
+                                        !modules[currentModule][category],
+                                    );
+                                }}
+                            />
+                            <label className='module-category-label'>
+                                {capitalize(category)}
+                            </label>
+                        </div>
+                    ))
+                }
             </div>
         </div>;
     }
