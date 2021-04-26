@@ -89,6 +89,50 @@ class TextInfo extends React.Component {
         this.setState({ currentModule: e.target.value });
     }
 
+    // Handle dropdown changes
+    handleWordSelect = (e) => {
+        this.setState({ selectedWord: e.target.value });
+    }
+    /*
+    this.state = {
+      chosen_example = ''
+    }
+  }
+    */
+
+
+    handleExampleSelect = (e) => {
+        // This is a work in progress! This shows that we should really consider refactoring
+        // the state dict.
+        const selectedWord = this.state.selectedWord;
+        this.setState((state) => ({
+            textData: {
+                ...state.textData,
+                word_data: {
+                    ...state.textData.word_data,
+                    [selectedWord]: {
+                        ...state.textData.word_data[selectedWord],
+                        // This throws an error when an example is chosen:
+                        // e.target is null (why?)
+                        chosen_example: e.target.value,
+                    },
+                },
+            },
+        }));
+        // this.setState({
+        //   textData: {
+        //     ...this.state.textData,
+        //     word_data: {
+        //       ...this.state.textData.word_data,
+        //       [selectedWord]: {
+        //         ...this.state.textData.word_data[selectedWord],
+        //         chosen_example: e.target.value
+        //       }
+        //     },
+        //   }
+        // }); // how to update the state of a nested object?
+    }
+
     /* Render Methods */
     renderHeader = () => {
         const { collapse } = this.state;
@@ -173,24 +217,84 @@ class TextInfo extends React.Component {
 
     // WE'RE CODING HERE
     renderWordSelection = () => {
-      // RIGHT HERE YEEEEET
-      const wordsInText = Object.keys(this.state.textData.word_data).filter((word) => word.includes('b'));
-      console.log(wordsInText);
+        // RIGHT HERE YEEEEET
+        const wordsInText = Object.keys(this.state.textData.word_data);
+        console.log('this is the word_data', this.state.textData.word_data);
+        console.log(wordsInText);
+        /*
+        this.state.textData.word_data = {
+          word1 : {
+            chosen_definition: 'definition'
+            chosen_example: 'example'
+            chosen_image: 'img'
+            definitions:
+            examples:
+            images:
+          }
+         */
 
-      options = wordsInText.map((text) => (
-        <option value = text.word/>
-      ))
-      return (<>
-        <label for="word-select"></label>
-        <select name='word-select'>
-          {options}
-        </select>
-      </>)
+        const options = wordsInText.map((word) => (<option key = {word} value = {word}>
+            {word}
+        </option>));
+
+        return (<>
+            <label htmlFor='word-select'>Select a word:</label>
+            <select name='word-select' onChange = {this.handleWordSelect}>
+                {options}
+            </select>
+        </>);
     }
+    // WORK IN PROGRESS
+    // renderWordDefinition = () => {
+    //   const wordData = this.state.textData.word_data;
+    //   let currentWordPartsOfSpeech;
+    //   let options = <></>;
+    //   const definitions = [];
+    //   if (this.state.selectedWord.length > 0) {
+    //       console.log('selected word: ', this.state.selectedWord);
+    //       console.log('selected word def', wordData[this.state.selectedWord]['definitions']);
+    //       currentWordPartsOfSpeech = Object.keys(
+    //          wordData[this.state.selectedWord]['definitions']
+    //       );
+    //       // console.log(currentWordDefinitions);
+    //       for (const partOfSpeech in currentWordPartsOfSpeech) {
+    //           for (const definition in currentWordPartsOfSpeech[partOfSpeech]) {
+    //               definitions.push(definition);
+    //           }
+    //       }
+    //
+    //
+    //       options = currentWordPartsOfSpeech.map(
+    //          (partOfSpeech) => (
+    //              <option key = {partOfSpeech} value = {partOfSpeech}>
+    //                  {currentWordPartsOfSpeech}
+    //              </option>
+    //          )
+    //       );
+    //   }
+
+    renderWordExample = () => {
+        const selectedWord = this.state.selectedWord;
+        const selectedWordExamples = this.state.textData.word_data[selectedWord].examples;
+        const examples = (selectedWordExamples
+            .map((example) => (<option key = {example} value = {example}>
+                {example}
+            </option>))
+        );
+
+
+        return (<>
+            <label htmlFor='example-select'>Example:</label>
+            <select name='example-select' onChange = {this.handleExampleSelect}>
+                {examples}
+            </select>
+        </>);
+    }
+
 
     renderCardButtons = () => {
         const { editing } = this.state;
-        return <div className="card-button-div">
+        return (<div className="card-button-div">
             <button
                 onClick={this.deleteText}
                 className={`card-buttons delete-button ${editing ? 'disabled' : ''}`}
@@ -208,16 +312,20 @@ class TextInfo extends React.Component {
             { editing && <div className='card-loading'>
                 <div className="spinner-border card-spinner" role="status"/>
             </div>}
-        </div>;
+        </div>);
     }
 
     renderCardBody = () => {
         const { collapse } = this.state;
-        return <div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
+        return (<div className={`card-body ${collapse ? 'card-collapse' : 'card-expand'}`}>
             { this.renderCardInfo() }
             { this.renderWordSelection() }
+            {/* this.renderWordDefinition() */}
+            {/* The ternary is a *temporary* solution for when the page first loads and
+            the user has not yet selected a word */}
+            { this.state.selectedWord ? this.renderWordExample() : <></> }
             { this.renderCardButtons() }
-        </div>;
+        </div>);
     }
 
 
