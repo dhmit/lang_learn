@@ -19,6 +19,7 @@ PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 NLTK_WORD_DIR = os.path.join(BACKEND_DIR, 'app/analysis/nltk_data/words')
 ANALYSIS_DIR = os.path.join(BACKEND_DIR, 'app/analysis')
 YOLO_DIR = os.path.join(ANALYSIS_DIR, 'yolo_files')
+LOCAL_PHOTOS_DIR = os.path.join(BACKEND_DIR, 'data/local_photos')
 
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 

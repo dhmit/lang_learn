@@ -1,11 +1,14 @@
 """
 These view functions and classes implement API endpoints
 """
+import os
 import json
 import random
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import FileResponse
+from django.conf import settings
 
 from .models import (
     Text,
@@ -200,3 +203,12 @@ def get_picturequiz(request, photo_id):
     photo_obj = Photo.objects.get(id=photo_id)
     serializer = PhotoSerializer(photo_obj)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_picture(request, file_name):
+    """
+    API endpoint for getting the photo file for the picture quiz
+    """
+    file_path = os.path.join(settings.LOCAL_PHOTOS_DIR, file_name)
+    return FileResponse(open(file_path, 'rb'))

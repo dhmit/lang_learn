@@ -28,6 +28,7 @@ from app.views import (
     get_quiz_data,
     text,
     get_picturequiz,
+    get_picture,
 )
 
 
@@ -58,6 +59,7 @@ urlpatterns = [
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
     path('api/text/<int:text_id>', text),
     path('api/get_picturequiz/<int:photo_id>/', get_picturequiz),
+    path('data/local_photos/<str:file_name>/', get_picture),
 
     # View paths
     react_view_path('', 'IndexView'),
