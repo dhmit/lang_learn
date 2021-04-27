@@ -1,7 +1,78 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+
+export class YoloModelDisplayWidget extends React.Component {
+    render() {
+        const items = [];
+        let box;
+        const ratio = this.props.height / this.props.natHeight;
+        for (box of this.props.boxes) {
+            items.push(
+                <rect
+                    className = 'outsideBox'
+                    x = {box['x_coord'] * ratio}
+                    y = {box['y_coord'] * ratio}
+                    height = {box['height'] * ratio}
+                    width = {box['width'] * ratio}
+                />,
+                <g className={'boxGroup'}>
+                    <text
+                        className='label'
+                        x = {box['x_coord'] * ratio}
+                        y = {box['y_coord'] * ratio - 5}
+                    >
+                        {box['label']}
+                    </text>
+                    <rect
+                        className = 'boundingBox'
+                        x = {box['x_coord'] * ratio}
+                        y = {box['y_coord'] * ratio}
+                        height = {box['height'] * ratio}
+                        width = {box['width'] * ratio}
+                    />
+                </g>,
+            );
+        }
+
+        return (
+            <div>
+                <svg
+                    className='analysis-overlay positionTopLeft'
+                    height={this.props.height}
+                    width={this.props.width}
+                >
+                    {items}
+                </svg>
+            </div>
+        );
+    }
+}
+
+function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth) {
+    let boxes = [];
+    if ('boxes' in parsedValue) {
+        boxes = parsedValue['boxes'];
+    }
+    return (
+        <YoloModelDisplayWidget
+            boxes={boxes}
+            height={height}
+            width={width}
+            natHeight={natHeight}
+            natWidth={natWidth}
+        />
+    );
+}
+
+YoloModelDisplayWidget.propTypes = {
+    boxes: PropTypes.array,
+    height: PropTypes.number,
+    width: PropTypes.number,
+    natHeight: PropTypes.number,
+    natWidth: PropTypes.number,
+};
 
 export class PictureQuizView extends React.Component {
     constructor(props) {
@@ -9,19 +80,40 @@ export class PictureQuizView extends React.Component {
         this.state = {
             score: 0,
             gameOver: false,
-            timeLeft: 30,
+            timeLeft: 10,
             showModal: false,
-            photo: null,
+            question: 1,
+            numQuestions: 1,
+            photoData: null,
+            loading: true,
+            width: null,
+            height: null,
+            natWidth: null,
+            natHeight: null,
+            objects: null,
         };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.pauseTimer = this.pauseTimer.bind(this);
         this.countDown = this.countDown.bind(this);
         this.modalHandler = this.modalHandler.bind(this);
+        this.onImgLoad = this.onImgLoad.bind(this);
+        this.photoRef = React.createRef();
     }
 
     async componentDidMount() {
         await this.startNewGame();
+    }
+
+    nextQuestion = () => {
+        const nextQuestionNumber = this.state.question + 1;
+        this.setState({
+            question: nextQuestionNumber,
+            timeLeft: 15,
+            gameOver: false,
+        });
+        this.timer = 0;
+        this.startTimer();
     }
 
     pauseTimer = () => {
@@ -42,13 +134,37 @@ export class PictureQuizView extends React.Component {
         try {
             const apiURL = `/api/get_picturequiz/${this.props.photoID}/`;
             const response = await fetch(apiURL);
-            const data = await response.json();
-            console.log(data);
+            const photoData = await response.json();
+            console.log(photoData);
+            console.log(Object.keys(photoData.objects.labels)[1]);
+            const numQuestions = Object.keys(photoData.objects.labels).length;
             this.timer = 0;
+            this.setState({
+                loading: false,
+                photoData,
+                numQuestions,
+            });
             this.startTimer();
         } catch (e) {
             console.log(e);
         }
+    }
+
+    onImgLoad({ target: img }) {
+        this.setState({
+            width: img.clientWidth,
+            height: img.clientHeight,
+            natWidth: img.naturalWidth,
+            natHeight: img.naturalHeight,
+        });
+    }
+
+    handleResize() {
+        const img = this.photoRef.current;
+        this.setState({
+            height: img.getBoundingClientRect()['height'],
+            width: img.getBoundingClientRect()['width'],
+        });
     }
 
     giveUp = () => {
@@ -77,6 +193,14 @@ export class PictureQuizView extends React.Component {
     }
 
     render() {
+        if (this.state.loading) {
+            return (<LoadingPage/>);
+        }
+
+
+
+        window.addEventListener('resize', () => this.handleResize());
+
         return (<React.Fragment>
             <Navbar />
             <div className="page">
@@ -134,12 +258,41 @@ export class PictureQuizView extends React.Component {
                 </div>
                 <div className = "col shaded-box">
                     <div className="row justify-content-center">
-                            <p>Prompt and image will go here.</p>
+                        Find this object in the image below:
                     </div>
                     <div className="row justify-content-center">
-                            <button className="btn btn-success mx-3 child"
-                                disabled={!this.state.gameOver}>Next
-                            </button>
+                        <h3>
+                            {Object.keys(this.state.photoData.objects.labels)[this.state.question - 1]}
+                        </h3>
+                    </div>
+                    <div className="image-view row justify-content-center">
+                        <img
+                            className='image-photo'
+                            src={this.state.photoData['image']}
+                            onLoad={this.onImgLoad}
+                            ref={this.photoRef}
+                        />
+                        {
+                            configAnalysisYoloModel(
+                                this.state.photoData,
+                                this.state.height,
+                                this.state.width,
+                                this.state.natHeight,
+                                this.state.natWidth,
+                            )
+                        }
+                        <svg
+                            height={this.state.height}
+                            width={this.state.width}
+                        >
+                        </svg>
+                    </div>
+                    <div className="row justify-content-center">
+                        <button className="btn btn-success mx-3 child"
+                            onClick={this.nextQuestion}
+                            disabled={!this.state.gameOver
+                            || this.state.question === this.state.numQuestions}>Next
+                        </button>
                     </div>
                 </div>
             </div>
@@ -151,3 +304,4 @@ export class PictureQuizView extends React.Component {
 PictureQuizView.propTypes = {
     photoID: PropTypes.number,
 };
+
