@@ -29,10 +29,10 @@ def get_bing_image_url(query):
     request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
                   + '&first=0&count=1&adlt=off'
     request = urllib.request.Request(request_url, None, headers=headers)
-    response = urllib.request.urlopen(request)
-    html = response.read().decode('utf8')
-    links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
-    return links[0]
+    with urllib.request.urlopen(request) as response:
+        html = response.read().decode('utf8')
+        links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
+        return links[0]
 
 
 def get_text_data(text_obj):
