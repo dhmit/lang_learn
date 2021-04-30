@@ -7,6 +7,8 @@ const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
+const synth = window.speechSynthesis;
+
 const play_button = (color) => {
     return (
         <svg
@@ -77,23 +79,23 @@ export class TextToSpeech extends Component {
         speechSynthesis.speak(utterance);
     }
 
-    toggleStar = () => {
-        const { starredCards, starOnly, cardIndex } = this.state;
-        let currentIndex = starOnly ? starredCards[cardIndex] : cardIndex;
-        if (this.isStarred(currentIndex)) {
-            starredCards.splice(starredCards.indexOf(currentIndex), 1);
-            if (starOnly) {
-                if (starredCards.length > 0) {
-                    currentIndex %= starredCards.length;
-                } else {
-                    currentIndex = 0;
-                }
-            }
-        } else {
-            starredCards.push(this.state.cardIndex);
-        }
-        this.setState({ starredCards, cardIndex: currentIndex });
-    }
+    // toggleStar = () => {
+    //     const { starredCards, starOnly, cardIndex } = this.state;
+    //     let currentIndex = starOnly ? starredCards[cardIndex] : cardIndex;
+    //     if (this.isStarred(currentIndex)) {
+    //         starredCards.splice(starredCards.indexOf(currentIndex), 1);
+    //         if (starOnly) {
+    //             if (starredCards.length > 0) {
+    //                 currentIndex %= starredCards.length;
+    //             } else {
+    //                 currentIndex = 0;
+    //             }
+    //         }
+    //     } else {
+    //         starredCards.push(this.state.cardIndex);
+    //     }
+    //     this.setState({ starredCards, cardIndex: currentIndex });
+    // }
 
     handleKeyDown = (e) => {
         if (['ArrowLeft', 'ArrowRight'].includes(e.code)) {
@@ -142,10 +144,11 @@ export class TextToSpeech extends Component {
 
         /* Generate Flashcard */
         const card = this.getcurrentSentence();
-        const flipcard =  <div className="flashcard-star-back"
-                               onClick={this.playAudio}>
-                               {play_button('yellow')}
-                          </div>
+        // const flipcard =  <div className="flashcard-star-back"
+        //                        onClick={this.playAudio}>
+        //                        {play_button('yellow')}
+        //                   </div>
+        const flipcard = <div> Hello </div>
 
         // <div className="flashcard-error">You do not have any starred cards</div>;
         // const flipcard = card

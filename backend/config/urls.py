@@ -27,6 +27,7 @@ from app.views import (
     get_crossword,
     get_quiz_data,
     text,
+    get_indiv_sentences
 )
 
 
