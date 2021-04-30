@@ -100,47 +100,25 @@ export class TextInfo extends React.Component {
     handleWordSelect = (e) => {
         this.setState({ selectedWord: e.target.value });
     }
-    /*
-    this.state = {
-      chosen_example = ''
-    }
-  }
-    */
 
+    handleDefinitionSelect = (e) => {
+        e.persist();
+        this.setState((state) => {
+            const { wordData } = state;
+            wordData[state.selectedWord].chosen_definition = e.target.value;
+            return { wordData };
+        });
+    }
 
     handleExampleSelect = (e) => {
         // This is a work in progress! This shows that we should really consider refactoring
         // the state dict.
-        const selectedWord = this.state.selectedWord;
+        e.persist();
         this.setState((state) => {
-            const wordData = state;
-            wordData[selectedWord].chosen_example = e.target.value;
+            const { wordData } = state;
+            wordData[state.selectedWord].chosen_example = e.target.value;
             return { wordData };
         });
-        // ({
-        //         wordData: {
-        //             ...state.wordData,
-        //             [selectedWord]: {
-        //                 ...state.wordData[selectedWord],
-        //                 // This throws an error when an example is chosen:
-        //                 // e.target is null (why?)
-        //                 chosen_example: e.target.value,
-        //             },
-        //         },
-        //     })
-        // });
-        // this.setState({
-        //   textData: {
-        //     ...this.state.textData,
-        //     word_data: {
-        //       ...this.state.textData.word_data,
-        //       [selectedWord]: {
-        //         ...this.state.textData.word_data[selectedWord],
-        //         chosen_example: e.target.value
-        //       }
-        //     },
-        //   }
-        // }); // how to update the state of a nested object?
     }
 
     /* Render Methods */
@@ -255,34 +233,39 @@ export class TextInfo extends React.Component {
             </select>
         </>);
     }
+
     // WORK IN PROGRESS
-    // renderWordDefinition = () => {
-    //   const wordData = this.state.textData.word_data;
-    //   let currentWordPartsOfSpeech;
-    //   let options = <></>;
-    //   const definitions = [];
-    //   if (this.state.selectedWord.length > 0) {
-    //       console.log('selected word: ', this.state.selectedWord);
-    //       console.log('selected word def', wordData[this.state.selectedWord]['definitions']);
-    //       currentWordPartsOfSpeech = Object.keys(
-    //          wordData[this.state.selectedWord]['definitions']
-    //       );
-    //       // console.log(currentWordDefinitions);
-    //       for (const partOfSpeech in currentWordPartsOfSpeech) {
-    //           for (const definition in currentWordPartsOfSpeech[partOfSpeech]) {
-    //               definitions.push(definition);
-    //           }
-    //       }
-    //
-    //
-    //       options = currentWordPartsOfSpeech.map(
-    //          (partOfSpeech) => (
-    //              <option key = {partOfSpeech} value = {partOfSpeech}>
-    //                  {currentWordPartsOfSpeech}
-    //              </option>
-    //          )
-    //       );
-    //   }
+    renderWordDefinition = () => {
+        const { wordData, selectedWord } = this.state;
+        const definitions = [];
+        const selectedDefinitions = wordData[this.state.selectedWord]['definitions'];
+        for (const partOfSpeech of Object.keys(selectedDefinitions)) {
+            for (const definition of selectedDefinitions[partOfSpeech]) {
+                definitions.push(definition);
+            }
+        }
+
+        const options = definitions.map(
+            (definition, k) => (
+                <option key={k} value={definition}>
+                    {definition}
+                </option>
+            ),
+        );
+        return (<>
+            <label className='text-info-label' htmlFor='definition-select'>
+                Definitions:
+            </label>
+            <select
+                className='text-info-dropdown'
+                name='definition-select'
+                value={this.state.wordData[selectedWord].chosen_definition}
+                onChange = {(e) => this.handleDefinitionSelect(e)}
+            >
+                {options}
+            </select>
+        </>);
+    }
 
     renderWordExample = () => {
         const selectedWord = this.state.selectedWord;
@@ -297,7 +280,8 @@ export class TextInfo extends React.Component {
             <select
                 className='text-info-dropdown'
                 name='example-select'
-                onChange = {this.handleExampleSelect}
+                value={this.state.wordData[selectedWord].chosen_example}
+                onChange = {(e) => this.handleExampleSelect(e)}
             >
                 {examples}
             </select>
@@ -334,7 +318,9 @@ export class TextInfo extends React.Component {
             { this.renderCardInfo() }
             <div className='row'>
                 <div className='col-12 col-xl-4'>{ this.renderWordSelection() }</div>
-                <div className='col-12 col-xl-4'>{ /* this.renderWordDefinition() */ }</div>
+                <div className='col-12 col-xl-4'>
+                    { this.state.selectedWord ? this.renderWordDefinition() : <></>}
+                </div>
                 <div className='col-12 col-xl-4'>
                     {/* The ternary is a *temporary* solution for when the page first loads and
                         the user has not yet selected a word */}
