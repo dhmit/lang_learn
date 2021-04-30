@@ -42,11 +42,16 @@ export class TextToSpeech extends Component {
     }
 
     componentDidMount = async () => {
-        const apiURL = `/api/get_indiv_sentences/${this.props.textID}`;
-        const response = await fetch(apiURL);
-        const textData = await response.json();
-        this.setState({ textData });
-        document.addEventListener('keydown', this.handleKeyDown, true);
+        try {
+            const apiURL = `/api/get_indiv_sentences/${this.props.textID}`;
+            const response = await fetch(apiURL);
+            const textData = await response.json();
+            console.log(textData)
+            // this.setState({ textData });
+            // document.addEventListener('keydown', this.handleKeyDown, true);
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     componentWillUnmount() {

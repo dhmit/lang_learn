@@ -200,6 +200,10 @@ def get_indiv_sentences(request, text_id):
     """
     API endpoint for getting the individual sentences from the given text.
     """
+    print("is this even running")
     text_obj = Text.objects.get(id=text_id)
-    sentences = get_sentences(text_obj)
-    return Response(sentences)
+    sentences = get_sentences(text_obj.content)
+    # return Response(sentences)
+    res = [{'sentence': sentence} for sentence in sentences]
+    print(sentences)
+    return Response(res)

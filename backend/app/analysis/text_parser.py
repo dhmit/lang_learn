@@ -1,30 +1,28 @@
 """
 Custom command to populate text model with definition, examples, and images
 """
-import re
-import urllib
-import urllib.request
-import urllib.parse
-import tqdm
+import nltk
 
 # Ours
 
 
 # Modified Code from Bing library
-def get_sentences(text_obj):
+def get_sentences(text):
     """
     Given a Text object, stores the definitions, examples, and image urls for all the words
     in this text.
     :param text_obj: the Text object that we want to get sentences from
     """
 
-    text_paragraph = text_obj.content
-    temp_sentences = text_paragraph.split(".")
+    sentences = nltk.tokenize.sent_tokenize(text)
+    # text_paragraph = text_obj.content
+    # temp_sentences = text_paragraph.split(".")
+    #
+    # sentences = []
+    # for sent in temp_sentences:
+    #     sentences.extend(sent.split("!"))
 
-    sentences = []
-    for sent in temp_sentences:
-        sentences.extend(sent.split("!"))
-
+    print(sentences)
     return sentences
 
 
