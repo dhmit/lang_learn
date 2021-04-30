@@ -9,17 +9,16 @@ const capitalize = (word) => {
 
 const synth = window.speechSynthesis;
 
-const play_button = (color) => {
+const playButton = (color) => {
     return (
         <svg
             xmlns = "http://www.w3.org/2000/svg"
             viewBox = "0 0 26 26"
             fill = {color}
             className = "bi bi-play-button"
-            viewBox = "0 0 16 16"
         >
             <polygon
-                class="play-btn__svg"
+                className="play-btn__svg"
                 points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"
             />
             <path
@@ -46,11 +45,11 @@ export class TextToSpeech extends Component {
             const apiURL = `/api/get_indiv_sentences/${this.props.textID}`;
             const response = await fetch(apiURL);
             const textData = await response.json();
-            console.log(textData)
+            console.log(textData);
             // this.setState({ textData });
             // document.addEventListener('keydown', this.handleKeyDown, true);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -68,7 +67,7 @@ export class TextToSpeech extends Component {
 
     changeSentence = (delta) => {
         const { textData, sentenceIndex } = this.state;
-        const listLength =  textData.length;
+        const listLength = textData.length;
         const newsentenceIndex = (sentenceIndex + delta + listLength) % listLength;
         this.setState({
             sentenceIndex: newsentenceIndex,
@@ -77,8 +76,9 @@ export class TextToSpeech extends Component {
     }
 
     playAudio = () => {
-        let utterance = new SpeechSynthesisUtterance();
-        utterance.text = textData[sentenceIndex];
+        const utterance = new SpeechSynthesisUtterance();
+        // utterance.text = textData[sentenceIndex];
+        utterance.text = 'hello';
         utterance.lang = 'en-US';
         utterance.rate = 1.2;
         speechSynthesis.speak(utterance);
@@ -153,7 +153,7 @@ export class TextToSpeech extends Component {
         //                        onClick={this.playAudio}>
         //                        {play_button('yellow')}
         //                   </div>
-        const flipcard = <div> Hello </div>
+        const flipcard = <div> Hello </div>;
 
         // <div className="flashcard-error">You do not have any starred cards</div>;
         // const flipcard = card

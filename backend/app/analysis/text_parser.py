@@ -11,7 +11,7 @@ def get_sentences(text):
     """
     Given a Text object, stores the definitions, examples, and image urls for all the words
     in this text.
-    :param text_obj: the Text object that we want to get sentences from
+    :param text: the Text object that we want to get sentences from
     """
 
     sentences = nltk.tokenize.sent_tokenize(text)
