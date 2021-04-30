@@ -4,6 +4,7 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 import { capitalize, getCookie } from '../common';
 
+
 class TextInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -22,6 +23,7 @@ class TextInfo extends React.Component {
         this.setState({ textData });
     }
 
+    // TODO: Find a way to display feedback upon saving or deleting a text.
     saveText = async () => {
         try {
             const csrftoken = getCookie('csrftoken');

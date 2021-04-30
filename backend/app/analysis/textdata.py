@@ -6,6 +6,7 @@ import urllib
 import urllib.request
 import urllib.parse
 import tqdm
+from spellchecker import SpellChecker
 
 # Ours
 from app.analysis.parts_of_speech import (
@@ -28,10 +29,10 @@ def get_bing_image_url(query):
     request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
                   + '&first=0&count=10&adlt=off'
     request = urllib.request.Request(request_url, None, headers=headers)
-    response = urllib.request.urlopen(request)
-    html = response.read().decode('utf8')
-    links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
-    return links
+    with urllib.request.urlopen(request) as response:
+        html = response.read().decode('utf8')
+        links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
+        return links
 
 
 def get_text_data(text_obj):
@@ -48,7 +49,7 @@ def get_text_data(text_obj):
     new_words_set = set(words)
     diff_words = new_words_set - old_words_set
     delete_words = old_words_set - new_words_set
-    print(diff_words, delete_words)
+
     # Remove word data for old words
     for word in delete_words:
         word_data.pop(word)
@@ -81,3 +82,32 @@ def get_text_data(text_obj):
 
     text_obj.word_data = word_data
     text_obj.save()
+
+
+def get_story_data(content):
+    """
+    Given the body of a story, return the image urls for all the nouns in the text.
+    """
+    word_urls = {}
+    words = get_valid_words(content.lower(), 'noun')
+    for word in words:
+        word = word.lower()
+        if word not in word_urls:
+            image_url = get_bing_image_url(word)[0]
+            if image_url is not None:
+                word_urls[word.lower()] = image_url
+    return word_urls
+
+
+def get_misspelled_words(content):
+    """
+    Given the body of a story, return a dictionary with the keys being the
+    misspelled word and the values the correct word.
+    """
+    correct_spelling = {}
+    spell = SpellChecker()
+    words_list = re.compile("([\\w][\\w]*'?\\w?)").findall(content)
+    misspelled = spell.unknown(words_list)
+    for word in misspelled:
+        correct_spelling[word] = spell.correction(word)
+    return correct_spelling
