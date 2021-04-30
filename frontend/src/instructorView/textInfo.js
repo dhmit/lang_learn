@@ -10,15 +10,20 @@ export class TextInfo extends React.Component {
             collapse: true,
             editing: false,
             currentModule: Object.keys(this.props.text.modules)[0],
-            textData: this.props.text,
             selectedWord: '',
+
+            content: this.props.text.content,
+            id: this.props.text.id,
+            modules: this.props.text.modules,
+            title: this.props.text.title,
+            wordData: this.props.text.word_data,
         };
     }
 
     updateModule = (category, value) => {
-        const textData = this.state.textData;
-        textData.modules[this.state.currentModule][category] = value;
-        this.setState({ textData });
+        const modules = this.state;
+        modules[this.state.currentModule][category] = value;
+        this.setState({ modules });
     }
 
     // TODO: Find a way to display feedback upon saving or deleting a text.
@@ -36,7 +41,13 @@ export class TextInfo extends React.Component {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
                 },
-                body: JSON.stringify(this.state.textData),
+                body: JSON.stringify({
+                    content: this.state.content,
+                    id: this.state.id,
+                    modules: this.state.modules,
+                    title: this.state.title,
+                    word_data: this.state.wordData,
+                }),
             });
             // Add a delay to this.setState to ensure users see the spinner when saving text
             setTimeout(() => {
@@ -60,7 +71,7 @@ export class TextInfo extends React.Component {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
                 },
-                body: JSON.stringify(this.state.textData.id),
+                body: JSON.stringify(this.state.id),
             }).then(() => {
                 this.props.delete();
             });
@@ -74,15 +85,11 @@ export class TextInfo extends React.Component {
     }
 
     editText = (e) => {
-        const { textData } = this.state;
-        textData.content = e.target.value;
-        this.setState({ textData });
+        this.setState({ content: e.target.value });
     }
 
     editTitle = (e) => {
-        const { textData } = this.state;
-        textData.title = e.target.value;
-        this.setState({ textData });
+        this.setState({ title: e.target.value });
     }
 
     handleModuleChange = (e) => {
@@ -105,20 +112,23 @@ export class TextInfo extends React.Component {
         // This is a work in progress! This shows that we should really consider refactoring
         // the state dict.
         const selectedWord = this.state.selectedWord;
-        this.setState((state) => ({
-            textData: {
-                ...state.textData,
-                word_data: {
-                    ...state.textData.word_data,
-                    [selectedWord]: {
-                        ...state.textData.word_data[selectedWord],
-                        // This throws an error when an example is chosen:
-                        // e.target is null (why?)
-                        chosen_example: e.target.value,
-                    },
-                },
-            },
-        }));
+        this.setState((state) => {
+            const wordData = state;
+            wordData[selectedWord].chosen_example = e.target.value;
+            return { wordData };
+        });
+        // ({
+        //         wordData: {
+        //             ...state.wordData,
+        //             [selectedWord]: {
+        //                 ...state.wordData[selectedWord],
+        //                 // This throws an error when an example is chosen:
+        //                 // e.target is null (why?)
+        //                 chosen_example: e.target.value,
+        //             },
+        //         },
+        //     })
+        // });
         // this.setState({
         //   textData: {
         //     ...this.state.textData,
@@ -135,8 +145,7 @@ export class TextInfo extends React.Component {
 
     /* Render Methods */
     renderHeader = () => {
-        const { collapse } = this.state;
-        const { title } = this.state.textData;
+        const { collapse, title } = this.state;
 
         return <div className={`card-header ${collapse ? 'header-round' : ''}`}>
             <div className="row">
@@ -166,8 +175,7 @@ export class TextInfo extends React.Component {
     }
 
     renderCardInfo = () => {
-        const { currentModule } = this.state;
-        const { modules, content } = this.state.textData;
+        const { currentModule, modules, content } = this.state;
         return <div className="row mb-4">
             <div className="col-xl-9 col-12 mb-4 mb-xl-0">
                 <textarea
@@ -218,8 +226,8 @@ export class TextInfo extends React.Component {
     // WE'RE CODING HERE
     renderWordSelection = () => {
         // RIGHT HERE YEEEEET
-        const wordsInText = Object.keys(this.state.textData.word_data);
-        console.log('this is the word_data', this.state.textData.word_data);
+        const wordsInText = Object.keys(this.state.wordData);
+        console.log('this is the word_data', this.state.wordData);
         console.log(wordsInText);
         /*
         this.state.textData.word_data = {
@@ -278,7 +286,7 @@ export class TextInfo extends React.Component {
 
     renderWordExample = () => {
         const selectedWord = this.state.selectedWord;
-        const selectedWordExamples = this.state.textData.word_data[selectedWord].examples;
+        const selectedWordExamples = this.state.wordData[selectedWord].examples;
         const examples = (selectedWordExamples
             .map((example) => (<option key = {example} value = {example}>
                 {example}

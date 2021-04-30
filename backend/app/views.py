@@ -169,6 +169,7 @@ def update_text(request):
     text_obj.title = body['title']
     text_obj.content = body['content']
     text_obj.modules = body['modules']
+    text_obj.word_data = body['word_data']
     text_obj.save()
 
     if old_text != text_obj.content:
