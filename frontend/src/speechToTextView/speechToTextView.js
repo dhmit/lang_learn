@@ -11,7 +11,22 @@ export class SpeechToTextView extends React.Component {
             sentences: [],
             sentenceIndex: 0,
             record: false,
+            blobURL: null,
+            downloadLinkURL: null,
         };
+    }
+
+    onData = (recordedBlob) => {
+        console.log('chunk of real-time data is: ', recordedBlob);
+    }
+
+    onSave = (blobObject) => {
+        this.setState({ downloadLinkURL: blobObject.blobURL });
+    }
+
+    onStop = (recordedBlob) => {
+        console.log('recordedBlob is: ', recordedBlob);
+        this.setState({ blobURL: recordedBlob.blobURL });
     }
 
     startRecording = () => {
@@ -20,14 +35,6 @@ export class SpeechToTextView extends React.Component {
 
     stopRecording = () => {
         this.setState({ record: false });
-    }
-
-    onData(recordedBlob) {
-        console.log('chunk of real-time data is: ', recordedBlob);
-    }
-
-    onStop(recordedBlob) {
-        console.log('recordedBlob is: ', recordedBlob);
     }
 
     async componentDidMount() {
@@ -42,19 +49,32 @@ export class SpeechToTextView extends React.Component {
     }
 
     render() {
+        const {
+            blobURL,
+            downloadLinkURL,
+            record,
+        } = this.state;
+
         return (<React.Fragment>
             <Navbar />
             <div className="page">
                 <ReactMic
-                    record={this.state.record}
+                    record={record}
                     className="sound-wave"
                     onStop={this.onStop}
                     onData={this.onData}
                     strokeColor="#000000"
                     backgroundColor="#FF4081"
                 />
+                <br/>
                 <button onClick={this.startRecording} type="button">Start</button>
                 <button onClick={this.stopRecording} type="button">Stop</button>
+                <br/>
+                <audio
+                    controls="controls"
+                    src={blobURL}
+                    controlsList="nodownload"
+                />
             </div>
             <Footer />
         </React.Fragment>);
