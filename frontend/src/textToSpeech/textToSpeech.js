@@ -107,6 +107,8 @@ export class TextToSpeech extends Component {
                 this.changeSentence(-1);
             } else if (code === 'ArrowRight') {
                 this.changeSentence(1);
+            } else if (code === 'Space') {
+                this.playAudio();
             }
         }
     }
@@ -146,11 +148,31 @@ export class TextToSpeech extends Component {
 
         /* Generate Flashcard */
         const card = this.getCurrentSentence();
-        const flipcard = <div className="flashcard-star-back"
-                               onClick={this.playAudio}>
-                               {playButton('yellow')}
+        // const flipcard = <div className="flashcard-star-back"
+        //                        onClick={this.playAudio}>
+        //                        {playButton('yellow')}
+        //
+        //                   </div>;
 
-                          </div>;
+        const flipcard =
+                <div>
+                    <div className="flashcard-star-back"
+                       onClick={this.playAudio}>
+                       {playButton('yellow')}
+
+                    </div>
+                    <div className="flashcard-div row">
+                        <div className="flashcard-arrows col-1 text-right"
+                            onClick={() => this.changeSentence(-1)}
+                        >
+                                &#60;
+                        </div>
+                        <div className="flashcard-arrows col-1" onClick={() => this.changeSentence(1)}>
+                            &#62;
+                        </div>
+                    </div>
+
+                </div>;
         // const flipcard = <div>{this.getCurrentSentence()}</div>;
 
         // <div className="flashcard-error">You do not have any starred cards</div>;
