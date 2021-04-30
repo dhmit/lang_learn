@@ -7,7 +7,7 @@ const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-const synth = window.speechSynthesis;
+// const synth = window.speechSynthesis;
 
 const playButton = (color) => {
     return (
@@ -60,7 +60,7 @@ export class TextToSpeech extends Component {
             sentenceIndex,
             textData,
         } = this.state;
-        return this.state.textData[this.state.sentenceIndex];
+        return this.state.textData[this.state.sentenceIndex]['sentence'];
     }
 
     changeSentence = (delta) => {
@@ -75,7 +75,7 @@ export class TextToSpeech extends Component {
 
     playAudio = () => {
         const utterance = new SpeechSynthesisUtterance();
-        utterance.text = this.state.textData[this.state.sentenceIndex];
+        utterance.text = this.getCurrentSentence();
         utterance.lang = 'en-US';
         utterance.rate = 1.2;
         speechSynthesis.speak(utterance);
@@ -146,11 +146,12 @@ export class TextToSpeech extends Component {
 
         /* Generate Flashcard */
         const card = this.getCurrentSentence();
-        // const flipcard =  <div className="flashcard-star-back"
-        //                        onClick={this.playAudio}>
-        //                        {play_button('yellow')}
-        //                   </div>
-        const flipcard = <div>Hello</div>;
+        const flipcard = <div className="flashcard-star-back"
+                               onClick={this.playAudio}>
+                               {playButton('yellow')}
+
+                          </div>;
+        // const flipcard = <div>{this.getCurrentSentence()}</div>;
 
         // <div className="flashcard-error">You do not have any starred cards</div>;
         // const flipcard = card
