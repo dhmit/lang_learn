@@ -10,6 +10,7 @@ django-webpack-loader==0.7.0
 djangorestframework==3.12.2
 futures==3.1.1
 goslate==1.5.1
+ibm-watson==5.1.0
 idna==2.10
 joblib==1.0.1
 nltk==3.5
