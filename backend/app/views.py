@@ -6,6 +6,9 @@ import random
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from os.path import join, dirname
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 from .models import (
     Text
@@ -202,6 +205,24 @@ def get_text_sentences(request, text_id):
     API endpoint to get a single piece of text based on the ID (maybe we want to change this).
     """
     text_obj = Text.objects.get(id=text_id)
-    print(sentence_feeder(text_obj.content))
     res = [{'sentence': sentence} for sentence in sentence_feeder(text_obj.content)]
     return Response(res)
+
+@api_view(['GET'])
+def get_text_from_speech(request, file_path, keywords):
+    authenticator = IAMAuthenticator('{apikey}')
+    speech_to_text = SpeechToTextV1(
+        authenticator=authenticator
+    )
+
+    speech_to_text.set_service_url('https://api.us-east.speech-to-text.watson.cloud.ibm.com')
+
+    with open(file_path, 'rb') as audio_file:
+        speech_recognition_results = speech_to_text.recognize(
+            audio=audio_file,
+            content_type='audio/flac',
+            word_alternatives_threshold=0.9,
+            keywords=keywords,
+            keywords_threshold=0.5
+        ).get_result()
+    print(json.dumps(speech_recognition_results, indent=2))
