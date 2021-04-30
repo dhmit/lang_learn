@@ -14,7 +14,7 @@ import { InstructorView } from './instructorView/instructorView';
 import { AllQuizView } from './quizView/allQuizView';
 import { FlashcardView } from './flashcard/flashcardView';
 import { CrosswordView } from './crosswordView/crosswordView';
-import {TextToSpeech} from './textToSpeech/textToSpeech';
+import { TextToSpeech } from './textToSpeech/textToSpeech';
 
 // Import all styles
 import './UILibrary/styles.scss';

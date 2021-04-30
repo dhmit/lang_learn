@@ -12,7 +12,7 @@ const QUIZ_TYPES = {
     'Flashcards': posLink,
     'Quiz': idLink,
     'Crossword': posLink,
-    'TextToSpeech': idLink
+    'TextToSpeech': idLink,
 };
 
 class TextInfo extends React.Component {

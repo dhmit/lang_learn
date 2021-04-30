@@ -41,16 +41,14 @@ export class TextToSpeech extends Component {
     }
 
     componentDidMount = async () => {
-        try {
-            const apiURL = `/api/get_indiv_sentences/${this.props.textID}`;
-            const response = await fetch(apiURL);
-            const textData = await response.json();
-            console.log(textData);
-            // this.setState({ textData });
-            // document.addEventListener('keydown', this.handleKeyDown, true);
-        } catch (e) {
-            console.log(e);
-        }
+        const apiURL = `/api/get_indiv_sentences/${this.props.textID}`;
+        const response = await fetch(apiURL);
+        const data = await response.json();
+        this.setState({
+            textData: data,
+        });
+        console.log(this.state.textData);
+        document.addEventListener('keydown', this.handleKeyDown, true);
     }
 
     componentWillUnmount() {
@@ -62,7 +60,7 @@ export class TextToSpeech extends Component {
             sentenceIndex,
             textData,
         } = this.state;
-        return textData[sentenceIndex];
+        return this.state.textData[this.state.sentenceIndex];
     }
 
     changeSentence = (delta) => {
@@ -77,8 +75,7 @@ export class TextToSpeech extends Component {
 
     playAudio = () => {
         const utterance = new SpeechSynthesisUtterance();
-        // utterance.text = textData[sentenceIndex];
-        utterance.text = 'hello';
+        utterance.text = this.state.textData[this.state.sentenceIndex];
         utterance.lang = 'en-US';
         utterance.rate = 1.2;
         speechSynthesis.speak(utterance);
@@ -148,12 +145,12 @@ export class TextToSpeech extends Component {
             : `${sentenceIndex + 1}/${sentenceLength} Words`;
 
         /* Generate Flashcard */
-        const card = this.getcurrentSentence();
+        const card = this.getCurrentSentence();
         // const flipcard =  <div className="flashcard-star-back"
         //                        onClick={this.playAudio}>
         //                        {play_button('yellow')}
         //                   </div>
-        const flipcard = <div> Hello </div>;
+        const flipcard = <div>Hello</div>;
 
         // <div className="flashcard-error">You do not have any starred cards</div>;
         // const flipcard = card
