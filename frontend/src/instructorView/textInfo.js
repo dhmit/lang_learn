@@ -126,8 +126,8 @@ export class TextInfo extends React.Component {
         const { collapse, title } = this.state;
 
         return <div className={`card-header ${collapse ? 'header-round' : ''}`}>
-            <div className="row">
-                <div className="col">
+            <div className='row'>
+                <div className='col'>
                     <input
                         className='text-title'
                         type='text'
@@ -138,7 +138,7 @@ export class TextInfo extends React.Component {
                 </div>
                 <div
                     onClick={this.toggleCollapse}
-                    className="col text-right collapse-div"
+                    className='col text-right collapse-div'
                 >
                     <label className='title-collapse'>
                         {collapse ? 'Show More' : 'Show Less'}
@@ -154,15 +154,15 @@ export class TextInfo extends React.Component {
 
     renderCardInfo = () => {
         const { currentModule, modules, content } = this.state;
-        return <div className="row mb-4">
-            <div className="col-xl-9 col-12 mb-4 mb-xl-0">
+        return <div className='row mb-4'>
+            <div className='col-xl-9 col-12 mb-4 mb-xl-0'>
                 <textarea
-                    className="text-content"
+                    className'text-content'
                     value={content}
                     onChange={this.editText}
                 />
             </div>
-            <div className="col-xl-3 col-12 module-selection">
+            <div className='col-xl-3 col-12 module-selection'>
                 <select
                     className='module-select'
                     value={currentModule}
@@ -203,10 +203,9 @@ export class TextInfo extends React.Component {
 
     // WE'RE CODING HERE
     renderWordSelection = () => {
-        // RIGHT HERE YEEEEET
         const wordsInText = Object.keys(this.state.wordData);
         console.log('this is the word_data', this.state.wordData);
-        console.log(wordsInText);
+        console.log('this is the state:', this.state);
         /*
         this.state.textData.word_data = {
           word1 : {
@@ -291,7 +290,7 @@ export class TextInfo extends React.Component {
 
     renderCardButtons = () => {
         const { editing } = this.state;
-        return (<div className="card-button-div">
+        return (<div className='card-button-div'>
             <button
                 onClick={this.deleteText}
                 className={`card-buttons delete-button ${editing ? 'disabled' : ''}`}
@@ -307,7 +306,12 @@ export class TextInfo extends React.Component {
                 Save
             </button>
             { editing && <div className='card-loading'>
-                <div className="spinner-border card-spinner" role="status"/>
+                <div className='spinner-border card-spinner' role='status'/>
+                { /* trying out a Bootstrap progress bar; there's also an HTML5 <progress>
+                 element */}
+                <div className='progress'>
+                    <div className ='progress-bar' role='progressbar'/>
+                </div>
             </div>}
         </div>);
     }
@@ -334,7 +338,7 @@ export class TextInfo extends React.Component {
 
     render() {
         return (
-            <div className="card">
+            <div className='card' role='article'>
                 { this.renderHeader() }
                 { this.renderCardBody() }
             </div>
