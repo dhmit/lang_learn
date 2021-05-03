@@ -1,0 +1,36 @@
+.submit-btn {
+    background-color: #278E73;
+    color: white;
+    margin-bottom: 3vh;
+    margin-top: 10vh;
+}
+
+.box {
+    background: #5941A9;
+    border-radius: 1vh;
+    margin: 5vh 1vw 3vh 1vw;
+    padding: 2vh;
+    width: 100%;
+}
+
+.modal-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modal-hide {
+    opacity: 0;
+    transform: translateY(-100vh);
+    z-index: -1;
+}
+
+.picture-prompt {
+    border-radius: 1vh;
+    border-style: solid;
+    max-height: 20vh;
+    max-width: 100%;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
