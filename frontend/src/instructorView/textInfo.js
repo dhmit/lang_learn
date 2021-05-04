@@ -21,7 +21,7 @@ export class TextInfo extends React.Component {
     }
 
     updateModule = (category, value) => {
-        const modules = this.state;
+        const { modules } = this.state;
         modules[this.state.currentModule][category] = value;
         this.setState({ modules });
     }
@@ -271,7 +271,7 @@ export class TextInfo extends React.Component {
         const selectedWord = this.state.selectedWord;
         const selectedWordExamples = this.state.wordData[selectedWord].examples;
         const examples = (selectedWordExamples
-            .map((example) => (<option key = {example} value = {example}>
+            .map((example) => (<option key={example} value={example}>
                 {example}
             </option>))
         );
@@ -281,13 +281,20 @@ export class TextInfo extends React.Component {
                 className='text-info-dropdown'
                 name='example-select'
                 value={this.state.wordData[selectedWord].chosen_example}
-                onChange = {(e) => this.handleExampleSelect(e)}
+                onChange={(e) => this.handleExampleSelect(e)}
             >
                 {examples}
             </select>
         </>);
     }
 
+    renderImages = () => {
+        const { wordData, selectedWord } = this.state;
+        const { images } = wordData[selectedWord];
+        return images.map((image, k) => (
+            <img src={image} key={k} className='col-12 col-xl-4'/>
+        ));
+    }
 
     renderCardButtons = () => {
         const { editing } = this.state;
@@ -326,6 +333,9 @@ export class TextInfo extends React.Component {
                         the user has not yet selected a word */}
                     { this.state.selectedWord ? this.renderWordExample() : <></> }
                 </div>
+            </div>
+            <div className='row'>
+                { this.state.selectedWord ? this.renderImages() : <></> }
             </div>
             { this.renderCardButtons() }
         </div>);

@@ -27,7 +27,7 @@ def get_bing_image_url(query):
     }
     # Parse the page source and download pics
     request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
-                  + '&first=0&count=10&adlt=off'
+                  + '&first=0&count=9&adlt=on'
     request = urllib.request.Request(request_url, None, headers=headers)
     with urllib.request.urlopen(request) as response:
         html = response.read().decode('utf8')
