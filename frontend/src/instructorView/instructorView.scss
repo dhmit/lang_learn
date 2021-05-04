@@ -1,14 +1,10 @@
 /* Top Level Instructor View*/
-.instructor {
-    background-color: #F9EEFF;
-    color: black;
-    overflow-y: hidden;
-}
 
-.instructor-header {
-    color: #2D2155;
-    font-size: 60px;
-    font-weight: bold;
+label {
+    font-size: 20px;
+    font-weight: 500;
+    margin: auto;
+    padding: 3px 0;
 }
 
 .add-text-button {
@@ -30,6 +26,40 @@
         background: #5941A9;
         color: white;
     }
+}
+
+.backdrop {
+    background-color: rgba(0,0,0,0.5);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.btn-create {
+    background-color: #278E73;
+    color: white;
+}
+
+.instructor {
+    background-color: #F9EEFF;
+    color: black;
+    overflow-y: hidden;
+}
+
+.instructor-header {
+    color: #2D2155;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.Modal {
+    color: #2D2155;
+    position: fixed;
+    transition: all 0.4s ease-out;
+    z-index: 500;
 }
 
 .plus-icon {
@@ -61,23 +91,6 @@
     width: 30px;
 }
 
-.Modal {
-    color: #2D2155;
-    position: fixed;
-    transition: all 0.4s ease-out;
-    z-index: 500;
-}
-
-.backdrop {
-    background-color: rgba(0,0,0,0.5);
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-}
-
 @media (min-width: 600px) {
     .Modal {
         left: calc(50% - 250px);
@@ -85,24 +98,15 @@
     }
 }
 
-label {
-    font-size: 20px;
-    font-weight: 500;
-    margin: auto;
-    padding: 3px 0;
-}
-
-.btn-create {
-    background-color: #278E73;
-    color: white;
-}
 
 /* Card (Text Info) Styles*/
+
 .card {
     border-radius: 10px;
     color: white;
     margin: 20px 0;
 }
+
 
 /* Card body and collapsing animation */
 
@@ -111,8 +115,8 @@ label {
 }
 
 .card-collapse {
-    opacity: 0;
     max-height: 0;
+    opacity: 0;
     padding: 0 1.25rem;
     transition: max-height 0.4s, opacity 0.2s, padding 0.5s linear;
 }
@@ -135,7 +139,9 @@ label {
     width: 100%;
 }
 
+
 /* Definition / Example / Image Styles */
+
 .text-info-label {
     color: black;
 }
@@ -146,10 +152,17 @@ label {
 
 
 /* Card Header Styles */
+
 .card-header {
     background-color: #5941A9;
     border-radius: 10px 10px 0 0 !important;
     transition: border-radius 0.5s ease-in;
+}
+
+.collapse-div {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .header-round {
@@ -164,12 +177,6 @@ label {
     font-weight: bold;
 }
 
-.collapse-div {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-}
-
 .title-collapse {
     color: #9F91CC;
     cursor: pointer;
@@ -177,7 +184,13 @@ label {
     margin: 0;
 }
 
+
 /* Arrow for collapsing */
+
+.arrow-flip {
+    transform: rotate(-180deg);
+}
+
 .collapse-arrow {
     background: #9F91CC;
     cursor: pointer;
@@ -187,10 +200,6 @@ label {
     transform: rotate(0);
     transition: all 0.5s ease-in-out;
     width: 27px;
-}
-
-.arrow-flip {
-    transform: rotate(-180deg);
 }
 
 .rect-1 {
@@ -213,18 +222,13 @@ label {
     width: 14px;
 }
 
+
 /* Card Buttons */
+
 .card-button-div {
     align-items: center;
     display: flex;
     flex-direction: row-reverse;
-}
-
-.card-spinner {
-    border-color: black;
-    border-right-color: transparent;
-    height: 2rem !important;
-    width: 2rem !important;
 }
 
 .card-buttons {
@@ -247,13 +251,11 @@ label {
     }
 }
 
-.save-button {
-    background: #2D2155;
-
-    &:hover {
-        border: #2D2155 2px solid;
-        color: #2D2155;
-    }
+.card-spinner {
+    border-color: black;
+    border-right-color: transparent;
+    height: 2rem !important;
+    width: 2rem !important;
 }
 
 .delete-button {
@@ -277,23 +279,17 @@ label {
     }
 }
 
+.save-button {
+    background: #2D2155;
+
+    &:hover {
+        border: #2D2155 2px solid;
+        color: #2D2155;
+    }
+}
+
+
 /* Module Selection Styles */
-.module-header {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.module-select {
-    font-size: 1.7rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    padding: 0.2rem 0.4rem;
-}
-
-.module-selection {
-    color: black;
-}
 
 .module-category {
     margin: 0 0 20px;
@@ -307,8 +303,25 @@ label {
     width: 25px;
 }
 
+.module-header {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 .module-category-label {
     font-size: 18px;
     font-weight: 500;
     margin: 0;
+}
+
+.module-select {
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.module-selection {
+    color: black;
 }
