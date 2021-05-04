@@ -157,14 +157,14 @@ export class TextInfo extends React.Component {
         return <div className='row mb-4'>
             <div className='col-xl-9 col-12 mb-4 mb-xl-0'>
                 <textarea
-                    className'text-content'
+                    className = 'text-content'
                     value={content}
                     onChange={this.editText}
                 />
             </div>
             <div className='col-xl-3 col-12 module-selection'>
                 <select
-                    className='module-select'
+                    className = 'module-select'
                     value={currentModule}
                     onChange={this.handleModuleChange}
                 >
