@@ -25,6 +25,35 @@ def get_sentences(text):
     print(sentences)
     return sentences
 
+def correct_sentence(given_sent, correct_sent):
+    grade = {}
+    given_tok = nltk.tokenize.word_tokenize(given_sent)
+    correct_tok = nltk.tokenize.word_tokenize(correct_sent)
+
+
+    index = 0
+    for word in given_tok:
+        match_found = False
+        for ind, match in enumerate(correct_tok[index:]):
+            print(word, match)
+            if word == match:
+                match_found = True
+                match_index = ind + index
+                break
+        if match_found:
+            grade[word] = "correct"
+            index = match_index + 1
+        else:
+            grade[word] = "incorrect"
+    return grade
+
+
+if __name__ == '__main__':
+    actual = "i like soup"
+    given = "i like"
+    print(actual, given)
+    print(correct_sentence(given, actual))
+
 
 
 
