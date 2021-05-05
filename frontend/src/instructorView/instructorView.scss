@@ -144,9 +144,15 @@ label {
 
 .text-info-label {
     color: black;
+    font-size: 1.6rem;
 }
 
 .text-info-dropdown {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    padding: 0.4rem 0.6rem;
     width: 100%;
 }
 
@@ -324,4 +330,20 @@ label {
 
 .module-selection {
     color: black;
+}
+
+/* Image Styles */
+.card-images {
+    cursor: pointer;
+    margin-bottom: 2rem;
+    max-height: 20rem;
+    width: 100%;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.chosen-image {
+    border: 10px solid black;
 }

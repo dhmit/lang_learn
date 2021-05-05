@@ -121,6 +121,14 @@ export class TextInfo extends React.Component {
         });
     }
 
+    handleImageSelect = (imageSrc) => {
+        this.setState((state) => {
+            const { wordData } = state;
+            wordData[state.selectedWord].chosen_image = imageSrc;
+            return { wordData };
+        });
+    }
+
     /* Render Methods */
     renderHeader = () => {
         const { collapse, title } = this.state;
@@ -290,8 +298,15 @@ export class TextInfo extends React.Component {
     renderImages = () => {
         const { wordData, selectedWord } = this.state;
         const { images } = wordData[selectedWord];
+        const chosenImage = wordData[selectedWord]['chosen_image'];
         return images.map((image, k) => (
-            <img src={image} key={k} className='col-12 col-xl-4'/>
+            <div key={k} className='col-12 col-xl-4 '>
+                <img
+                    src={image}
+                    onClick={() => this.handleImageSelect(image)}
+                    className={`card-images ${chosenImage === image ? 'chosen-image' : ''}`}
+                />
+            </div>
         ));
     }
 
