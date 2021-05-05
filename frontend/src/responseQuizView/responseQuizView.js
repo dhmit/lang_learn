@@ -224,10 +224,7 @@ export class ResponseQuizView extends React.Component {
                                     const answers = this.state.userAnswers;
 
                                     if (this.state.graded) {
-                                        if (Object.prototype.hasOwnProperty.call(
-                                            answers,
-                                            qNumber,
-                                        )) {
+                                        if (qNumber in answers) {
                                             const userAnswer = answers[qNumber];
                                             const correctAnswer = this.state.data[key].answer;
                                             if (userAnswer === correctAnswer) {
@@ -238,10 +235,8 @@ export class ResponseQuizView extends React.Component {
                                         }
                                     } else {
                                         for (const i in answers) {
-                                            if (Object.prototype.hasOwnProperty.call(answers, i)) {
-                                                if (qNumber.toString() === i) {
-                                                    qStatus = 'Answered';
-                                                }
+                                            if (qNumber.toString() === i) {
+                                                qStatus = 'Answered';
                                             }
                                         }
                                     }

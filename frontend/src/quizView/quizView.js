@@ -128,7 +128,6 @@ export class QuizView extends React.Component {
             return (<LoadingPage />);
         }
 
-        // Previously a ButtonChoices function
         const choices = this.state.data[this.state.question - 1].options;
 
         const radios = choices.map((choice, i) => {
