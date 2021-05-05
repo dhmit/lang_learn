@@ -54,8 +54,6 @@ export class ResponseQuizView extends React.Component {
             this.setState({
                 question: nextQuestionNumber,
             });
-        } else {
-            console.log();
         }
     }
 
