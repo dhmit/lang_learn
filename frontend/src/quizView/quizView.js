@@ -16,6 +16,7 @@ export class QuizView extends React.Component {
         super(props);
         this.state = {
             data: null,
+            error: false,
             question: 1,
             userAnswers: {},
             score: 0,
@@ -26,8 +27,13 @@ export class QuizView extends React.Component {
     async componentDidMount() {
         try {
             const response = await fetch(`/api/get_quiz_data/${this.props.textID}/`);
-            const data = await response.json();
-            this.setState({ data: data });
+            if (!response.ok) {
+                console.log('Something went wrong :(');
+                this.setState({error: true});
+            } else {
+                const questionData = await response.json();
+                this.setState({data: questionData});
+            }
         } catch (e) {
             console.log(e);
         }
@@ -114,6 +120,10 @@ export class QuizView extends React.Component {
     }
 
     render() {
+        if (this.state.error) {
+            // Eventually create a better error page
+            return (<p>Something is broken. Consider fixing that. ¯\_(ツ)_/¯</p>);
+        }
         if (!this.state.data) {
             return (<LoadingPage />);
         }

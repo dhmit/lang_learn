@@ -4,6 +4,8 @@ These view functions and classes implement API endpoints
 import json
 import random
 
+from django.http import Http404
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -186,7 +188,10 @@ def get_quiz_data(request, text_id):
     the id of the text. The first verb in each sentence of the text will be fill-in. The options
     will be randomly selected and arranged.
     """
-    text_obj = Text.objects.get(id=text_id)
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist:
+        raise Http404
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
@@ -197,7 +202,10 @@ def get_response_quiz_data(request, text_id):
     API endpoint for getting the necessary information for the conversation quiz given
     the id of the text. [add more important info]
     """
-    text_obj = Text.objects.get(id=text_id)
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist:
+        raise Http404
     res = get_quiz_questions(text_obj.content)
     for question in res:
         apply_question_option_errors(question)
