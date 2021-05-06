@@ -84,16 +84,8 @@ export class TextInfo extends React.Component {
         this.setState({ collapse: !this.state.collapse });
     }
 
-    editText = (e) => {
-        this.setState({ content: e.target.value });
-    }
-
-    editTitle = (e) => {
-        this.setState({ title: e.target.value });
-    }
-
-    handleModuleChange = (e) => {
-        this.setState({ currentModule: e.target.value });
+    handleTextInfoChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     // Handle dropdown changes
@@ -140,7 +132,7 @@ export class TextInfo extends React.Component {
                         className='text-title'
                         type='text'
                         name='title'
-                        onChange={this.editTitle}
+                        onChange={this.handleTextInfoChange}
                         value={title}
                     />
                 </div>
@@ -165,16 +157,18 @@ export class TextInfo extends React.Component {
         return <div className='row mb-4'>
             <div className='col-xl-9 col-12 mb-4 mb-xl-0'>
                 <textarea
+                    name='content'
                     className = 'text-content'
                     value={content}
-                    onChange={this.editText}
+                    onChange={this.handleTextInfoChange}
                 />
             </div>
             <div className='col-xl-3 col-12 module-selection'>
                 <select
+                    name='currentModule'
                     className = 'module-select'
                     value={currentModule}
-                    onChange={this.handleModuleChange}
+                    onChange={this.handleTextInfoChange}
                 >
                     {
                         Object.keys(modules).map((module, k) => (
@@ -234,7 +228,7 @@ export class TextInfo extends React.Component {
             <label className='text-info-label' htmlFor='word-select'>Select a word:</label>
             <select
                 className='text-info-dropdown'
-                name='word-select'
+                name='selectedWord'
                 onChange = {this.handleWordSelect}>
                 {options}
             </select>
