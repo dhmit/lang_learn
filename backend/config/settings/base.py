@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
 
 CONFIG_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BACKEND_DIR = os.path.dirname(CONFIG_DIR)
@@ -17,6 +18,11 @@ SETTINGS_DIR = os.path.join(CONFIG_DIR, 'settings')
 DB_PATH = os.path.join(BACKEND_DIR, 'db.sqlite3')
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 NLTK_WORD_DIR = os.path.join(BACKEND_DIR, 'app/analysis/nltk_data/words')
+
+load_dotenv()
+
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+SEARCH_CX = os.environ.get('SEARCH_CX')
 
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 

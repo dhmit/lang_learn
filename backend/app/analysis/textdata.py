@@ -2,11 +2,10 @@
 Custom command to populate text model with definition, examples, and images
 """
 import re
-import urllib
-import urllib.request
-import urllib.parse
 import tqdm
+from django.conf import settings
 from spellchecker import SpellChecker
+from google_images_search import GoogleImagesSearch
 
 # Ours
 from app.analysis.parts_of_speech import (
@@ -16,23 +15,20 @@ from app.analysis.parts_of_speech import (
 )
 
 
-# Modified Code from Bing library
-def get_bing_image_url(query):
+def get_image_urls(query):
     """
-    Given the word that we want to search for, returns a url of the image found from Bing image
-    search
+    Given the word that we want to search for, returns urls for images found using Google Images
     """
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
+    gis = GoogleImagesSearch(settings.GOOGLE_API_KEY, settings.SEARCH_CX)
+    _search_params = {
+        'q': query,
+        'num': 9,
+        'safe': 'high',
+        'rights': 'CC_PUBLICDOMAIN',
+        'imgSize': 'LARGE'
     }
-    # Parse the page source and download pics
-    request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(query) \
-                  + '&first=0&count=9&adlt=on'
-    request = urllib.request.Request(request_url, None, headers=headers)
-    with urllib.request.urlopen(request) as response:
-        html = response.read().decode('utf8')
-        links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
-        return links
+    gis.search(search_params=_search_params)
+    return [image._url for image in gis.results()]
 
 
 def get_text_data(text_obj):
@@ -76,7 +72,7 @@ def get_text_data(text_obj):
 
     print(f"Getting images for \"{text_obj.title}\"...")
     for word in tqdm.tqdm(diff_words):
-        image_urls = get_bing_image_url(word)
+        image_urls = get_image_urls(word)
         word_data[word]["images"] = image_urls
         word_data[word]["chosen_image"] = image_urls[0] if len(image_urls) > 0 else ""
 
@@ -93,7 +89,7 @@ def get_story_data(content):
     for word in words:
         word = word.lower()
         if word not in word_urls:
-            image_url = get_bing_image_url(word)[0]
+            image_url = get_image_urls(word)[0]
             if image_url is not None:
                 word_urls[word.lower()] = image_url
     return word_urls
