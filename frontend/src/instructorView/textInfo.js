@@ -88,35 +88,10 @@ export class TextInfo extends React.Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    // Handle dropdown changes
-    handleWordSelect = (e) => {
-        this.setState({ selectedWord: e.target.value });
-    }
-
-    handleDefinitionSelect = (e) => {
-        e.persist();
+    handleWordInfoSelect = (key, value) => {
         this.setState((state) => {
             const { wordData } = state;
-            wordData[state.selectedWord].chosen_definition = e.target.value;
-            return { wordData };
-        });
-    }
-
-    handleExampleSelect = (e) => {
-        // This is a work in progress! This shows that we should really consider refactoring
-        // the state dict.
-        e.persist();
-        this.setState((state) => {
-            const { wordData } = state;
-            wordData[state.selectedWord].chosen_example = e.target.value;
-            return { wordData };
-        });
-    }
-
-    handleImageSelect = (imageSrc) => {
-        this.setState((state) => {
-            const { wordData } = state;
-            wordData[state.selectedWord].chosen_image = imageSrc;
+            wordData[state.selectedWord][key] = value;
             return { wordData };
         });
     }
@@ -229,7 +204,7 @@ export class TextInfo extends React.Component {
             <select
                 className='text-info-dropdown'
                 name='selectedWord'
-                onChange = {this.handleWordSelect}>
+                onChange = {this.handleTextInfoChange}>
                 {options}
             </select>
         </>);
@@ -261,7 +236,7 @@ export class TextInfo extends React.Component {
                 className='text-info-dropdown'
                 name='definition-select'
                 value={this.state.wordData[selectedWord].chosen_definition}
-                onChange = {(e) => this.handleDefinitionSelect(e)}
+                onChange = {(e) => this.handleWordInfoSelect('chosen_definition', e.target.value)}
             >
                 {options}
             </select>
@@ -282,7 +257,7 @@ export class TextInfo extends React.Component {
                 className='text-info-dropdown'
                 name='example-select'
                 value={this.state.wordData[selectedWord].chosen_example}
-                onChange={(e) => this.handleExampleSelect(e)}
+                onChange={(e) => this.handleWordInfoSelect('chosen_example', e.target.value)}
             >
                 {examples}
             </select>
@@ -297,7 +272,7 @@ export class TextInfo extends React.Component {
             <div key={k} className='col-12 col-xl-4 '>
                 <img
                     src={image}
-                    onClick={() => this.handleImageSelect(image)}
+                    onClick={() => this.handleWordInfoSelect('chosen_image', image)}
                     className={`card-images ${chosenImage === image ? 'chosen-image' : ''}`}
                 />
             </div>
