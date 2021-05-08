@@ -9,31 +9,33 @@ export class YoloModelDisplayWidget extends React.Component {
         let box;
         const ratio = this.props.height / this.props.natHeight;
         for (box of this.props.boxes) {
-            items.push(
-                <rect
-                    className = 'outsideBox'
-                    x = {box['x_coord'] * ratio}
-                    y = {box['y_coord'] * ratio}
-                    height = {box['height'] * ratio}
-                    width = {box['width'] * ratio}
-                />,
-                <g className={'boxGroup'}>
-                    <text
-                        className='label'
-                        x = {box['x_coord'] * ratio}
-                        y = {box['y_coord'] * ratio - 5}
-                    >
-                        {box['label']}
-                    </text>
+            if (box['x_coord'] * ratio && box['label'] === this.props.currentObject) {
+                items.push(
                     <rect
-                        className = 'boundingBox'
-                        x = {box['x_coord'] * ratio}
-                        y = {box['y_coord'] * ratio}
-                        height = {box['height'] * ratio}
-                        width = {box['width'] * ratio}
-                    />
-                </g>,
-            );
+                        className='outsideBox'
+                        x={box['x_coord'] * ratio}
+                        y={box['y_coord'] * ratio}
+                        height={box['height'] * ratio}
+                        width={box['width'] * ratio}
+                    />,
+                    <g className={'boxGroup'}>
+                        <text
+                            className='label'
+                            x={box['x_coord'] * ratio}
+                            y={box['y_coord'] * ratio - 5}
+                        >
+                            {box['label']}
+                        </text>
+                        <rect
+                            className='boundingBox'
+                            x={box['x_coord'] * ratio}
+                            y={box['y_coord'] * ratio}
+                            height={box['height'] * ratio}
+                            width={box['width'] * ratio}
+                        />
+                    </g>,
+                );
+            }
         }
 
         return (
@@ -50,7 +52,7 @@ export class YoloModelDisplayWidget extends React.Component {
     }
 }
 
-function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth) {
+function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth, currentObject) {
     let boxes = [];
     if ('boxes' in parsedValue) {
         boxes = parsedValue['boxes'];
@@ -62,6 +64,7 @@ function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth
             width={width}
             natHeight={natHeight}
             natWidth={natWidth}
+            currentObject={currentObject}
         />
     );
 }
@@ -72,6 +75,7 @@ YoloModelDisplayWidget.propTypes = {
     width: PropTypes.number,
     natHeight: PropTypes.number,
     natWidth: PropTypes.number,
+    currentObject: PropTypes.string,
 };
 
 export class PictureQuizView extends React.Component {
@@ -109,7 +113,7 @@ export class PictureQuizView extends React.Component {
         const nextQuestionNumber = this.state.question + 1;
         this.setState({
             question: nextQuestionNumber,
-            timeLeft: 15,
+            timeLeft: 10,
             gameOver: false,
         });
         this.timer = 0;
@@ -174,7 +178,7 @@ export class PictureQuizView extends React.Component {
     }
 
     startTimer = () => {
-        if (this.timer === 0 && this.state.timeLeft > 0) {
+        if (this.timer === 0) {
             this.timer = setInterval(this.countDown, 1000);
         }
     }
@@ -272,20 +276,21 @@ export class PictureQuizView extends React.Component {
                             onLoad={this.onImgLoad}
                             ref={this.photoRef}
                         />
-                        {
-                            configAnalysisYoloModel(
-                                this.state.photoData,
+                        {this.state.gameOver
+                            ? configAnalysisYoloModel(
+                                this.state.photoData.objects,
                                 this.state.height,
                                 this.state.width,
                                 this.state.natHeight,
                                 this.state.natWidth,
+                                Object.keys(this.state.photoData.objects.labels)[this.state.question - 1],
                             )
+                            : <svg
+                                height={this.state.height}
+                                width={this.state.width}
+                            >
+                            </svg>
                         }
-                        <svg
-                            height={this.state.height}
-                            width={this.state.width}
-                        >
-                        </svg>
                     </div>
                     <div className="row justify-content-center">
                         <button className="btn btn-success mx-3 child"
