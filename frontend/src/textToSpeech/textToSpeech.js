@@ -36,6 +36,7 @@ export class TextToSpeech extends Component {
             sentenceIndex: 0,
             showModal: false,
             nextSentence: false,
+            userText: '',
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -79,6 +80,48 @@ export class TextToSpeech extends Component {
         utterance.lang = 'en-US';
         utterance.rate = 1.2;
         speechSynthesis.speak(utterance);
+    }
+
+    handleInput = (event) => {
+        const inputValue = event.target.value;
+        this.setState({
+            userText: inputValue,
+        });
+
+        // if (';,. '.includes(inputValue.slice(-1))) {
+        //     this.createPictureBook(inputValue);
+        // }
+        console.log('this is the input value:');
+        console.log(inputValue);
+        console.log('this is the state value:');
+        console.log(this.userText);
+    };
+
+    handleSubmit = (event) => {
+        // const inputValue = ;
+        // this.setState({
+        //     userText: inputValue,
+        // });
+
+        // if (';,. '.includes(inputValue.slice(-1))) {
+        this.gradeText();
+        // }
+        console.log('You have submitted!!!');
+        // console.log(inputValue);
+        // console.log('this is the state value:');
+        // console.log(this.userText);
+    };
+
+    gradeText = async (input) => {
+        try {
+            const apiURL = '/api/get_picturebook_data?content=' + input;
+            const response = await fetch(apiURL);
+            const pictureBookWords = await response.json();
+            pictureBookWords.pop(-1);
+            this.setState({ pictureBookWords });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // toggleStar = () => {
@@ -316,6 +359,29 @@ export class TextToSpeech extends Component {
                         </div>
                     </div>
                     {flipcard}
+                    <div className='row'>
+                        <div className="col box">
+                            <form id='input-form'>
+                                <div className="form-group">
+                                    <label>Please write exactly what you hear from the audio.</label>
+                                    <textarea className="form-control text-input"
+                                            id="content"
+                                            rows="10"
+                                            onChange={this.handleInput}
+                                            value={this.userText}>
+                                    </textarea>
+                                </div>
+                            </form>
+                        </div>
+                            <div className='col-xl-4 text-right bottom-align-text' id="submit-btn-div">
+                                <button type="submit"
+                                    className="btn btn-success submit-btn"
+                                    form="picturebook-form"
+                                    onClick={this.handleSubmit}>
+                                    Submit
+                                </button>
+                        </div>
+                    </div>
                 </div>
                 <Footer/>
             </>
