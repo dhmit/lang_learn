@@ -34,6 +34,7 @@ from .quiz_creation.conjugation_quiz import (
 )
 from .analysis.text_parser import (
     get_sentences,
+    correct_sentence,
 )
 
 
@@ -242,3 +243,14 @@ def get_indiv_sentences(request, text_id):
     res = [{'sentence': sentence} for sentence in sentences]
     return Response(res)
 
+
+@api_view(['GET'])
+def get_sentence_grade(request):
+    """
+    API endpoint for getting the individual sentences from the given text.
+    """
+    user_sentence = request.query_params.get('user_sentence')
+    actual_sentence = request.query_params.get('correct_sentence')
+
+    graded_sentence = correct_sentence(user_sentence, actual_sentence)
+    return Response(graded_sentence)

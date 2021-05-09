@@ -112,13 +112,13 @@ export class TextToSpeech extends Component {
         // console.log(this.userText);
     };
 
-    gradeText = async (input) => {
+    gradeText = async () => {
         try {
-            const apiURL = '/api/get_picturebook_data?content=' + input;
+            const apiURL = '/api/get_sentences_grade?userSentence=' + this.userText + "?correctSentence=" + this.getCurrentSentence;
             const response = await fetch(apiURL);
-            const pictureBookWords = await response.json();
-            pictureBookWords.pop(-1);
-            this.setState({ pictureBookWords });
+            const grade = await response.json();
+            // this.setState({ pictureBookWords });
+            console.log(grade);
         } catch (e) {
             console.log(e);
         }
