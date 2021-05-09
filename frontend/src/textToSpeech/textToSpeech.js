@@ -104,7 +104,10 @@ export class TextToSpeech extends Component {
         // });
 
         // if (';,. '.includes(inputValue.slice(-1))) {
-        this.gradeText();
+        console.log('trying to submit');
+        const input = this.userText + ';' + this.getCurrentSentence();
+        // this.gradeText(input);
+        this.createPictureBook(input);
         // }
         console.log('You have submitted!!!');
         // console.log(inputValue);
@@ -112,13 +115,27 @@ export class TextToSpeech extends Component {
         // console.log(this.userText);
     };
 
-    gradeText = async () => {
+    gradeText = async (input) => {
+        console.log('gradetest was called');
         try {
-            const apiURL = '/api/get_sentences_grade?userSentence=' + this.userText + "?correctSentence=" + this.getCurrentSentence;
+            const apiURL = '/api/get_correct_sentence?content=' + input;
             const response = await fetch(apiURL);
             const grade = await response.json();
             // this.setState({ pictureBookWords });
             console.log(grade);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    createPictureBook = async (input) => {
+        try {
+            const apiURL = '/api/get_sentence_grade?content=' + input;
+            const response = await fetch(apiURL);
+            const pictureBookWords = await response.json();
+            // pictureBookWords.pop(-1);
+            // this.setState({ pictureBookWords });
+            console.log(pictureBookWords);
         } catch (e) {
             console.log(e);
         }

@@ -30,6 +30,7 @@ from app.views import (
     get_quiz_data,
     text,
     get_indiv_sentences,
+    get_sentence_grade,
 )
 
 
@@ -62,6 +63,8 @@ urlpatterns = [
     path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
     path('api/get_picturebook_data', get_picturebook_data),
     path('api/get_indiv_sentences/<int:text_id>', get_indiv_sentences),
+    path('api/get_sentence_grade', get_sentence_grade),
+
 
     # View paths
     react_view_path('', 'IndexView'),
