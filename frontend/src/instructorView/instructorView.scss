@@ -1,20 +1,20 @@
 /* Top Level Instructor View*/
 
 label {
-    font-size: 20px;
+    font-size: .9em;
     font-weight: 500;
     margin: auto;
-    padding: 3px 0;
+    padding: .1em 0;
 }
 
 .add-text-button {
     background: white;
     border: none;
-    border-radius: 30px;
+    border-radius: 25vh;
     color: black;
     font-size: 25px;
     font-weight: bold;
-    padding: 5px 20px 5px 60px;
+    padding: .15em .9em .15em 2.7em;
     position: relative;
     transition: all 0.3s linear;
 
@@ -64,7 +64,7 @@ label {
 
 .plus-icon {
     background: #5941A9;
-    border-radius: 30px;
+    border-radius: 25vh;
     height: 47px;
     left: 0;
     position: absolute;
@@ -179,7 +179,7 @@ label {
     background: #5941A9;
     border: none;
     color: #F9EEFF;
-    font-size: 26px;
+    font-size: 1.7rem;
     font-weight: bold;
 }
 
@@ -239,12 +239,12 @@ label {
 
 .card-buttons {
     border: transparent 2px solid;
-    border-radius: 8px;
+    border-radius: 1vh;
     color: white;
-    font-size: 24px;
+    font-size: 1.6em;
     font-weight: bold;
     margin: 0 0 0 20px;
-    padding: 5px 20px;
+    padding: .15em .9em;
     transition-duration: 0.3s;
 
     &:focus {
@@ -257,12 +257,19 @@ label {
     }
 }
 
-.card-spinner {
-    border-color: black;
-    border-right-color: transparent;
-    height: 2rem !important;
-    width: 2rem !important;
+.card-loading {
+    display: inline;
+    width: 15%;
 }
+// We might not need this anymore now that we have the progress bar
+//
+//.card-spinner {
+//    display: none;
+//    border-color: black;
+//    border-right-color: transparent;
+//    height: 2rem !important;
+//    width: 2rem !important;
+//}
 
 .delete-button {
     background: #933A3A;
@@ -283,6 +290,11 @@ label {
         border: transparent 2px solid;
         color: black;
     }
+}
+
+.progress-bar {
+    background-color: #2D2155;
+    width: 100%;
 }
 
 .save-button {
@@ -322,7 +334,7 @@ label {
 }
 
 .module-select {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
     padding: 0.2rem 0.4rem;

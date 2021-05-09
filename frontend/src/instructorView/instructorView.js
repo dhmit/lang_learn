@@ -111,6 +111,11 @@ export class InstructorView extends React.Component {
                     <span>&times;</span>
                 </button>
             </div>
+
+            {
+                /* TODO: The process of submitting is really slow for large texts!
+                (Refreshing the page displays the results quicker) */
+            }
             <form onSubmit={this.handleSubmit}>
                 <div className="modal-body">
                     <div className="row align-items-center">
@@ -118,7 +123,7 @@ export class InstructorView extends React.Component {
                             <label htmlFor="title" className="form-label">Title:</label>
                         </div>
                         <div className="col-auto">
-                            <input type="text" id="title"
+          h                  <input type="text" id="title"
                                 className="form-control" onChange={this.handleInput}
                                 value={this.state.addTitle} required/>
                         </div>
@@ -164,7 +169,7 @@ export class InstructorView extends React.Component {
             return (<LoadingPage text='Setting up Teacher Interface...'/>);
         }
         return (<React.Fragment>
-            <Navbar color='light' />
+            <Navbar color='light' role='banner'/>
             <div className="page instructor">
                 <h1 className='instructor-header'>Resources</h1>
                 { this.state.addingText > 0 && this.renderAlert() }
@@ -178,7 +183,7 @@ export class InstructorView extends React.Component {
                     />
                 ))}
             </div>
-            <Footer />
+            <Footer role='contentinfo'/>
         </React.Fragment>);
     }
 }

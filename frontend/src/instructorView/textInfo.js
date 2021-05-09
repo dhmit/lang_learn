@@ -52,7 +52,7 @@ export class TextInfo extends React.Component {
             // Add a delay to this.setState to ensure users see the spinner when saving text
             setTimeout(() => {
                 this.setState({ editing: false });
-            }, 200);
+            }, 500);
         } catch (e) {
             console.log(e);
         }
@@ -297,11 +297,11 @@ export class TextInfo extends React.Component {
                 Save
             </button>
             { editing && <div className='card-loading'>
-                <div className='spinner-border card-spinner' role='status'/>
-                { /* trying out a Bootstrap progress bar; there's also an HTML5 <progress>
-                 element */}
+                {/* We might not need this anymore:
+                    <div className='spinner-border card-spinner' role='status'/>
+                */ }
                 <div className='progress'>
-                    <div className ='progress-bar' role='progressbar'/>
+                    <div className='progress-bar progress-bar-striped progress-bar-animated' role='progressbar'/>
                 </div>
             </div>}
         </div>);
