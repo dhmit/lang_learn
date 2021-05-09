@@ -2,6 +2,7 @@
 Custom command to populate text model with definition, examples, and images
 """
 import nltk
+import string
 
 # Ours
 
@@ -26,13 +27,50 @@ def get_sentences(text):
     return sentences
 
 
+def correct_sentence(given_sent, correct_sent):
+    grade = {}
+    print(given_sent.translate(str.maketrans('', '', string.punctuation)))
+    given_tok = nltk.tokenize.word_tokenize(given_sent.translate(
+        str.maketrans('', '', string.punctuation)))
+    correct_tok = nltk.tokenize.word_tokenize(correct_sent.translate(
+        str.maketrans('', '', string.punctuation)))
+
+    words_missing = correct_tok.copy()
+    for word in given_tok:
+        if words_missing.count(word) != 0:
+            words_missing.remove(word)
+
+    grade["missing"] = words_missing
+
+    index = 0
+    for ind_1, word in enumerate(given_tok):
+        match_found = False
+        for ind_2, match in enumerate(correct_tok[index:]):
+            # print(word, match)
+            if word == match:
+                match_found = True
+                match_index = ind_2 + index
+                break
+        if match_found:
+            grade[ind_1] = {"word": word,
+                            "grade": "correct"}
+            index = match_index + 1
+        else:
+            grade[ind_1] = {"word": word,
+                            "grade": "incorrect"}
+    return grade
 
 
+if __name__ == '__main__':
+    actual = "i like soup"
+    given = "i like, soop"
+    print(actual, given)
+    print(correct_sentence(given, actual))
 
-
-
-
-
+    # actual = ["i like soup", "soup likes me", "EOM"]
+    #
+    # res = [{'sentence': sentence} for sentence in actual]
+    # print(res)
 
     # part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
     #

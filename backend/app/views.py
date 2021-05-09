@@ -123,7 +123,6 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
-
 @api_view(['GET'])
 def get_picturebook_prompt(request, text_id, part_of_speech):
     """
@@ -231,6 +230,7 @@ def get_quiz_data(request, text_id):
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
+
 @api_view(['GET'])
 def get_indiv_sentences(request, text_id):
     """
@@ -241,3 +241,4 @@ def get_indiv_sentences(request, text_id):
     # return Response(sentences)
     res = [{'sentence': sentence} for sentence in sentences]
     return Response(res)
+
