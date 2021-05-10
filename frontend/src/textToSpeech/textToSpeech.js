@@ -91,10 +91,10 @@ export class TextToSpeech extends Component {
         // if (';,. '.includes(inputValue.slice(-1))) {
         //     this.createPictureBook(inputValue);
         // }
-        console.log('this is the input value:');
-        console.log(inputValue);
+        // console.log('this is the input value:');
+        // console.log(inputValue);
         console.log('this is the state value:');
-        console.log(this.userText);
+        console.log(this.state.userText);
     };
 
     handleSubmit = (event) => {
@@ -105,9 +105,9 @@ export class TextToSpeech extends Component {
 
         // if (';,. '.includes(inputValue.slice(-1))) {
         console.log('trying to submit');
-        const input = this.userText + ';' + this.getCurrentSentence();
-        // this.gradeText(input);
-        this.createPictureBook(input);
+        const input = this.state.userText + ';' + this.getCurrentSentence();
+        this.gradeText(input);
+        // this.createPictureBook(input);
         // }
         console.log('You have submitted!!!');
         // console.log(inputValue);
@@ -118,7 +118,9 @@ export class TextToSpeech extends Component {
     gradeText = async (input) => {
         console.log('gradetest was called');
         try {
-            const apiURL = '/api/get_correct_sentence?content=' + input;
+            console.log('im tryig something here');
+            const apiURL = '/api/get_sentence_grade?content=' + input;
+            // const apiURL = '/api/get_picturebook_data?content=' + input;
             const response = await fetch(apiURL);
             const grade = await response.json();
             // this.setState({ pictureBookWords });
@@ -130,7 +132,9 @@ export class TextToSpeech extends Component {
 
     createPictureBook = async (input) => {
         try {
-            const apiURL = '/api/get_sentence_grade?content=' + input;
+            console.log('here is input');
+            console.log(input);
+            const apiURL = '/api/get_picturebook_data?content=' + input;
             const response = await fetch(apiURL);
             const pictureBookWords = await response.json();
             // pictureBookWords.pop(-1);
@@ -385,8 +389,14 @@ export class TextToSpeech extends Component {
                                             id="content"
                                             rows="10"
                                             onChange={this.handleInput}
-                                            value={this.userText}>
+                                            value={this.state.userText}
+                                        >
                                     </textarea>
+                                    <div>
+                                        Hello my name is
+                                        <br/>
+                                        {this.state.userText}
+                                    </div>
                                 </div>
                             </form>
                         </div>

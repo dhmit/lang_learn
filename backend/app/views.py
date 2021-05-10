@@ -148,7 +148,7 @@ def get_picturebook_data(request):
     API endpoint for getting the picture book images given the story the user wrote.
     """
     story_content = request.query_params.get('content')
-    print(story_content)
+    print('hmmm:', story_content)
     urls = get_story_data(story_content)
     misspelled = get_misspelled_words(story_content)
     res = [{'word': word,
@@ -251,6 +251,7 @@ def get_sentence_grade(request):
     API endpoint for getting the individual sentences from the given text.
     """
     # sentences = request.query_params.get('content')
+    # print(sentences)
     # user_sentence ,actual_sentence = sentences.split(';')
     #
     #graded_sentence = correct_sentence(user_sentence, actual_sentence)
@@ -261,11 +262,21 @@ def get_sentence_grade(request):
     # #res = [graded_sentence]
     # return Response(res)
 
-    story_content = "Hello, my name is pain"
-    urls = get_story_data(story_content)
-    misspelled = get_misspelled_words(story_content)
-    res = [{'word': word,
-            'url': urls[word]}
-           for word in urls]
-    res.append(misspelled)
-    return Response(res)
+    # story_content = "Hello, my name is pain"
+    # urls = get_story_data(story_content)
+    # misspelled = get_misspelled_words(story_content)
+    # res = [{'word': word,
+    #         'url': urls[word]}
+    #        for word in urls]
+    # res.append(misspelled)
+    # return Response(res)
+    # story_content = request.query_params.get('content')
+    # print('hmmm:', story_content)
+    # urls = get_story_data(story_content)
+    # misspelled = get_misspelled_words(story_content)
+    # res = [{'word': word,
+    #         'url': urls[word]}
+    #        for word in urls]
+    # res.append(misspelled)
+    # return Response(res)
+    return get_picturebook_data(request)
