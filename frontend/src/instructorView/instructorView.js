@@ -104,6 +104,7 @@ export class InstructorView extends React.Component {
             transform: this.state.showModal
                 ? 'translateY(0)' : 'translateY(-100vh)',
             opacity: this.state.showModal ? 1 : 0,
+            zIndex: this.state.showModal ? 100 : -1,
         }}>
             <div className="modal-header">
                 <h2 className="modal-title">Create Resource</h2>
@@ -120,10 +121,12 @@ export class InstructorView extends React.Component {
                 <div className="modal-body">
                     <div className="row align-items-center">
                         <div className="col-auto">
-                            <label htmlFor="title" className="form-label">Title:</label>
+                            <label htmlFor="title" className="form-label">
+                                Title:
+                            </label>
                         </div>
                         <div className="col-auto">
-          h                  <input type="text" id="title"
+                            <input type="text" id="title"
                                 className="form-control" onChange={this.handleInput}
                                 value={this.state.addTitle} required/>
                         </div>

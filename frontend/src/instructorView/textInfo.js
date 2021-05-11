@@ -11,6 +11,8 @@ export class TextInfo extends React.Component {
             editing: false,
             currentModule: Object.keys(this.props.text.modules)[0],
             selectedWord: Object.keys(this.props.text.word_data)[0],
+            customDefinition: '',
+            customExample: '',
 
             content: this.props.text.content,
             id: this.props.text.id,
@@ -184,23 +186,9 @@ export class TextInfo extends React.Component {
         </div>;
     }
 
-    // WE'RE CODING HERE
+
     renderWordSelection = () => {
         const wordsInText = Object.keys(this.state.wordData);
-        console.log('this is the word_data', this.state.wordData);
-        console.log('this is the state:', this.state);
-        /*
-        this.state.textData.word_data = {
-          word1 : {
-            chosen_definition: 'definition'
-            chosen_example: 'example'
-            chosen_image: 'img'
-            definitions:
-            examples:
-            images:
-          }
-         */
-
         const options = wordsInText.map((word) => (<option key = {word} value = {word}>
             {word}
         </option>));
@@ -218,7 +206,7 @@ export class TextInfo extends React.Component {
 
     // WORK IN PROGRESS
     renderWordDefinition = () => {
-        const { wordData, selectedWord } = this.state;
+        const { wordData, selectedWord, customDefinition } = this.state;
         const definitions = [];
         const selectedDefinitions = wordData[this.state.selectedWord]['definitions'];
         for (const partOfSpeech of Object.keys(selectedDefinitions)) {
@@ -246,12 +234,39 @@ export class TextInfo extends React.Component {
             >
                 {options}
             </select>
+            <div className='custom-div'>
+                <label className='text-info-label'>
+                Add Your Own Definition:
+                </label>
+                <input
+                    type='text'
+                    name='customDefinition'
+                    className='custom-word-input'
+                    onChange={this.handleTextInfoChange}
+                    value={customDefinition}
+                />
+                <button
+                    className='custom-word-button'
+                    onClick={() => {
+                        this.setState((state) => {
+                            if (customDefinition.trim() !== '') {
+                                const newWordData = state.wordData;
+                                newWordData[selectedWord].definitions.noun.push(customDefinition);
+                                return { wordData: newWordData, customDefinition: '' };
+                            }
+                            return { customDefinition: '' };
+                        });
+                    }}
+                >
+                    Add
+                </button>
+            </div>
         </>);
     }
 
     renderWordExample = () => {
-        const selectedWord = this.state.selectedWord;
-        const selectedWordExamples = this.state.wordData[selectedWord].examples;
+        const { wordData, selectedWord, customExample } = this.state;
+        const selectedWordExamples = wordData[selectedWord].examples;
         const examples = (selectedWordExamples
             .map((example) => (<option key={example} value={example}>
                 {example}
@@ -267,6 +282,33 @@ export class TextInfo extends React.Component {
             >
                 {examples}
             </select>
+            <div className='custom-div'>
+                <label className='text-info-label'>
+                Add Your Own Example:
+                </label>
+                <input
+                    type='text'
+                    name='customExample'
+                    className='custom-word-input'
+                    onChange={this.handleTextInfoChange}
+                    value={customExample}
+                />
+                <button
+                    className='custom-word-button'
+                    onClick={() => {
+                        this.setState((state) => {
+                            if (customExample.trim() !== '') {
+                                const newWordData = state.wordData;
+                                newWordData[selectedWord].examples.push(customExample);
+                                return { wordData: newWordData, customExample: '' };
+                            }
+                            return { customExample: '' };
+                        });
+                    }}
+                >
+                    Add
+                </button>
+            </div>
         </>);
     }
 
@@ -307,7 +349,10 @@ export class TextInfo extends React.Component {
                     <div className='spinner-border card-spinner' role='status'/>
                 */ }
                 <div className='progress'>
-                    <div className='progress-bar progress-bar-striped progress-bar-animated' role='progressbar'/>
+                    <div
+                        className='progress-bar progress-bar-striped progress-bar-animated'
+                        role='progressbar'
+                    />
                 </div>
             </div>}
         </div>);

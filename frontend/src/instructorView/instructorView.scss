@@ -7,6 +7,10 @@ label {
     padding: .1em 0;
 }
 
+.form-label {
+    font-size: 1.4em;
+}
+
 .add-text-button {
     background: white;
     border: none;
@@ -156,6 +160,38 @@ label {
     width: 100%;
 }
 
+.custom-div {
+    margin-bottom: 2rem;
+}
+
+.custom-word-input {
+    border-right: none;
+    font-size: 1.4rem;
+    padding: 0.4rem 0.6rem;
+    width: 75%;
+}
+
+.custom-word-button {
+    background: #009E36;
+    border: transparent 2px solid;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 0.2rem 0.6rem;
+    transition-duration: 0.3s;
+    width: 25%;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:hover {
+        background: white;
+        border: #009E36 2px solid;
+        color: #009E36;
+        cursor: pointer;
+    }
+}
 
 /* Card Header Styles */
 
@@ -261,15 +297,6 @@ label {
     display: inline;
     width: 15%;
 }
-// We might not need this anymore now that we have the progress bar
-//
-//.card-spinner {
-//    display: none;
-//    border-color: black;
-//    border-right-color: transparent;
-//    height: 2rem !important;
-//    width: 2rem !important;
-//}
 
 .delete-button {
     background: #933A3A;
