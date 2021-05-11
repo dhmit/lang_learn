@@ -175,7 +175,8 @@ def update_text(request):
     if old_text != text_obj.content:
         get_text_data(text_obj)
 
-    return Response()
+    serializer = TextSerializer(text_obj)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

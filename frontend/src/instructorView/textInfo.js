@@ -10,7 +10,7 @@ export class TextInfo extends React.Component {
             collapse: true,
             editing: false,
             currentModule: Object.keys(this.props.text.modules)[0],
-            selectedWord: '',
+            selectedWord: Object.keys(this.props.text.word_data)[0],
 
             content: this.props.text.content,
             id: this.props.text.id,
@@ -32,7 +32,7 @@ export class TextInfo extends React.Component {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/update_text';
             this.setState({ editing: true });
-            await fetch(apiURL, {
+            const response = await fetch(apiURL, {
                 credentials: 'include',
                 method: 'POST',
                 mode: 'same-origin',
@@ -49,10 +49,16 @@ export class TextInfo extends React.Component {
                     word_data: this.state.wordData,
                 }),
             });
-            // Add a delay to this.setState to ensure users see the spinner when saving text
+            // Add a delay to this.setState to ensure users see progress bar when saving text
             setTimeout(() => {
                 this.setState({ editing: false });
             }, 500);
+
+            const data = await response.json();
+            this.setState({
+                wordData: data.word_data,
+                selectedWord: Object.keys(data.word_data)[0],
+            });
         } catch (e) {
             console.log(e);
         }
