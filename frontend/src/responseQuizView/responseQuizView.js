@@ -112,9 +112,7 @@ export class ResponseQuizView extends React.Component {
 
     onAnswerChoiceClick = (event) => {
         const currentQ = this.state.question;
-        if ((typeof event.target.value) === 'undefined') {
-            console.log();
-        } else if (!this.state.graded) {
+        if ((!this.state.graded) && ((typeof event.target.value) !== 'undefined')) {
             const answers = this.state.userAnswers;
             answers[currentQ] = event.target.value;
             this.setState({ userAnswers: answers });
