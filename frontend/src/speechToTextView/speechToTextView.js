@@ -11,8 +11,9 @@ export class SpeechToTextView extends React.Component {
             sentences: [],
             sentenceIndex: 0,
             record: false,
+            blob: null,
             blobURL: null,
-            downloadLinkURL: null,
+            transcribedData: null,
         };
     }
 
@@ -21,12 +22,15 @@ export class SpeechToTextView extends React.Component {
     }
 
     onSave = (blobObject) => {
-        this.setState({ downloadLinkURL: blobObject.blobURL });
+        this.setState({ downloadLinkURL: blobObject });
     }
 
     onStop = (recordedBlob) => {
-        console.log('recordedBlob is: ', recordedBlob);
-        this.setState({ blobURL: recordedBlob.blobURL });
+        this.setState({
+            blob: recordedBlob.blob,
+            blobURL: recordedBlob.blobURL,
+        });
+        this.getTranscript();
     }
 
     startRecording = () => {
@@ -35,6 +39,24 @@ export class SpeechToTextView extends React.Component {
 
     stopRecording = () => {
         this.setState({ record: false });
+    }
+
+    async getTranscript() {
+        try {
+            const fd = new FormData();
+            fd.append('audio', this.state.blob);
+            const apiURL = '/api/get_transcript';
+            const response = await fetch(apiURL, {
+                headers: { Accept: 'application/json' },
+                method: 'POST',
+                body: fd,
+            });
+            const transcribedData = await response.json();
+            this.setState({ transcribedData: transcribedData });
+            console.log(transcribedData);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async componentDidMount() {
@@ -51,9 +73,13 @@ export class SpeechToTextView extends React.Component {
     render() {
         const {
             blobURL,
-            downloadLinkURL,
             record,
+            transcribedData,
         } = this.state;
+
+        if (!this.state.sentences) {
+            return (<LoadingPage text='Setting up Speech to Text'/>);
+        }
 
         return (<React.Fragment>
             <Navbar />
@@ -75,6 +101,7 @@ export class SpeechToTextView extends React.Component {
                     src={blobURL}
                     controlsList="nodownload"
                 />
+                <p>Transcript: {transcribedData ? transcribedData[0]['transcript'] : ''}</p>
             </div>
             <Footer />
         </React.Fragment>);
