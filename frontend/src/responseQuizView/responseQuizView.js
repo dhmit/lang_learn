@@ -106,7 +106,6 @@ export class ResponseQuizView extends React.Component {
 
     onProgressBarClick = (event) => {
         this.setState({
-            ...this.state,
             question: parseInt(event.target.value),
         });
     }
@@ -261,7 +260,7 @@ export class ResponseQuizView extends React.Component {
                             }
                         </div>
                         <div className="col-9 shaded-box">
-                            <h3 className="question-title">Question #{this.state.question}</h3>
+                            <h2 className="question-title">Question #{this.state.question}</h2>
                             <p className="question-primary-text">
                                 Respond to the prompt below:
                             </p>
@@ -273,13 +272,10 @@ export class ResponseQuizView extends React.Component {
                             {(this.state.graded)
                                 ? <div>
                                     <p>
-                                        <b className="results-header">Your Response</b>
+                                        <h2 className="results-header">Your Response</h2>
                                         <br />
                                         <p className="results-text">
-                                            Your answer: {(Object.prototype.hasOwnProperty.call(
-                                                this.state.userAnswers,
-                                                this.state.question,
-                                            ))
+                                            Your answer: {this.state.question in this.state.userAnswers
                                                 ? <>{this.state.userAnswers[this.state.question]}</>
                                                 : <i>Unanswered</i>}
                                         </p>
@@ -289,7 +285,7 @@ export class ResponseQuizView extends React.Component {
                                             }
                                         </p>
                                     </p>
-                                    <b className="results-header">Machine-Generated Feedback</b>
+                                    <h3 className="results-header">Machine-Generated Feedback</h3>
                                     <br />
                                     <p className="results-text">
                                         {(Object.prototype.hasOwnProperty.call(
