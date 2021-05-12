@@ -261,7 +261,7 @@ export class ResponseQuizView extends React.Component {
                             }
                         </div>
                         <div className="col-9 shaded-box">
-                            <h3 className="question-title">Question #{this.state.question}</h3>
+                            <h2 className="question-title">Question #{this.state.question}</h2>
                             <p className="question-primary-text">
                                 Respond to the prompt below:
                             </p>
@@ -272,22 +272,19 @@ export class ResponseQuizView extends React.Component {
                             <br />
                             {(this.state.graded)
                                 ? <div>
-                                    <p>
-                                        <h3 className="results-header">Your Response</h3>
-                                        <br />
-                                        <p className="results-text">
-                                            Your answer: {this.state.question in this.state.userAnswers
-                                                ? <>{this.state.userAnswers[this.state.question]}</>
-                                                : <i>Unanswered</i>}
-                                        </p>
-                                        <p className="results-text">
-                                            Correct answer: {
-                                                this.state.data[this.state.question - 1].answer
-                                            }
-                                        </p>
+                                    <h2 className="results-header">Your Response</h2>
+                                    <p className="results-text">
+                                        Your answer: {this.state.question in this.state.userAnswers
+                                            ? <>{this.state.userAnswers[this.state.question]}</>
+                                            : <i>Unanswered</i>}
                                     </p>
-                                    <b className="results-header">Machine-Generated Feedback</b>
+                                    <p className="results-text">
+                                        Correct answer: {
+                                            this.state.data[this.state.question - 1].answer
+                                        }
+                                    </p>
                                     <br />
+                                    <h2 className="results-header">Machine-Generated Feedback</h2>
                                     <p className="results-text">
                                         {(Object.prototype.hasOwnProperty.call(
                                             this.state.userAnswers,
