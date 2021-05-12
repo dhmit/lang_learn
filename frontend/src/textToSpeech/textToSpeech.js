@@ -37,6 +37,8 @@ export class TextToSpeech extends Component {
             showModal: false,
             nextSentence: false,
             userText: '',
+            graded: false,
+            grade: null,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -116,7 +118,7 @@ export class TextToSpeech extends Component {
     };
 
     gradeText = async (input) => {
-        console.log('gradetest was called');
+        console.log('gradeText was called');
         try {
             console.log('im trying something here');
             const apiURL = `/api/get_sentence_grade/${input}/${this.getCurrentSentence()}`;
@@ -126,21 +128,7 @@ export class TextToSpeech extends Component {
             const grade = await response.json();
             // this.setState({ pictureBookWords });
             console.log(grade);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    createPictureBook = async (input) => {
-        try {
-            console.log('here is input');
-            console.log(input);
-            const apiURL = '/api/get_picturebook_data?content=' + input;
-            const response = await fetch(apiURL);
-            const pictureBookWords = await response.json();
-            // pictureBookWords.pop(-1);
-            // this.setState({ pictureBookWords });
-            console.log(pictureBookWords);
+            this.setState({grade: grade, graded: true});
         } catch (e) {
             console.log(e);
         }
@@ -395,8 +383,27 @@ export class TextToSpeech extends Component {
                                     </textarea>
                                     <div>
                                         Here is the current sentence in text form:
-                                        <br/>
+                                    </div>
+                                    <div>
                                         {this.getCurrentSentence()}
+                                    </div>
+                                    <div>
+                                        Here is the grade:
+                                    </div>
+                                    <div>
+                                        {
+                                            this.state.graded
+                                                // ? this.state.grade.map((grade) => <div>{grade.name}</div>)
+                                                // ? Object.entries(this.state.grade).map((key) => <div> key={key} {this.state.grade.key}</div>)
+                                                // ? {
+                                                //     for (const [key, value] of Object.entries(this.state.grade)) {
+                                                //       key: {key}: value: {value}
+                                                //     }
+                                                // }
+                                                ? 'is working on displaying grade'
+                                                : 'Not submitted yet'
+                                        }
+
                                     </div>
                                 </div>
                             </form>

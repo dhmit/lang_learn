@@ -3,6 +3,7 @@ Custom command to populate text model with definition, examples, and images
 """
 import nltk
 import string
+import Levenshtein as Lev
 
 # Ours
 
@@ -41,6 +42,7 @@ def correct_sentence(given_sent, correct_sent):
             words_missing.remove(word)
 
     grade["missing"] = words_missing
+    incorrect_word_index = []
 
     index = 0
     for ind_1, word in enumerate(given_tok):
@@ -56,8 +58,58 @@ def correct_sentence(given_sent, correct_sent):
                             "grade": "correct"}
             index = match_index + 1
         else:
+            incorrect_word_index.append(ind_1)
             grade[ind_1] = {"word": word,
                             "grade": "incorrect"}
+
+    for word_index in incorrect_word_index:
+        sim_word = most_similar_word(given_tok[word_index], words_missing)
+        if sim_word is not None:
+            word_grade = correct_words(given_tok[word_index], sim_word)
+            grade[word_index]["word_grade"] = word_grade
+    return grade
+
+
+def most_similar_word(word, comparisons):
+    min_lev_val = None
+    min_lev_word = None
+
+    for current_word in comparisons:
+        current_val = Lev.distance(word, current_word)
+        if min_lev_val == None or min_lev_val > current_val:
+            min_lev_val = current_val
+            min_lev_word = current_word
+    return min_lev_word
+
+
+def correct_words(given_word, correct_word):
+    grade = {}
+
+    char_missing = []
+    char_missing[:0] = correct_word
+    for char in given_word:
+        if char_missing.count(char) != 0:
+            char_missing.remove(char)
+
+    grade["missing"] = list(char_missing)
+
+    index = 0
+    for ind_1, char in enumerate(given_word):
+        match_found = False
+        for ind_2, match in enumerate(correct_word[index:]):
+            # print(word, match)
+            if char == match:
+                match_found = True
+                match_index = ind_2 + index
+                break
+        if match_found:
+            grade[ind_1] = {"char": char,
+                            "grade": "correct"}
+            index = match_index + 1
+        else:
+            grade[ind_1] = {"char": char,
+                            "grade": "incorrect"}
+
     return grade
 
 
