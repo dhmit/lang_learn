@@ -246,7 +246,7 @@ def get_indiv_sentences(request, text_id):
 
 
 @api_view(['GET'])
-def get_sentence_grade(request):
+def get_sentence_grade(request, user_sent, actual_sent):
     """
     API endpoint for getting the individual sentences from the given text.
     """
@@ -254,7 +254,7 @@ def get_sentence_grade(request):
     # print(sentences)
     # user_sentence ,actual_sentence = sentences.split(';')
     #
-    #graded_sentence = correct_sentence(user_sentence, actual_sentence)
+    graded_sentence = correct_sentence(user_sent, actual_sent)
     # return Response(graded_sentence)
     # test = ["hello", "this", "is", "a", "test"]
     # res = [{'word': word,}
@@ -279,4 +279,15 @@ def get_sentence_grade(request):
     #        for word in urls]
     # res.append(misspelled)
     # return Response(res)
-    return get_picturebook_data(request)
+    # return get_picturebook_data(request)
+    text = user_sent
+    text_2 = actual_sent
+
+    # print('hmmm:', story_content)
+    # urls = get_story_data(story_content)
+    # misspelled = get_misspelled_words(story_content)
+    # res = [{'word': word,
+    #         'url': urls[word]}
+    #        for word in urls]
+    # res.append(misspelled)
+    return Response(graded_sentence)

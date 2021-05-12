@@ -105,7 +105,7 @@ export class TextToSpeech extends Component {
 
         // if (';,. '.includes(inputValue.slice(-1))) {
         console.log('trying to submit');
-        const input = this.state.userText + ';' + this.getCurrentSentence();
+        const input = this.state.userText;  // + ';%20' + this.getCurrentSentence();
         this.gradeText(input);
         // this.createPictureBook(input);
         // }
@@ -118,8 +118,9 @@ export class TextToSpeech extends Component {
     gradeText = async (input) => {
         console.log('gradetest was called');
         try {
-            console.log('im tryig something here');
-            const apiURL = '/api/get_sentence_grade?content=' + input;
+            console.log('im trying something here');
+            const apiURL = `/api/get_sentence_grade/${input}/${this.getCurrentSentence()}`;
+            // const apiURL = '/api/get_sentence_grade?content=' + input + '?content2=' + this.getCurrentSentence();
             // const apiURL = '/api/get_picturebook_data?content=' + input;
             const response = await fetch(apiURL);
             const grade = await response.json();
@@ -393,9 +394,9 @@ export class TextToSpeech extends Component {
                                         >
                                     </textarea>
                                     <div>
-                                        Hello my name is
+                                        Here is the current sentence in text form:
                                         <br/>
-                                        {this.state.userText}
+                                        {this.getCurrentSentence()}
                                     </div>
                                 </div>
                             </form>

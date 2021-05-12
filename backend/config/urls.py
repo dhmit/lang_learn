@@ -63,7 +63,7 @@ urlpatterns = [
     path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
     path('api/get_picturebook_data', get_picturebook_data),
     path('api/get_indiv_sentences/<int:text_id>', get_indiv_sentences),
-    path('api/get_sentence_grade', get_sentence_grade),
+    path('api/get_sentence_grade/<str:user_sent>/<str:actual_sent>', get_sentence_grade),
 
 
     # View paths
