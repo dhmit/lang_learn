@@ -28,6 +28,7 @@ from app.views import (
     get_quiz_data,
     text,
     get_text_sentences,
+    get_transcript,
 )
 
 
@@ -58,6 +59,7 @@ urlpatterns = [
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
     path('api/text/<int:text_id>', text),
     path('api/get_text_sentences/<int:text_id>', get_text_sentences),
+    path('api/get_transcript', get_transcript),
 
     # View paths
     react_view_path('', 'IndexView'),
