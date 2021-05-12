@@ -52,6 +52,7 @@ export class SpeechToTextView extends React.Component {
         try {
             const fd = new FormData();
             fd.append('audio', this.state.blob);
+            fd.append('sentence', this.state.sentences[this.state.sentenceIndex]['sentence']);
             const apiURL = '/api/get_transcript';
             const response = await fetch(apiURL, {
                 headers: { Accept: 'application/json' },

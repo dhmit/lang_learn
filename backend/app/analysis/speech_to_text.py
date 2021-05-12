@@ -12,3 +12,8 @@ def sentence_feeder(text):
     """
     return nltk.tokenize.sent_tokenize(text)
 
+def tokenize_sentence(sentence):
+    """
+    Given a sentence, return a list of words in the text.
+    """
+    return nltk.tokenize.word_tokenize(sentence)

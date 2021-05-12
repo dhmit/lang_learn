@@ -32,10 +32,11 @@ from .analysis.crosswords import (
     get_crosswords,
 )
 from .quiz_creation.conjugation_quiz import (
-    get_quiz_sentences
+    get_quiz_sentences,
 )
 from .analysis.speech_to_text import (
-    sentence_feeder
+    sentence_feeder,
+    tokenize_sentence,
 )
 
 
@@ -215,9 +216,12 @@ def get_transcript(request):
     speech_to_text = SpeechToTextV1(authenticator=authenticator)
     speech_to_text.set_service_url('https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/0a741a70-e987-4969-85b8-3e6e290d31f6')
     audio_file = request.FILES.get('audio')
+    words = tokenize_sentence(request.POST.get('sentence'))
     speech_recognition_results = speech_to_text.recognize(
         audio=audio_file,
         content_type='audio/webm;codecs=opus',
+        keyword=words,
         word_alternatives_threshold=0.9,
     ).get_result()
+    print(speech_recognition_results)
     return Response(speech_recognition_results['results'][0]['alternatives'])
