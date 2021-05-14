@@ -19,10 +19,6 @@ export class SpeechToTextView extends React.Component {
         this.nextSentence = this.nextSentence.bind(this);
     }
 
-    onData = (recordedBlob) => {
-        console.log('chunk of real-time data is: ', recordedBlob);
-    }
-
     onStop = (recordedBlob) => {
         this.setState({
             blob: recordedBlob.blob,
@@ -138,6 +134,7 @@ export class SpeechToTextView extends React.Component {
                     </div>
                 </div>
                 <p>Transcript: {transcribedData ? transcribedData[0]['transcript'] : ''}</p>
+                <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
             </div>
             <Footer />
         </React.Fragment>);
