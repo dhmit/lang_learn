@@ -84,30 +84,33 @@ export class TextToSpeech extends Component {
         speechSynthesis.speak(utterance);
     }
 
-    handleInput = (event) => {
-        const inputValue = event.target.value;
-        this.setState({
-            userText: inputValue,
-        });
-
-        // if (';,. '.includes(inputValue.slice(-1))) {
-        //     this.createPictureBook(inputValue);
-        // }
-        // console.log('this is the input value:');
-        // console.log(inputValue);
-        console.log('this is the state value:');
-        console.log(this.state.userText);
-    };
+    // handleInput = (event) => {
+    //     const inputValue = event.target.value;
+    //     this.setState({
+    //         userText: inputValue,
+    //     });
+    //
+    //     // if (';,. '.includes(inputValue.slice(-1))) {
+    //     //     this.createPictureBook(inputValue);
+    //     // }
+    //     // console.log('this is the input value:');
+    //     // console.log(inputValue);
+    //     console.log('this is the state value:');
+    //     console.log(this.state.userText);
+    // };
 
     handleSubmit = (event) => {
         // const inputValue = ;
         // this.setState({
         //     userText: inputValue,
         // });
-
+        const input = document.getElementById('content').value;
         // if (';,. '.includes(inputValue.slice(-1))) {
-        console.log('trying to submit');
-        const input = this.state.userText;  // + ';%20' + this.getCurrentSentence();
+        console.log('this is the input i want', input);
+        // const input = this.state.userText;  // + ';%20' + this.getCurrentSentence();
+        this.setState({
+            userText: input,
+        });
         this.gradeText(input);
         // this.createPictureBook(input);
         // }
@@ -212,19 +215,19 @@ export class TextToSpeech extends Component {
                     <div className="flashcard-star-back"
                        onClick={this.playAudio}>
                        {playButton('yellow')}
-
                     </div>
-                    <div className="flashcard-div row">
+                    <div className="flashcard-div row center">
                         <div className="flashcard-arrows col-1 text-right"
                             onClick={() => this.changeSentence(-1)}
                         >
                                 &#60;
                         </div>
-                        <div className="flashcard-arrows col-1" onClick={() => this.changeSentence(1)}>
+                        <div className="flashcard-arrows col-1"
+                             onClick={() => this.changeSentence(1)}
+                        >
                             &#62;
                         </div>
                     </div>
-
                 </div>;
         // const flipcard = <div>{this.getCurrentSentence()}</div>;
 
@@ -377,15 +380,19 @@ export class TextToSpeech extends Component {
                                     <textarea className="form-control text-input"
                                             id="content"
                                             rows="10"
-                                            onChange={this.handleInput}
-                                            value={this.state.userText}
-                                        >
+                                    >
                                     </textarea>
                                     <div>
                                         Here is the current sentence in text form:
                                     </div>
                                     <div>
                                         {this.getCurrentSentence()}
+                                    </div>
+                                    <div>
+                                        Here is your submission:
+                                    </div>
+                                    <div>
+                                        {this.state.userText}
                                     </div>
                                     <div>
                                         Here is the grade:
