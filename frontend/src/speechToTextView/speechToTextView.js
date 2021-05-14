@@ -14,6 +14,8 @@ export class SpeechToTextView extends React.Component {
             blob: null,
             blobURL: null,
             transcribedData: null,
+            canTranscribe: false,
+            transcribing: false,
         };
         this.getTranscript = this.getTranscript.bind(this);
         this.nextSentence = this.nextSentence.bind(this);
@@ -27,11 +29,17 @@ export class SpeechToTextView extends React.Component {
     }
 
     startRecording = () => {
-        this.setState({ record: true });
+        this.setState({
+            record: true,
+            canTranscribe: false,
+        });
     }
 
     stopRecording = () => {
-        this.setState({ record: false });
+        this.setState({
+            record: false,
+            canTranscribe: true,
+        });
     }
 
     nextSentence = () => {
@@ -46,6 +54,10 @@ export class SpeechToTextView extends React.Component {
 
     async getTranscript() {
         try {
+            this.setState({
+                canTranscribe: false,
+                transcribing: true,
+            });
             const fd = new FormData();
             fd.append('audio', this.state.blob);
             fd.append('sentence', this.state.sentences[this.state.sentenceIndex]['sentence']);
@@ -56,7 +68,10 @@ export class SpeechToTextView extends React.Component {
                 body: fd,
             });
             const transcribedData = await response.json();
-            this.setState({ transcribedData: transcribedData });
+            this.setState({
+                transcribedData: transcribedData,
+                transcribing: false,
+            });
         } catch (e) {
             console.log(e);
         }
@@ -123,7 +138,7 @@ export class SpeechToTextView extends React.Component {
                         />
                     </div>
                     <div className="col-1 vertical-center">
-                        <button className="btn btn-success btn-done" onClick={this.getTranscript}>
+                        <button className="btn btn-success btn-done" onClick={this.getTranscript} disabled={!this.state.canTranscribe}>
                             Done
                         </button>
                     </div>
@@ -133,8 +148,17 @@ export class SpeechToTextView extends React.Component {
                         </button>
                     </div>
                 </div>
+<<<<<<< Updated upstream
                 <p>Transcript: {transcribedData ? transcribedData[0]['transcript'] : ''}</p>
                 <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
+=======
+                <p>Transcript:
+                    <div className="spinner-grow spinner-grow-sm mx-2" role="status" hidden={!this.state.transcribing}>
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    {transcribedData ? transcribedData[0]['transcript'] : ''}
+                </p>
+>>>>>>> Stashed changes
             </div>
             <Footer />
         </React.Fragment>);
