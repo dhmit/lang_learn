@@ -1,5 +1,17 @@
-.vertical-center {
-    margin: auto;
+.btn-done {
+    color: white;
+    background-color: #278E73;
+}
+
+.modal-hide {
+    opacity: 0;
+    transform: translateY(-100vh);
+    z-index: -1;
+}
+
+.modal-show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .sound-wave {
@@ -7,7 +19,6 @@
     max-width: 100%;
 }
 
-.btn-done {
-    color: white;
-    background-color: #278E73;
+.vertical-center {
+    margin: auto;
 }
