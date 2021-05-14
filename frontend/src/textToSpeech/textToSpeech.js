@@ -185,6 +185,27 @@ export class TextToSpeech extends Component {
         return 0;
     }
 
+    giveGrade = () => {
+        const words = [];
+        for (let i = 0; i < this.state.grade['length']; i++) {
+            if (this.state.grade[i]['grade'] === 'correct') {
+                // const color = '#3ED7AF';
+                words.push(
+                    <span style='color: #3ED7AF'>{this.state.grade[i]['word']}</span>
+                );
+            } else {
+                // const color = '#F64F4F';
+                words.push(
+                    <span style='color: #F64F4F'>{this.state.grade[i]['word']}</span>
+                );
+            }
+            // words.push(
+            //     <span style='color: color} >{this.state.grade[i]['word']}</span>
+            // );
+            // if incorrect, color == this
+        }
+    }
+
     render() {
         const {
             textData,
@@ -370,6 +391,14 @@ export class TextToSpeech extends Component {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        {
+                            this.state.graded
+                            ? this.giveGrade()
+                                : <div> Submit Grade </div>
+                        }
+
                     </div>
                     {flipcard}
                     <div className='row'>
