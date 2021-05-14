@@ -67,10 +67,8 @@ export class TextInfo extends React.Component {
     }
 
     deleteText = () => {
-        // Confirms whether or not the user wishes to delete la text.
-        let confirmDeletion;
         // eslint-disable-next-line no-alert
-        confirmDeletion = window.confirm('Are you sure you want to delete this text? This' +
+        const confirmDeletion = window.confirm('Are you sure you want to delete this text? This' +
             ' decision cannot be reversed.');
         if (confirmDeletion) {
             try {
