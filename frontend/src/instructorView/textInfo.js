@@ -67,24 +67,31 @@ export class TextInfo extends React.Component {
     }
 
     deleteText = () => {
-        try {
-            const csrftoken = getCookie('csrftoken');
-            const apiURL = '/api/delete_text';
-            fetch(apiURL, {
-                credentials: 'include',
-                method: 'POST',
-                mode: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-                body: JSON.stringify(this.state.id),
-            }).then(() => {
-                this.props.delete();
-            });
-        } catch (e) {
-            console.log(e);
+        // Confirms whether or not the user wishes to delete la text.
+        let confirmDeletion;
+        // eslint-disable-next-line no-alert
+        confirmDeletion = window.confirm('Are you sure you want to delete this text? This' +
+            ' decision cannot be reversed.');
+        if (confirmDeletion) {
+            try {
+                const csrftoken = getCookie('csrftoken');
+                const apiURL = '/api/delete_text';
+                fetch(apiURL, {
+                    credentials: 'include',
+                    method: 'POST',
+                    mode: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify(this.state.id),
+                }).then(() => {
+                    this.props.delete();
+                });
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
