@@ -204,7 +204,6 @@ export class TextInfo extends React.Component {
         </>);
     }
 
-    // WORK IN PROGRESS
     renderWordDefinition = () => {
         const { wordData, selectedWord, customDefinition } = this.state;
         const definitions = [];
@@ -317,7 +316,7 @@ export class TextInfo extends React.Component {
         const { images } = wordData[selectedWord];
         const chosenImage = wordData[selectedWord]['chosen_image'];
         return images.map((image, k) => (
-            <div key={k} className='col-12 col-xl-4 '>
+            <div key={k} className='col-4'>
                 <img
                     src={image}
                     onClick={() => this.handleWordInfoSelect('chosen_image', image)}

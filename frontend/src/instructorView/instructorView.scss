@@ -126,7 +126,7 @@ label {
 }
 
 .card-expand {
-    max-height: 3000px;
+    max-height: 300em;
     opacity: 1;
     padding: 1.25rem;
     transition: max-height 0.2s ease-in, opacity 0.4s ease-in, padding 0.2s linear;
@@ -154,10 +154,10 @@ label {
 .text-info-dropdown {
     font-size: 1.4rem;
     margin-bottom: 2rem;
-    word-wrap: break-word;
-    text-overflow: ellipsis;
     padding: 0.4rem 0.6rem;
+    text-overflow: ellipsis;
     width: 100%;
+    word-wrap: break-word;
 }
 
 .custom-div {
@@ -167,13 +167,13 @@ label {
 .custom-word-input {
     border-right: none;
     font-size: 1.4rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.41rem 0.6rem;
     width: 75%;
 }
 
 .custom-word-button {
     background: #009E36;
-    border: transparent 2px solid;
+    border: #009E36 2px solid;
     color: white;
     font-size: 1.6rem;
     font-weight: bold;
@@ -365,6 +365,7 @@ label {
     font-weight: bold;
     margin-bottom: 1.5rem;
     padding: 0.2rem 0.4rem;
+    width: 100%;
 }
 
 .module-selection {
