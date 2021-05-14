@@ -15,6 +15,7 @@ idna==2.10
 joblib==1.0.1
 nltk==3.5
 PyDictionary==2.0.1
+pyspellchecker==0.6.1
 python-dotenv==0.17.1
 pytz==2020.5
 regex==2020.11.13

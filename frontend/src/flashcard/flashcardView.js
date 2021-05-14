@@ -283,7 +283,7 @@ export class FlashcardView extends Component {
                         <div className='col-xl-8 col-md-6 col-12 text-center text-md-left'>
                             <h1 className='flashcard-title'>Flashcard</h1>
                             <button
-                                className="btn btn-outline-light btn-circle flashcard-instruction"
+                                className="btn btn-outline-light btn-circle instruction"
                                 onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
