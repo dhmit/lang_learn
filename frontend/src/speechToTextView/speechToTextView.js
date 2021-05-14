@@ -148,17 +148,13 @@ export class SpeechToTextView extends React.Component {
                         </button>
                     </div>
                 </div>
-<<<<<<< Updated upstream
-                <p>Transcript: {transcribedData ? transcribedData[0]['transcript'] : ''}</p>
-                <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
-=======
                 <p>Transcript:
                     <div className="spinner-grow spinner-grow-sm mx-2" role="status" hidden={!this.state.transcribing}>
                         <span className="sr-only">Loading...</span>
                     </div>
                     {transcribedData ? transcribedData[0]['transcript'] : ''}
                 </p>
->>>>>>> Stashed changes
+                <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
             </div>
             <Footer />
         </React.Fragment>);
