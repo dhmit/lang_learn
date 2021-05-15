@@ -20,12 +20,6 @@ svg {
     transition: transform 150ms ease-in-out;
 }
 
-.boundingBox {
-    fill: none !important;
-    stroke: cyan;
-    stroke-width: 2;
-}
-
 .label {
     fill: white;
     font-size: 20px;
@@ -35,22 +29,19 @@ svg {
     opacity: 0;
 }
 
-.boxGroup rect {
+.visibleBoxGroup {
+    opacity: 0;
+}
+
+.visibleBoxGroup rect {
     pointer-events: all;
 }
 
-.boxGroup:hover {
+.visibleBoxGroup:hover {
     opacity: 1;
 }
 
-.boxGroup rect:hover {
+.visibleBoxGroup rect:hover {
     fill: blueviolet !important;
     fill-opacity: 0.25;
-}
-
-.outsideBox {
-    stroke: cyan;
-    stroke-width: 2;
-    fill: none;
-    pointer-events: all;
 }

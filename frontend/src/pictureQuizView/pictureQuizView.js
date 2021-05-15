@@ -17,8 +17,9 @@ export class YoloModelDisplayWidget extends React.Component {
                         y={box['y_coord'] * ratio}
                         height={box['height'] * ratio}
                         width={box['width'] * ratio}
+                        style={this.props.boxStyle}
                     />,
-                    <g className={'boxGroup'}>
+                    <g className={this.props.visible ? 'visibleBoxGroup' : 'boxGroup'}>
                         <text
                             className='label'
                             x={box['x_coord'] * ratio}
@@ -32,6 +33,7 @@ export class YoloModelDisplayWidget extends React.Component {
                             y={box['y_coord'] * ratio}
                             height={box['height'] * ratio}
                             width={box['width'] * ratio}
+                            onClick={this.props.handleClick}
                         />
                     </g>,
                 );
@@ -52,7 +54,7 @@ export class YoloModelDisplayWidget extends React.Component {
     }
 }
 
-function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth, currentObject) {
+function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth, currentObject, handleClick, style, visible) {
     let boxes = [];
     if ('boxes' in parsedValue) {
         boxes = parsedValue['boxes'];
@@ -65,6 +67,9 @@ function configAnalysisYoloModel(parsedValue, height, width, natHeight, natWidth
             natHeight={natHeight}
             natWidth={natWidth}
             currentObject={currentObject}
+            handleClick={handleClick}
+            boxStyle={style}
+            visible={visible}
         />
     );
 }
@@ -76,6 +81,9 @@ YoloModelDisplayWidget.propTypes = {
     natHeight: PropTypes.number,
     natWidth: PropTypes.number,
     currentObject: PropTypes.string,
+    handleClick: PropTypes.func,
+    boxStyle: PropTypes.object,
+    visible: PropTypes.bool,
 };
 
 export class PictureQuizView extends React.Component {
@@ -196,12 +204,23 @@ export class PictureQuizView extends React.Component {
         }
     }
 
+    onObjectClick = () => {
+        console.log(this.state.gameOver ? 'This was the answer' : 'YOU WIN');
+    }
+
     render() {
         if (this.state.loading) {
             return (<LoadingPage/>);
         }
-
-
+        const widgetStyle = this.state.gameOver ? {
+            stroke: 'cyan',
+            strokeWidth: 2,
+            fill: 'none',
+            pointerEvents: 'all',
+        } : {
+            fill: 'none',
+            pointerEvents: 'all',
+        };
 
         window.addEventListener('resize', () => this.handleResize());
 
@@ -276,21 +295,17 @@ export class PictureQuizView extends React.Component {
                             onLoad={this.onImgLoad}
                             ref={this.photoRef}
                         />
-                        {this.state.gameOver
-                            ? configAnalysisYoloModel(
-                                this.state.photoData.objects,
-                                this.state.height,
-                                this.state.width,
-                                this.state.natHeight,
-                                this.state.natWidth,
-                                Object.keys(this.state.photoData.objects.labels)[this.state.question - 1],
-                            )
-                            : <svg
-                                height={this.state.height}
-                                width={this.state.width}
-                            >
-                            </svg>
-                        }
+                        {configAnalysisYoloModel(
+                            this.state.photoData.objects,
+                            this.state.height,
+                            this.state.width,
+                            this.state.natHeight,
+                            this.state.natWidth,
+                            Object.keys(this.state.photoData.objects.labels)[this.state.question - 1],
+                            this.onObjectClick,
+                            widgetStyle,
+                            this.state.gameOver,
+                        )}
                     </div>
                     <div className="row justify-content-center">
                         <button className="btn btn-success mx-3 child"
