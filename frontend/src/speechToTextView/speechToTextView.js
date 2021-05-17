@@ -78,7 +78,7 @@ export class SpeechToTextView extends React.Component {
             });
             const transcribedData = await response.json();
             this.setState({
-                transcribedData: transcribedData,
+                transcribedData: transcribedData[0],
                 transcribing: false,
             });
         } catch (e) {
@@ -111,8 +111,7 @@ export class SpeechToTextView extends React.Component {
             <div className="page">
                 <div className="row">
                     <h1>Speech to Text</h1>
-                    <button
-                        className="btn btn-outline-light btn-circle mx-3"
+                    <button className="btn btn-outline-light btn-circle mx-3 btn-instructions"
                         onClick={this.modalHandler}>
                         <b>?</b>
                     </button>
@@ -133,7 +132,14 @@ export class SpeechToTextView extends React.Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <p>instructions to be added</p>
+                            <p>Welcome to the Speech to Text Module! The goal of the
+                            module is to read alout the sentence that has been extracted
+                            from the text. Press the start button to start recording and
+                            the stop button when you are done. </p>
+                            <p> If you are happy with your audio, press the Done button
+                            to receive your score for the sentence. Once you are satisfied
+                            with you score, feel free to move on to the next sentence
+                            by pressing the Next Sentence button.</p>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary"
@@ -184,13 +190,19 @@ export class SpeechToTextView extends React.Component {
                         </button>
                     </div>
                 </div>
-                <p>Transcript:
+                <span hidden={!this.state.transcribing}>Processing Audio
                     <div className="spinner-grow spinner-grow-sm mx-2" role="status" hidden={!this.state.transcribing}>
-                        <span className="sr-only">Loading...</span>
+                        <span className="sr-only">Processing Audio...</span>
                     </div>
-                    {transcribedData ? transcribedData[0]['transcript'] : ''}
-                </p>
-                <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
+                </span>
+                {
+                    transcribedData
+                        ? <div>
+                            <p>Transcript: {transcribedData['transcript']}</p>
+                            <p>Score: {transcribedData['score']}</p>
+                        </div>
+                        : null
+                }
             </div>
             <Footer />
         </React.Fragment>);
