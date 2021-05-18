@@ -16,7 +16,7 @@ def get_sentences(text):
     :param text: the Text object that we want to get sentences from
     """
 
-    sentences = nltk.tokenize.sent_tokenize(text)
+    sentences = nltk.tokenize.sent_tokenize(text.replace("\n", " "))
     # text_paragraph = text_obj.content
     # temp_sentences = text_paragraph.split(".")
     #
@@ -31,9 +31,9 @@ def get_sentences(text):
 def correct_sentence(given_sent, correct_sent):
     grade = {}
     print(given_sent.translate(str.maketrans('', '', string.punctuation)))
-    given_tok = nltk.tokenize.word_tokenize(given_sent.translate(
+    given_tok = nltk.tokenize.word_tokenize(given_sent.lower().translate(
         str.maketrans('', '', string.punctuation)))
-    correct_tok = nltk.tokenize.word_tokenize(correct_sent.translate(
+    correct_tok = nltk.tokenize.word_tokenize(correct_sent.lower().translate(
         str.maketrans('', '', string.punctuation)))
 
     words_missing = correct_tok.copy()
@@ -43,6 +43,9 @@ def correct_sentence(given_sent, correct_sent):
 
     grade["missing"] = words_missing
     incorrect_word_index = []
+
+    grade["length"] = len(given_tok)
+    grade["isCorrect"] = given_tok == correct_tok
 
     index = 0
     for ind_1, word in enumerate(given_tok):

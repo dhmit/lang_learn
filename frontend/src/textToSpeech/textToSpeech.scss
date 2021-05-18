@@ -1,1 +1,14 @@
 /* Styles for the text to speech page */
+.correct-word {
+    color: #3ED7AF;
+    // font-size: 60px;
+    // font-weight: bold;
+}
+
+.incorrect-word {
+    color: #F64F4F;
+}
+
+.hide-button {
+    visibility: hidden;
+}

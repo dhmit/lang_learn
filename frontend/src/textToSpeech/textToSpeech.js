@@ -35,10 +35,11 @@ export class TextToSpeech extends Component {
             textData: null,
             sentenceIndex: 0,
             showModal: false,
-            nextSentence: false,
             userText: '',
             graded: false,
             grade: null,
+            continue: false,
+            showAnswer: false,
         };
         this.modalHandler = this.modalHandler.bind(this);
     }
@@ -74,13 +75,33 @@ export class TextToSpeech extends Component {
             sentenceIndex: newsentenceIndex,
             showNext: true,
         });
+        this.reset();
+    }
+
+    reset = async (input) => {
+        this.setState({
+            showModal: false,
+            userText: '',
+            graded: false,
+            grade: null,
+            continue: false,
+            showAnswer: false,
+        });
+        document.getElementById('content').value = '';
+    }
+
+    giveUp = (event) => {
+        this.setState({
+            continue: true,
+            showAnswer: true,
+        });
     }
 
     playAudio = () => {
         const utterance = new SpeechSynthesisUtterance();
         utterance.text = this.getCurrentSentence();
         utterance.lang = 'en-US';
-        utterance.rate = 1.2;
+        utterance.rate = 1;
         speechSynthesis.speak(utterance);
     }
 
@@ -131,7 +152,9 @@ export class TextToSpeech extends Component {
             const grade = await response.json();
             // this.setState({ pictureBookWords });
             console.log(grade);
+
             this.setState({grade: grade, graded: true});
+            this.setState({continue: grade['isCorrect']});
         } catch (e) {
             console.log(e);
         }
@@ -155,20 +178,6 @@ export class TextToSpeech extends Component {
     //     this.setState({ starredCards, cardIndex: currentIndex });
     // }
 
-    handleKeyDown = (e) => {
-        if (['ArrowLeft', 'ArrowRight'].includes(e.code)) {
-            e.preventDefault();
-            const { code } = e;
-            if (code === 'ArrowLeft') {
-                this.changeSentence(-1);
-            } else if (code === 'ArrowRight') {
-                this.changeSentence(1);
-            } else if (code === 'Space') {
-                this.playAudio();
-            }
-        }
-    }
-
     modalHandler = (event) => {
         event.preventDefault();
         this.setState({
@@ -188,22 +197,26 @@ export class TextToSpeech extends Component {
     giveGrade = () => {
         const words = [];
         for (let i = 0; i < this.state.grade['length']; i++) {
+            // let word = this.state.grade[i]['word']
             if (this.state.grade[i]['grade'] === 'correct') {
                 // const color = '#3ED7AF';
                 words.push(
-                    <span style='color: #3ED7AF'>{this.state.grade[i]['word']}</span>
+                    <span className="correct-word">{this.state.grade[i]['word']}&nbsp;</span>
                 );
             } else {
                 // const color = '#F64F4F';
                 words.push(
-                    <span style='color: #F64F4F'>{this.state.grade[i]['word']}</span>
+                    <span className="incorrect-word">{this.state.grade[i]['word']}&nbsp;</span>
+                    // <span style='color: #F64F4F'>{this.state.grade[i]['word']}</span>
                 );
             }
+        }
+        return words;
+        // return <p>i am trying</p>;
             // words.push(
             //     <span style='color: color} >{this.state.grade[i]['word']}</span>
             // );
             // if incorrect, color == this
-        }
     }
 
     render() {
@@ -230,110 +243,6 @@ export class TextToSpeech extends Component {
         //                        {playButton('yellow')}
         //
         //                   </div>;
-
-        const flipcard =
-                <div>
-                    <div className="flashcard-star-back"
-                       onClick={this.playAudio}>
-                       {playButton('yellow')}
-                    </div>
-                    <div className="flashcard-div row center">
-                        <div className="flashcard-arrows col-1 text-right"
-                            onClick={() => this.changeSentence(-1)}
-                        >
-                                &#60;
-                        </div>
-                        <div className="flashcard-arrows col-1"
-                             onClick={() => this.changeSentence(1)}
-                        >
-                            &#62;
-                        </div>
-                    </div>
-                </div>;
-        // const flipcard = <div>{this.getCurrentSentence()}</div>;
-
-        // <div className="flashcard-error">You do not have any starred cards</div>;
-        // const flipcard = card
-        //     ? (
-        //         <div className="flashcard-div row">
-        //             <div
-        //                 className="flashcard-arrows col-1 text-right"
-        //                 onClick={() => this.changeCard(-1)}
-        //             >
-        //                 &#60;
-        //             </div>
-        //             <div className={`flip-card col ${showBack ? 'showBack' : ''}
-        //                 ${showNext ? 'showNext' : ''}`}>
-        //                 <div
-        //                     className="flip-card-inner">
-        //                     <div className="flip-card-front">
-        //                         <div className="row">
-        //                             <div className="col-1" onClick={this.flipCard}>
-        //                             </div>
-        //                             <div className="col text-center-front" onClick={this.flipCard}>
-        //                                 <img className="flashcard-image"
-        //                                     src={card.url} alt={card.word.toUpperCase()}/>
-        //                             </div>
-        //                             <div className="col-1 mx-2">
-        //                                 <div className="flashcard-star-front"
-        //                                     onClick={this.toggleStar}>
-        //                                     {this.isStarred(starOnly
-        //                                         ? starredCards[sentenceIndex] : sentenceIndex)
-        //                                         ? filledStar('yellow')
-        //                                         : star('white')
-        //                                     }
-        //                                 </div>
-        //                                 <div className="flashcard-star-buffer"
-        //                                     onClick={this.flipCard}>
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                         <h3 className="click-to-flip" onClick={this.flipCard}>
-        //                             Click to flip
-        //                         </h3>
-        //
-        //                     </div>
-        //
-        //                     <div className="flip-card-back">
-        //                         <div className="row">
-        //                             <div className="col-1" onClick={this.flipCard}>
-        //                             </div>
-        //                             <div className="col text-center" onClick={this.flipCard}>
-        //                                 <h1 className='flashcard-word'>
-        //                                     {card.word.toUpperCase()}
-        //                                 </h1>
-        //                                 <h2 className="flashcard-info">
-        //                                     <b><u>Definition:</u></b> {card.definition[0]}
-        //                                 </h2>
-        //                                 <h2 className="flashcard-info">
-        //                                     <b><u>Example:</u></b> <i>"{card.example[0]}"</i>
-        //                                 </h2>
-        //                             </div>
-        //                             <div className="col-1 mx-2">
-        //                                 <div className="flashcard-star-back"
-        //                                     onClick={this.toggleStar}>
-        //                                     {this.isStarred(starOnly
-        //                                         ? starredCards[sentenceIndex] : sentenceIndex)
-        //                                         ? filledStar('yellow')
-        //                                         : star('white')
-        //                                     }
-        //                                 </div>
-        //                                 <div className="flashcard-star-buffer"
-        //                                     onClick={this.flipCard}>
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                         <h3 className="click-to-flip" onClick={this.flipCard}>
-        //                             Click to flip
-        //                         </h3>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //             <div className="flashcard-arrows col-1" onClick={() => this.changeCard(1)}>
-        //                 &#62;
-        //             </div>
-        //         </div>)
-        //     : <div className="flashcard-error">You do not have any starred cards</div>;
 
         /* Actual Return statement */
         return (
@@ -393,65 +302,85 @@ export class TextToSpeech extends Component {
                         </div>
                     </div>
                     <div>
-                        {
-                            this.state.graded
-                            ? this.giveGrade()
-                                : <div> Submit Grade </div>
-                        }
-
+                        <div className="play audio"
+                           onClick={this.playAudio}>
+                           {playButton('yellow')}
+                        </div>
                     </div>
-                    {flipcard}
+                    {
+                        this.state.graded
+                        ? this.giveGrade()
+                        : null
+                    }
+                    {
+                        this.state.showAnswer
+                        ? (
+                            <div>
+                                <p>This is the correct answer:</p>
+                                <p>{this.getCurrentSentence()}</p>
+                            </div>
+                        )
+                        : null
+                    }
                     <div className='row'>
                         <div className="col box">
                             <form id='input-form'>
                                 <div className="form-group">
                                     <label>Please write exactly what you hear from the audio.</label>
-                                    <textarea className="form-control text-input"
-                                            id="content"
-                                            rows="10"
-                                    >
+                                    <textarea
+                                        className="form-control text-input"
+                                        id="content"
+                                        rows="10"
+                                        disabled={this.state.continue}>
                                     </textarea>
-                                    <div>
-                                        Here is the current sentence in text form:
-                                    </div>
-                                    <div>
-                                        {this.getCurrentSentence()}
-                                    </div>
-                                    <div>
-                                        Here is your submission:
-                                    </div>
-                                    <div>
-                                        {this.state.userText}
-                                    </div>
-                                    <div>
-                                        Here is the grade:
-                                    </div>
-                                    <div>
-                                        {
-                                            this.state.graded
-                                                // ? this.state.grade.map((grade) => <div>{grade.name}</div>)
-                                                // ? Object.entries(this.state.grade).map((key) => <div> key={key} {this.state.grade.key}</div>)
-                                                // ? {
-                                                //     for (const [key, value] of Object.entries(this.state.grade)) {
-                                                //       key: {key}: value: {value}
-                                                //     }
-                                                // }
-                                                ? 'is working on displaying grade'
-                                                : 'Not submitted yet'
-                                        }
-
-                                    </div>
                                 </div>
                             </form>
                         </div>
-                            <div className='col-xl-4 text-right bottom-align-text' id="submit-btn-div">
-                                <button type="submit"
-                                    className="btn btn-success submit-btn"
-                                    form="picturebook-form"
-                                    onClick={this.handleSubmit}>
-                                    Submit
-                                </button>
+                        <div className='col-2 text-right bottom-align-text' id="submit-btn-div">
+                            <button type="submit"
+                                className="btn btn-success submit-btn"
+                                form="picturebook-form"
+                                onClick={this.handleSubmit}
+                                disabled={this.state.continue}>
+                                Submit
+                            </button>
                         </div>
+                    </div>
+                    <div>
+                        {
+                            this.state.continue
+                            ? (
+                                <div className="row">
+                                  <button type="submit"
+                                      className="btn btn-success give-up-btn col-6 text-middle bottom-align-text hide-button"
+                                      form="picturebook-form">
+                                      Give Up
+                                  </button>
+                                  <button type="submit"
+                                      className="btn btn-success continue-btn col-6 text-middle bottom-align-text"
+                                      form="picturebook-form"
+                                      onClick={() => this.changeSentence(1)}>
+                                      Next
+                                  </button>
+                                </div>
+
+                            )
+                            : (
+                              <div className="row">
+                                <button type="submit"
+                                    className="btn btn-success give-up-btn col-6 text-middle bottom-align-text"
+                                    form="picturebook-form"
+                                    onClick={this.giveUp}>
+                                    Give Up
+                                </button>
+                                <button type="submit"
+                                    className="btn btn-success continue-btn col-6 text-middle bottom-align-text hide-button"
+                                    form="picturebook-form">
+                                    Next
+                                </button>
+                              </div>
+                            )
+                        }
                     </div>
                 </div>
                 <Footer/>
