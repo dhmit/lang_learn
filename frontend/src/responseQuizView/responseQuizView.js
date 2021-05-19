@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+
 import React from 'react';
 import './responseQuizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
