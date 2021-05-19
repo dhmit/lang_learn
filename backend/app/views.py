@@ -120,7 +120,6 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
-
 @api_view(['GET'])
 def get_picturebook_prompt(request, text_id, part_of_speech):
     """
