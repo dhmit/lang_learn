@@ -24,6 +24,9 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
+        'story generator': {
+            'noun': False,
+        },
         'quiz': {
             'conjugations': False,
         },

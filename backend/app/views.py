@@ -5,11 +5,14 @@ import os
 import json
 import random
 
+from django.http import Http404
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import FileResponse
 from django.conf import settings
 
+from .analysis.conversation_quiz import get_quiz_questions
 from .models import (
     Text,
     Photo
@@ -28,6 +31,8 @@ from .analysis.anagrams import (
 )
 from .analysis.textdata import (
     get_text_data,
+    get_story_data,
+    get_misspelled_words,
 )
 from .analysis.crosswords import (
     get_crosswords,
@@ -120,6 +125,39 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
+@api_view(['GET'])
+def get_picturebook_prompt(request, text_id, part_of_speech):
+    """
+    API endpoint for getting the necessary information for the picture book exercise
+    given the id of the text and the part of speech. The words chosen will be random.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    image_urls = text_obj.images
+    words = get_valid_words(text_obj.content, part_of_speech)
+    random.shuffle(words)
+    words = words[:4]
+
+    res = [{'word': word,
+            'url': image_urls.get(word, '')}
+           for word in words]
+    return Response(res)
+
+
+@api_view(['GET'])
+def get_picturebook_data(request):
+    """
+    API endpoint for getting the picture book images given the story the user wrote.
+    """
+    story_content = request.query_params.get('content')
+    urls = get_story_data(story_content)
+    misspelled = get_misspelled_words(story_content)
+    res = [{'word': word,
+            'url': urls[word]}
+           for word in urls]
+    res.append(misspelled)
+    return Response(res)
+
+
 @api_view(['POST'])
 def add_text(request):
     """
@@ -190,8 +228,25 @@ def get_quiz_data(request, text_id):
     the id of the text. The first verb in each sentence of the text will be fill-in. The options
     will be randomly selected and arranged.
     """
-    text_obj = Text.objects.get(id=text_id)
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
     res = get_quiz_sentences(text_obj.content)
+    return Response(res)
+
+
+@api_view(['GET'])
+def get_response_quiz_data(request, text_id):
+    """
+    API endpoint for getting the necessary information for the conversation quiz given
+    the id of the text. [add more important info]
+    """
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
+    res = get_quiz_questions(text_obj.content)
     return Response(res)
 
 
