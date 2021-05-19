@@ -1,3 +1,22 @@
+"""
+Analysis module used to create the questions for the conversation quiz
+
+Parsing text:
+Take in string of question and answers, each separated by '\n'
+
+Send question to frontend
+
+option = {
+    'error-types':[ strings representing error types ],
+    'text': str
+}
+
+question = {
+    'question': str,
+    'options': [ options ],
+    'answer': int (index of correct option),
+}
+"""
 import random
 import copy
 from app.analysis.error_functions import (
@@ -17,24 +36,6 @@ AVAILABLE_FUNCTIONS = [
     verb_conjugation,
     verb_deletion,
 ]
-
-"""
-Parsing text:
-Take in string of question and answers, each separated by '\n'
-
-Send question to frontend
-
-option = {
-    'error-types':[strings representing error types],
-    'text': str
-}
-
-question = {
-    'question': str,
-    'options': [ options ],
-    'answer': int (index of correct option),
-}
-"""
 
 
 def apply_question_option_errors(quiz_question):

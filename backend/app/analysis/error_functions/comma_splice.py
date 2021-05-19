@@ -8,7 +8,7 @@ def apply(question_option):
     """
     Creates a new option (dict) that has text with a comma splice error.
     :param question_option:
-    :return:
+    :return: question_option
     """
     # split answer up into sentences
     sentences = sent_tokenize(question_option['text'])

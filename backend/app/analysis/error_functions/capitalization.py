@@ -5,6 +5,11 @@ import random
 
 
 def apply(question_option):
+    """
+    Creates a new option (dict) that has text with a capitalization error.
+    :param question_option:
+    :return: question_option
+    """
     sentence_list = question_option['text'].split('. ')
     sentence_index = random.randint(0, len(sentence_list) - 1)
     new_sentence = sentence_list[sentence_index][0].lower() + sentence_list[sentence_index][1:]
