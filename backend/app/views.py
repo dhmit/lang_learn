@@ -243,6 +243,4 @@ def get_response_quiz_data(request, text_id):
     except Text.DoesNotExist:
         raise Http404
     res = get_quiz_questions(text_obj.content)
-    for question in res:
-        apply_question_option_errors(question)
     return Response(res)

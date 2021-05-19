@@ -5,7 +5,7 @@ from nltk.tokenize import sent_tokenize
 
 def apply(question_option):
     """
-    Creates a new option (dict) that contains a run-on sentence error by removing a period from
+    Creates a new option (dict) that contains a run-on sentence error by removing a punctuation from
     two independent clauses
     :param: question option
     :return: question option with run on error
@@ -19,18 +19,20 @@ def apply(question_option):
     if len(sentences) == 2:
         selected_sentence_index = 0
     else:
-        # otherwise, choose any from first to second to last
-        selected_sentence_index = random.randint(0, len(sentences)-2)
-    # get sentence at selected index
+        # Otherwise, choose any from first to second to last
+        selected_sentence_index = random.randint(0, len(sentences) - 2)
+    # Get sentence at selected index
     selected_sentence = sentences[selected_sentence_index]
-    # take out the period
+    # Remove the punctuation
     if selected_sentence[-1] in ['.', '?', '!']:
         new_sentence = selected_sentence.replace(selected_sentence[-1], '')
     else:
         return question_option, False
     sentences[selected_sentence_index] = new_sentence
-    # lowercase the next sentence
-    sentences[selected_sentence_index+1] = sentences[selected_sentence_index+1].lower()
+    # Lowercase the next sentence
+    next_sentence = sentences[selected_sentence_index + 1]
+    new_next_sentence = next_sentence[0].lower() + next_sentence[1:]
+    sentences[selected_sentence_index + 1] = new_next_sentence
     out_text = ' '.join(sentences)
 
     question_option_with_error = {

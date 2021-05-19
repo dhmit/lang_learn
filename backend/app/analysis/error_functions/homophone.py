@@ -7,7 +7,7 @@ from nltk.tokenize import sent_tokenize
 
 def apply(question_option):
     """
-    Creates a new question option, but replacing one of the words with a homograph
+    Creates a new question option, but replacing one of the words with a homophone
     :param question_option:
     :return: dict new question option with homophone error
     """

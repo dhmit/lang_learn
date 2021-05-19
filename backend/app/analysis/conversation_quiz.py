@@ -1,8 +1,22 @@
-import os
 import random
 import copy
-import importlib
-from django.conf import settings
+from app.analysis.error_functions import (
+    capitalization,
+    comma_splice,
+    homophone,
+    run_on,
+    verb_conjugation,
+    verb_deletion,
+)
+
+AVAILABLE_FUNCTIONS = [
+    capitalization,
+    comma_splice,
+    homophone,
+    run_on,
+    verb_conjugation,
+    verb_deletion,
+]
 
 """
 Parsing text:
@@ -21,6 +35,34 @@ question = {
     'answer': int (index of correct option),
 }
 """
+
+
+def apply_question_option_errors(quiz_question):
+    """
+    Given a single quiz question (dict), induce a random error in 3 of its options.
+    :param quiz_question:
+    """
+    # Apply a random error to the last 3 options
+    seen_choices = {quiz_question['options'][0]['text'], }
+    for i in range(1, 4):
+        untested_functions = AVAILABLE_FUNCTIONS.copy()
+        error_applied = False
+        # Try to produce an error in the option
+        while not error_applied:
+            if len(untested_functions) == 0:
+                raise Exception(f"There are no functions available that can produce an error in "
+                                f"question: {quiz_question['question']}")
+            random.shuffle(untested_functions)
+            error_function = untested_functions.pop(-1)
+            quiz_question['options'][i], error_applied = error_function.apply(
+                quiz_question['options'][i]
+            )
+            new_text = quiz_question['options'][i]['text']
+            error_applied = error_applied and new_text not in seen_choices
+            seen_choices.add(new_text)
+
+    # Randomize positions of the choices
+    random.shuffle(quiz_question['options'])
 
 
 def get_quiz_questions(text):
@@ -45,46 +87,6 @@ def get_quiz_questions(text):
             'options': [copy.deepcopy(answer)] * 4,
             'answer': q_and_a[i + 1].strip(' '),
         }
+        apply_question_option_errors(new_question)
         questions.append(new_question)
     return questions
-
-
-def apply_question_option_errors(quiz_question):
-    """
-    Given a single quiz question (dict), induce a random error in 3 of its options.
-    :param quiz_question:
-    """
-    # Get all of the error functions defined in error_functions
-    usable_functions = []
-    for error_name in os.listdir(settings.ERROR_FUNCTIONS_DIR):
-        error_name, _ = os.path.splitext(error_name)
-        try:
-            error_function = importlib.import_module(
-                f'.{error_name}', package='app.analysis.error_functions'
-            )
-            if hasattr(error_function, 'apply'):
-                usable_functions.append(error_function)
-        except ModuleNotFoundError:
-            print(f'{error_name} error is not available.')
-
-    # Apply a random error to the last 3 options
-    seen_choices = {quiz_question['options'][0]['text'], }
-    for i in range(1, 4):
-        untested_functions = usable_functions.copy()
-        error_applied = False
-        # Try to produce an error in the option
-        while not error_applied:
-            if len(untested_functions) == 0:
-                raise Exception(f"There are no functions available that can produce an error in "
-                                f"question: {quiz_question['question']}")
-            random.shuffle(untested_functions)
-            error_function = untested_functions.pop(-1)
-            quiz_question['options'][i], error_applied = error_function.apply(
-                quiz_question['options'][i]
-            )
-            new_text = quiz_question['options'][i]['text']
-            error_applied = error_applied and new_text not in seen_choices
-            seen_choices.add(new_text)
-
-    # Randomize positions of the choices
-    random.shuffle(quiz_question['options'])
