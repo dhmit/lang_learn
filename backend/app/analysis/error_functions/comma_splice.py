@@ -1,3 +1,6 @@
+"""
+Error function used to create a new question option with a comma splice error
+"""
 from nltk.tokenize import sent_tokenize
 
 
@@ -14,9 +17,8 @@ def apply(question_option):
     if len(sentences) == 1:
         return question_option, False
 
-    for i in range(len(sentences)):
+    for i, sentence in enumerate(sentences):
         # remove ending punctuation mark
-        sentence = sentences[i]
         if i != len(sentences) - 1:
             sentence = sentence[0:len(sentence) - 1]
         if i != 0:

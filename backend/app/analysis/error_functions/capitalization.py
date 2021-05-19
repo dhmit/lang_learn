@@ -1,3 +1,6 @@
+"""
+Error function used to create a new question option with a capitalization error
+"""
 import random
 
 

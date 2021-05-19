@@ -1,9 +1,12 @@
+"""
+Error function used to create a new question option with a deleted verb
+"""
 from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 
 
 def apply(question_option):
     """
-    Creates a new option (dict) that has text with a verb conjugation error.
+    Creates a new option (dict) that has text with a verb deletion error.
     :param question_option: dict
     """
     # Use convert the option text into a sentence struct to get fill-in text and erroneous verb

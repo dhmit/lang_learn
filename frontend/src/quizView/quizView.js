@@ -29,10 +29,10 @@ export class QuizView extends React.Component {
             const response = await fetch(`/api/get_quiz_data/${this.props.textID}/`);
             if (!response.ok) {
                 console.log('Something went wrong :(');
-                this.setState({error: true});
+                this.setState({ error: true });
             } else {
                 const questionData = await response.json();
-                this.setState({data: questionData});
+                this.setState({ data: questionData });
             }
         } catch (e) {
             console.log(e);

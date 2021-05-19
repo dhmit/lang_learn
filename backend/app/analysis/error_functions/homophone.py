@@ -1,3 +1,6 @@
+"""
+Error function used to create a new question option with a homophone error
+"""
 import random
 
 import similar_sounding_words

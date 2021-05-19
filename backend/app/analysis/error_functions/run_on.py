@@ -1,3 +1,6 @@
+"""
+Error function used to create a new question option with a run-on sentence
+"""
 import random
 
 from nltk.tokenize import sent_tokenize

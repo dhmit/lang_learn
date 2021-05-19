@@ -38,10 +38,10 @@ export class ResponseQuizView extends React.Component {
             const response = await fetch(`/api/get_response_quiz_data/${this.props.textID}/`);
             if (!response.ok) {
                 console.log('Something went wrong :(');
-                this.setState({error: true});
+                this.setState({ error: true });
             } else {
                 const questionData = await response.json();
-                this.setState({data: questionData});
+                this.setState({ data: questionData });
             }
         } catch (e) {
             console.log(e);
@@ -114,10 +114,10 @@ export class ResponseQuizView extends React.Component {
         const currentQ = this.state.question;
         if ((!this.state.graded) && ((typeof event.target.value) !== 'undefined')) {
             this.setState({
-              userAnswers: {
-                ...this.state.userAnswers,
-                [currentQ]: event.target.value
-              }
+                userAnswers: {
+                    ...this.state.userAnswers,
+                    [currentQ]: event.target.value,
+                },
             });
         }
     }

@@ -1,3 +1,6 @@
+"""
+Error function used to create a new question option with a verb conjugation error
+"""
 import random
 from app.quiz_creation.conjugation_quiz import get_quiz_sentences
 

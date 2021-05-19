@@ -164,6 +164,9 @@ class MainTests(TestCase):
         self.assertEqual(crosswords.is_valid(solution, 'colon', (14, 4), 'down', clues), False)
 
     def test_apply_question_option_errors(self):
+        """
+        Tests the apply_question_option_errors from conversation quiz
+        """
         test_text = """
         Hello, how are you today?
         I am doing well. How are you?
@@ -197,7 +200,9 @@ class MainTests(TestCase):
         self.assertEqual(num_eq_to_answer, 1)
 
     def test_error_functions(self):
-        # General error_function test
+        """
+        General test for error functions used in apply_question_option_errors
+        """
         err_funcs = [
             error_functions.capitalization,
             error_functions.comma_splice,
@@ -240,6 +245,9 @@ class MainTests(TestCase):
                     self.assertEqual(new_option['error-types'], option['error-types'])
 
     def test_capitalization(self):
+        """
+        Test capitalization error function
+        """
         option_1 = {'error-types': [], 'text': 'I am doing well. How are you?'}
         new_option_1, success = error_functions.capitalization.apply(option_1)
         if success:  # If the error was applies, check that it was applied correctly
@@ -262,6 +270,9 @@ class MainTests(TestCase):
             self.assertEqual(new_option_2, expected_2)
 
     def test_comma_splice(self):
+        """
+        Test comma splice error function
+        """
         option_1 = {
             'error-types': [],
             'text': 'I will go to the park later. I will also go to the store.'
@@ -275,6 +286,9 @@ class MainTests(TestCase):
             self.assertEqual(new_option_1, expected_1)
 
     def test_homophone(self):
+        """
+        Test homophone error function
+        """
         option_1 = {'error-types': [], 'text': 'Did you hear their performance?'}
         new_option_1, success = error_functions.homophone.apply(option_1)
         if success:
@@ -286,6 +300,9 @@ class MainTests(TestCase):
             self.assertIn(new_option_1, expected_1)
 
     def test_run_on(self):
+        """
+        Test run-on sentence error function
+        """
         option_1 = {
             'error-types': [],
             'text': 'I will go to the park later. I will also go to the store.'
@@ -299,6 +316,10 @@ class MainTests(TestCase):
             self.assertEqual(new_option_1, expected_1)
 
     def test_verb_error_func(self):
+        """
+        Test for error functions that use get_quiz_sentences from conjugation quiz to produce
+        verb-related errors
+        """
         option = {'error-types': [], 'text': 'I run outside when the weather is nice.'}
         verb_error_funcs = [
             error_functions.verb_conjugation,
@@ -316,6 +337,9 @@ class MainTests(TestCase):
             self.assertTrue(run_or_is)
 
     def test_verb_deletion(self):
+        """
+        Test verb deletion error function
+        """
         option_1 = {'error-types': [], 'text': 'I run outside when the weather is nice.'}
         new_option_1, success = error_functions.verb_deletion.apply(option_1)
         # The new text should be shorter than the original answer choice

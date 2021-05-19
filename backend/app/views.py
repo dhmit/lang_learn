@@ -9,7 +9,7 @@ from django.http import Http404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .analysis.conversation_quiz import get_quiz_questions, apply_question_option_errors
+from .analysis.conversation_quiz import get_quiz_questions
 from .models import (
     Text
 )
@@ -225,8 +225,8 @@ def get_quiz_data(request, text_id):
     """
     try:
         text_obj = Text.objects.get(id=text_id)
-    except Text.DoesNotExist:
-        raise Http404
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
@@ -239,7 +239,7 @@ def get_response_quiz_data(request, text_id):
     """
     try:
         text_obj = Text.objects.get(id=text_id)
-    except Text.DoesNotExist:
-        raise Http404
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
     res = get_quiz_questions(text_obj.content)
     return Response(res)
