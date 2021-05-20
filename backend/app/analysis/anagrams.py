@@ -2,6 +2,7 @@
 Helper functions for generating and checking anagrams
 """
 import os
+import random
 from django.conf import settings
 
 
@@ -13,6 +14,16 @@ def get_word_set():
     with open(word_file) as file:
         word_set = set(line.strip() for line in file.readlines())
     return word_set
+
+
+def scramble_word(word):
+    """
+    :param word: the word to scramble for single word anagrams
+    :return: a string of the word with the letters scrambled
+    """
+    word_as_list = list(word)
+    random.shuffle(word_as_list)
+    return ''.join(word_as_list)
 
 
 def get_letter_freq(letters):
