@@ -21,9 +21,18 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
+        'story generator': {
+            'noun': False,
+        },
         'quiz': {
             'conjugations': False,
-        }
+        },
+        'crossword': {
+            'noun': False,
+            'verb': False,
+            'adjective': False,
+            'adverb': False,
+        },
     }
     return mods
 

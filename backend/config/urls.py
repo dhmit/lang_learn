@@ -25,8 +25,11 @@ from app.views import (
     delete_text,
     add_text,
     get_flashcards,
+    get_picturebook_prompt,
+    get_picturebook_data,
+    get_crossword,
     get_quiz_data,
-    text,
+    text, get_response_quiz_data,
 )
 
 
@@ -54,16 +57,23 @@ urlpatterns = [
     path('api/delete_text', delete_text),
     path('api/add_text', add_text),
     path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
+    path('api/get_crossword/<int:text_id>/<str:part_of_speech>', get_crossword),
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
+    path('api/get_response_quiz_data/<int:text_id>/', get_response_quiz_data),
     path('api/text/<int:text_id>', text),
+    path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
+    path('api/get_picturebook_data', get_picturebook_data),
 
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagrams/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
     react_view_path('instructor', 'InstructorView'),
     react_view_path('flashcards/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
+    react_view_path('crossword/<int:textID>/<str:partOfSpeech>', 'CrosswordView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
-    react_view_path('flashcard/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('quiz/', 'AllQuizView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
+    react_view_path('picturebook/<int:textID>/<str:partOfSpeech>', 'PictureBookView'),
+    react_view_path('response_quiz/', 'ResponseAllQuizView'),
+    react_view_path('response_quiz/<int:textID>/', 'ResponseQuizView'),
 ]

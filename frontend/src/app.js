@@ -11,8 +11,12 @@ import { IndexView } from './index/index';
 import { QuizView } from './quizView/quizView';
 import { AnagramView } from './anagramView/anagramView';
 import { InstructorView } from './instructorView/instructorView';
-import { AllQuizView } from './quizView/allQuizView';
 import { FlashcardView } from './flashcard/flashcardView';
+import { AllQuizView } from './quizView/allQuizView';
+import { PictureBookView } from './pictureBookView/pictureBookView';
+import { CrosswordView } from './crosswordView/crosswordView';
+import { ResponseAllQuizView } from './responseQuizView/responseAllQuizView';
+import { ResponseQuizView } from './responseQuizView/responseQuizView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -26,6 +30,10 @@ window.app_modules = {
     AnagramView,
     InstructorView,
     FlashcardView,
+    PictureBookView,
+    CrosswordView,
     IndexView,
     QuizView,
+    ResponseAllQuizView,
+    ResponseQuizView,
 };
