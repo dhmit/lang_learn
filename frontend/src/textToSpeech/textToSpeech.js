@@ -201,22 +201,40 @@ export class TextToSpeech extends Component {
             if (this.state.grade[i]['grade'] === 'correct') {
                 // const color = '#3ED7AF';
                 words.push(
-                    <span className="correct-word">{this.state.grade[i]['word']}&nbsp;</span>
+                    <span className="correct-word">{this.state.grade[i]['word']}</span>
                 );
+                words.push(<span> </span>);
             } else {
                 // const color = '#F64F4F';
                 words.push(
-                    <span className="incorrect-word">{this.state.grade[i]['word']}&nbsp;</span>
+                    <span className="incorrect-word">{this.state.grade[i]['word']}</span>
+
                     // <span style='color: #F64F4F'>{this.state.grade[i]['word']}</span>
                 );
+                words.push(<span> </span>);
             }
         }
         return words;
-        // return <p>i am trying</p>;
-            // words.push(
-            //     <span style='color: color} >{this.state.grade[i]['word']}</span>
-            // );
-            // if incorrect, color == this
+    }
+
+    giveMissingWords = () => {
+        console.log('missing words was called');
+        console.log(this.state.grade['missing']);
+        console.log(this.state.grade['missing'].length);
+        const words = [];
+        for (let i = 0; i < this.state.grade['missing'].length; i++) {
+            words.push(
+                    <p className="missing-words">{this.state.grade['missing'][i]}</p>
+            );
+        }
+
+        this.shuffle(words);
+        return words;
+        // return 'missing words was called';
+    }
+
+    shuffle = async (arr) => {
+        arr.sort(() => Math.random() - 0.5);
     }
 
     render() {
@@ -236,15 +254,14 @@ export class TextToSpeech extends Component {
             ? 'No Sentences Available'
             : `${sentenceIndex + 1}/${sentenceLength} Words`;
 
-        /* Generate Flashcard */
-        const card = this.getCurrentSentence();
-        // const flipcard = <div className="flashcard-star-back"
-        //                        onClick={this.playAudio}>
-        //                        {playButton('yellow')}
-        //
-        //                   </div>;
 
         /* Actual Return statement */
+        let missingWords = null;
+        if (this.state.graded) {
+            missingWords = this.giveMissingWords();
+            // const missingWordsLength = missingWords.len
+        }
+
         return (
             <>
                 <Navbar/>
@@ -253,7 +270,7 @@ export class TextToSpeech extends Component {
                         <div className='col-xl-8 col-md-6 col-12 text-center text-md-left'>
                             <h1 className='flashcard-title'>Sentence</h1>
                             <button
-                                className="btn btn-outline-light btn-circle flashcard-instruction"
+                                className="btn btn-outline-light btn-circle instruction"
                                 onClick={this.modalHandler}>
                                 <b>?</b>
                             </button>
@@ -278,7 +295,10 @@ export class TextToSpeech extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <p></p>
+                                    <p>Click the play button to hear the
+                                    sentence. After, type exactly what you hear.
+                                     Press submit to see your score! Press give
+                                     up if you want the correct answer.</p>
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary"
@@ -301,27 +321,55 @@ export class TextToSpeech extends Component {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div className="play audio"
-                           onClick={this.playAudio}>
-                           {playButton('yellow')}
+                    <div className='row answer'>
+                        <div className="col-1">
+                            <div className="play audio"
+                               onClick={this.playAudio}>
+                               {playButton('pink')}
+                            </div>
+                            <div className="play-button-buffer">
+                                {null}
+                            </div>
+                        </div>
+                        <div className='col-8 box-answer'>
+                            <h2 className='grade-text para'>Here is your grade:</h2>
+                            {
+                                this.state.graded
+                                ? this.giveGrade()
+                                : <p>You have not submitted yet</p>
+                            }
+                            {
+                                this.state.showAnswer
+                                ? (
+                                    <div>
+                                        <br/>
+                                        <h2 className='para'>This is the correct answer:</h2>
+                                        <p>{this.getCurrentSentence()}</p>
+                                    </div>
+                                )
+                                : null
+                            }
+                        </div>
+                        <div className='col-3'>
+                            <div className='box-missing-words'>
+                                <h2 className='para'>Missing Words:</h2>
+                                {
+                                    this.state.graded
+                                    ? (
+                                        <div className='row'>
+                                            <div className='col missing-words-list'>
+                                                {missingWords.slice(0, Math.round(missingWords.length / 2))}
+                                            </div>
+                                            <div className='col missing-words-list'>
+                                                {missingWords.slice(Math.round(missingWords.length / 2), missingWords.length)}
+                                            </div>
+                                        </div>
+                                    )
+                                    : null
+                                }
+                            </div>
                         </div>
                     </div>
-                    {
-                        this.state.graded
-                        ? this.giveGrade()
-                        : null
-                    }
-                    {
-                        this.state.showAnswer
-                        ? (
-                            <div>
-                                <p>This is the correct answer:</p>
-                                <p>{this.getCurrentSentence()}</p>
-                            </div>
-                        )
-                        : null
-                    }
                     <div className='row'>
                         <div className="col box">
                             <form id='input-form'>
@@ -336,9 +384,9 @@ export class TextToSpeech extends Component {
                                 </div>
                             </form>
                         </div>
-                        <div className='col-2 text-right bottom-align-text' id="submit-btn-div">
+                        <div className='col-2 sub-div' id="submit-btn-div">
                             <button type="submit"
-                                className="btn btn-success submit-btn"
+                                className= 'btn btn-success submit-btn text-middle'
                                 form="picturebook-form"
                                 onClick={this.handleSubmit}
                                 disabled={this.state.continue}>
@@ -350,7 +398,7 @@ export class TextToSpeech extends Component {
                         {
                             this.state.continue
                             ? (
-                                <div className="row">
+                                <div className="row bot-but">
                                   <button type="submit"
                                       className="btn btn-success give-up-btn col-6 text-middle bottom-align-text hide-button"
                                       form="picturebook-form">
@@ -366,7 +414,7 @@ export class TextToSpeech extends Component {
 
                             )
                             : (
-                              <div className="row">
+                              <div className="row bot-but">
                                 <button type="submit"
                                     className="btn btn-success give-up-btn col-6 text-middle bottom-align-text"
                                     form="picturebook-form"
