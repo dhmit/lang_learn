@@ -3,9 +3,9 @@ import * as PropTypes from 'prop-types';
 
 import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
 
-const capitalize = (word) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-};
+// const capitalize = (word) => {
+//     return word.charAt(0).toUpperCase() + word.slice(1);
+// };
 
 // const synth = window.speechSynthesis;
 
@@ -22,7 +22,8 @@ const playButton = (color) => {
                 points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"
             />
             <path
-                d="M26,13A13,13,0,1,1,13,0,13,13,0,0,1,26,13ZM13,2.18A10.89,10.89,0,1,0,23.84,13.06,10.89,10.89,0,0,0,13,2.18Z"
+                d={'M26,13A13,13,0,1,1,13,0,13,13,0,0,1,26,13ZM13,2.18A10.89,10.89'
+                + ',0,1,0,23.84,13.06,10.89,10.89,0,0,0,13,2.18Z'}
             />
         </svg>
     );
@@ -60,10 +61,6 @@ export class TextToSpeech extends Component {
     }
 
     getCurrentSentence = () => {
-        const {
-            sentenceIndex,
-            textData,
-        } = this.state;
         return this.state.textData[this.state.sentenceIndex]['sentence'];
     }
 
@@ -78,7 +75,7 @@ export class TextToSpeech extends Component {
         this.reset();
     }
 
-    reset = async (input) => {
+    reset = async () => {
         this.setState({
             showModal: false,
             userText: '',
@@ -90,7 +87,7 @@ export class TextToSpeech extends Component {
         document.getElementById('content').value = '';
     }
 
-    giveUp = (event) => {
+    giveUp = () => {
         this.setState({
             continue: true,
             showAnswer: true,
@@ -105,40 +102,15 @@ export class TextToSpeech extends Component {
         speechSynthesis.speak(utterance);
     }
 
-    // handleInput = (event) => {
-    //     const inputValue = event.target.value;
-    //     this.setState({
-    //         userText: inputValue,
-    //     });
-    //
-    //     // if (';,. '.includes(inputValue.slice(-1))) {
-    //     //     this.createPictureBook(inputValue);
-    //     // }
-    //     // console.log('this is the input value:');
-    //     // console.log(inputValue);
-    //     console.log('this is the state value:');
-    //     console.log(this.state.userText);
-    // };
-
-    handleSubmit = (event) => {
-        // const inputValue = ;
-        // this.setState({
-        //     userText: inputValue,
-        // });
+    handleSubmit = () => {
         const input = document.getElementById('content').value;
-        // if (';,. '.includes(inputValue.slice(-1))) {
         console.log('this is the input i want', input);
-        // const input = this.state.userText;  // + ';%20' + this.getCurrentSentence();
         this.setState({
             userText: input,
         });
         this.gradeText(input);
-        // this.createPictureBook(input);
-        // }
+
         console.log('You have submitted!!!');
-        // console.log(inputValue);
-        // console.log('this is the state value:');
-        // console.log(this.userText);
     };
 
     gradeText = async (input) => {
@@ -146,37 +118,17 @@ export class TextToSpeech extends Component {
         try {
             console.log('im trying something here');
             const apiURL = `/api/get_sentence_grade/${input}/${this.getCurrentSentence()}`;
-            // const apiURL = '/api/get_sentence_grade?content=' + input + '?content2=' + this.getCurrentSentence();
-            // const apiURL = '/api/get_picturebook_data?content=' + input;
             const response = await fetch(apiURL);
             const grade = await response.json();
             // this.setState({ pictureBookWords });
             console.log(grade);
 
-            this.setState({grade: grade, graded: true});
-            this.setState({continue: grade['isCorrect']});
+            this.setState({ grade: grade, graded: true });
+            this.setState({ continue: grade['isCorrect'] });
         } catch (e) {
             console.log(e);
         }
     }
-
-    // toggleStar = () => {
-    //     const { starredCards, starOnly, cardIndex } = this.state;
-    //     let currentIndex = starOnly ? starredCards[cardIndex] : cardIndex;
-    //     if (this.isStarred(currentIndex)) {
-    //         starredCards.splice(starredCards.indexOf(currentIndex), 1);
-    //         if (starOnly) {
-    //             if (starredCards.length > 0) {
-    //                 currentIndex %= starredCards.length;
-    //             } else {
-    //                 currentIndex = 0;
-    //             }
-    //         }
-    //     } else {
-    //         starredCards.push(this.state.cardIndex);
-    //     }
-    //     this.setState({ starredCards, cardIndex: currentIndex });
-    // }
 
     modalHandler = (event) => {
         event.preventDefault();
@@ -201,15 +153,13 @@ export class TextToSpeech extends Component {
             if (this.state.grade[i]['grade'] === 'correct') {
                 // const color = '#3ED7AF';
                 words.push(
-                    <span className="correct-word">{this.state.grade[i]['word']}</span>
+                    <span className="correct-word">{this.state.grade[i]['word']}</span>,
                 );
                 words.push(<span> </span>);
             } else {
                 // const color = '#F64F4F';
                 words.push(
-                    <span className="incorrect-word">{this.state.grade[i]['word']}</span>
-
-                    // <span style='color: #F64F4F'>{this.state.grade[i]['word']}</span>
+                    <span className="incorrect-word">{this.state.grade[i]['word']}</span>,
                 );
                 words.push(<span> </span>);
             }
@@ -224,7 +174,7 @@ export class TextToSpeech extends Component {
         const words = [];
         for (let i = 0; i < this.state.grade['missing'].length; i++) {
             words.push(
-                    <p className="missing-words">{this.state.grade['missing'][i]}</p>
+                <p className="missing-words">{this.state.grade['missing'][i]}</p>,
             );
         }
 
@@ -240,7 +190,6 @@ export class TextToSpeech extends Component {
     render() {
         const {
             textData,
-            showNext,
             sentenceIndex,
         } = this.state;
 
@@ -256,9 +205,9 @@ export class TextToSpeech extends Component {
 
 
         /* Actual Return statement */
-        let missingWords = null;
+        let missingWord = null;
         if (this.state.graded) {
-            missingWords = this.giveMissingWords();
+            missingWord = this.giveMissingWords();
             // const missingWordsLength = missingWords.len
         }
 
@@ -324,8 +273,8 @@ export class TextToSpeech extends Component {
                     <div className='row answer'>
                         <div className="col-1">
                             <div className="play audio"
-                               onClick={this.playAudio}>
-                               {playButton('pink')}
+                                onClick={this.playAudio}>
+                                {playButton('pink')}
                             </div>
                             <div className="play-button-buffer">
                                 {null}
@@ -335,19 +284,19 @@ export class TextToSpeech extends Component {
                             <h2 className='grade-text para'>Here is your grade:</h2>
                             {
                                 this.state.graded
-                                ? this.giveGrade()
-                                : <p>You have not submitted yet</p>
+                                    ? this.giveGrade()
+                                    : <p>You have not submitted yet</p>
                             }
                             {
                                 this.state.showAnswer
-                                ? (
-                                    <div>
-                                        <br/>
-                                        <h2 className='para'>This is the correct answer:</h2>
-                                        <p>{this.getCurrentSentence()}</p>
-                                    </div>
-                                )
-                                : null
+                                    ? (
+                                        <div>
+                                            <br/>
+                                            <h2 className='para'>This is the correct answer:</h2>
+                                            <p>{this.getCurrentSentence()}</p>
+                                        </div>
+                                    )
+                                    : null
                             }
                         </div>
                         <div className='col-3'>
@@ -355,17 +304,19 @@ export class TextToSpeech extends Component {
                                 <h2 className='para'>Missing Words:</h2>
                                 {
                                     this.state.graded
-                                    ? (
-                                        <div className='row'>
-                                            <div className='col missing-words-list'>
-                                                {missingWords.slice(0, Math.round(missingWords.length / 2))}
+                                        ? (
+                                            <div className='row'>
+                                                <div className='col missing-words-list'>
+                                                    {missingWord.slice(0,
+                                                        Math.round(missingWord.length / 2))}
+                                                </div>
+                                                <div className='col missing-words-list'>{
+                                                    missingWord.slice(Math.round(missingWord.length
+                                                        / 2), missingWord.length)}
+                                                </div>
                                             </div>
-                                            <div className='col missing-words-list'>
-                                                {missingWords.slice(Math.round(missingWords.length / 2), missingWords.length)}
-                                            </div>
-                                        </div>
-                                    )
-                                    : null
+                                        )
+                                        : null
                                 }
                             </div>
                         </div>
@@ -374,7 +325,9 @@ export class TextToSpeech extends Component {
                         <div className="col box">
                             <form id='input-form'>
                                 <div className="form-group">
-                                    <label>Please write exactly what you hear from the audio.</label>
+                                    <label>
+                                    Please write exactly what you hear from the audio.
+                                    </label>
                                     <textarea
                                         className="form-control text-input"
                                         id="content"
@@ -397,37 +350,41 @@ export class TextToSpeech extends Component {
                     <div>
                         {
                             this.state.continue
-                            ? (
-                                <div className="row bot-but">
-                                  <button type="submit"
-                                      className="btn btn-success give-up-btn col-6 text-middle bottom-align-text hide-button"
-                                      form="picturebook-form">
-                                      Give Up
-                                  </button>
-                                  <button type="submit"
-                                      className="btn btn-success continue-btn col-6 text-middle bottom-align-text"
-                                      form="picturebook-form"
-                                      onClick={() => this.changeSentence(1)}>
-                                      Next
-                                  </button>
-                                </div>
+                                ? (
+                                    <div className="row bot-but">
+                                        <button type="submit"
+                                            className={'btn btn-success give-up-btn col-6 '
+                                            + 'text-middle bottom-align-text hide-button'}
+                                            form="picturebook-form">
+                                            Give Up
+                                        </button>
+                                        <button type="submit"
+                                            className={'btn btn-success continue-btn col-6'
+                                            + ' text-middle bottom-align-text'}
+                                            form="picturebook-form"
+                                            onClick={() => this.changeSentence(1)}>
+                                            Next
+                                        </button>
+                                    </div>
 
-                            )
-                            : (
-                              <div className="row bot-but">
-                                <button type="submit"
-                                    className="btn btn-success give-up-btn col-6 text-middle bottom-align-text"
-                                    form="picturebook-form"
-                                    onClick={this.giveUp}>
-                                    Give Up
-                                </button>
-                                <button type="submit"
-                                    className="btn btn-success continue-btn col-6 text-middle bottom-align-text hide-button"
-                                    form="picturebook-form">
-                                    Next
-                                </button>
-                              </div>
-                            )
+                                )
+                                : (
+                                    <div className="row bot-but">
+                                        <button type="submit"
+                                            className={'btn btn-success give-up-btn col-6'
+                                            + ' text-middle bottom-align-text'}
+                                            form="picturebook-form"
+                                            onClick={this.giveUp}>
+                                            Give Up
+                                        </button>
+                                        <button type="submit"
+                                            className={'btn btn-success continue-btn '
+                                            + 'col-6 text-middle bottom-align-text hide-button'}
+                                            form="picturebook-form">
+                                            Next
+                                        </button>
+                                    </div>
+                                )
                         }
                     </div>
                 </div>
@@ -437,5 +394,5 @@ export class TextToSpeech extends Component {
     }
 }
 TextToSpeech.propTypes = {
-    textID: PropTypes.number
+    textID: PropTypes.number,
 };
