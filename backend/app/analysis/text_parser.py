@@ -48,7 +48,7 @@ def correct_sentence(given_sent, correct_sent):
             grade["missing"].remove(word)
 
 
-    incorrect_word_index = []
+    grade["incorrect_word_index"] = []
 
     # hold the length of the users input
     grade["length"] = len(given_tok)
@@ -76,12 +76,12 @@ def correct_sentence(given_sent, correct_sent):
                             "grade": "correct"}
             index = match_index + 1
         else:
-            incorrect_word_index.append(ind_1)
+            grade["incorrect_word_index"].append(ind_1)
             grade[ind_1] = {"word": word,
                             "grade": "incorrect"}
 
     # incorrect indices
-    for word_index in incorrect_word_index:
+    for word_index in grade["incorrect_word_index"]:
 
         # find the  most similar word
         sim_word = most_similar_word(given_tok[word_index], grade["missing"])
