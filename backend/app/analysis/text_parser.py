@@ -17,45 +17,63 @@ def get_sentences(text):
     """
 
     sentences = nltk.tokenize.sent_tokenize(text.replace("\n", " "))
-    # text_paragraph = text_obj.content
-    # temp_sentences = text_paragraph.split(".")
-    #
-    # sentences = []
-    # for sent in temp_sentences:
-    #     sentences.extend(sent.split("!"))
 
-    print(sentences)
     return sentences
 
 
 def correct_sentence(given_sent, correct_sent):
+    """
+    Function takes the user's sentence and the correct sentence and compares them to find missing
+    words, the incorrect words, and a grade
+
+    :param given_sent: str, sentence the user types into the text box
+    :param correct_sent: str, the correct sentence that the instructor inputs
+    :return: dictionary with parameters holding the missing words, correct words, length of user
+             input, word/correctness at each index,
+
+    """
+
     grade = {}
-    print(given_sent.translate(str.maketrans('', '', string.punctuation)))
+
+    # tokenize given_sent and correct_sent and turn them both into lists
     given_tok = nltk.tokenize.word_tokenize(given_sent.lower().translate(
         str.maketrans('', '', string.punctuation)))
     correct_tok = nltk.tokenize.word_tokenize(correct_sent.lower().translate(
         str.maketrans('', '', string.punctuation)))
 
     words_missing = correct_tok.copy()
+
     for word in given_tok:
         if words_missing.count(word) != 0:
+            # remove the words that the user typed in to get the missing words
             words_missing.remove(word)
 
+    # hold all the missing words
     grade["missing"] = words_missing
+
     incorrect_word_index = []
 
+    # hold the length of the users input
     grade["length"] = len(given_tok)
+
+    # True if the user inputs the same sentence as the correct answer
     grade["isCorrect"] = given_tok == correct_tok
 
     index = 0
     for ind_1, word in enumerate(given_tok):
+
         match_found = False
+
+        # loop until the match is found or all words are looked at and no match is found
         for ind_2, match in enumerate(correct_tok[index:]):
-            # print(word, match)
+
             if word == match:
                 match_found = True
                 match_index = ind_2 + index
                 break
+
+        # if the match is found then the grade is correct, incorrect otherwise
+        # increase match_index by 1 if the match is found
         if match_found:
             grade[ind_1] = {"word": word,
                             "grade": "correct"}
@@ -65,42 +83,69 @@ def correct_sentence(given_sent, correct_sent):
             grade[ind_1] = {"word": word,
                             "grade": "incorrect"}
 
+    # incorrect indices
     for word_index in incorrect_word_index:
+
+        # find a similar word
         sim_word = most_similar_word(given_tok[word_index], words_missing)
+
+
         if sim_word is not None:
             word_grade = correct_words(given_tok[word_index], sim_word)
             grade[word_index]["word_grade"] = word_grade
+
     return grade
 
 
 def most_similar_word(word, comparisons):
+    """
+    Take a word and find the most similar word in a given list
+    :param word: string with one word
+    :param comparisons: list of words
+    :return: string, most similar word in comparisons to word
+    """
     min_lev_val = None
     min_lev_word = None
 
+    # check the missing words and see how similar they are
     for current_word in comparisons:
         current_val = Lev.distance(word, current_word)
+
+        # see if the word is less or more similar
         if min_lev_val == None or min_lev_val > current_val:
             min_lev_val = current_val
             min_lev_word = current_word
+
+    # return the most similar word
     return min_lev_word
 
 
 def correct_words(given_word, correct_word):
+    """
+    Determine which letters in a input word are correct and incorrect
+    :param given_word: string with one word, the incorrect word from the user's input
+    :param correct_word: string with one word, the similar word that is correct
+    :return:
+    """
     grade = {}
 
     char_missing = []
+
     char_missing[:0] = correct_word
+
+    # remove the character if the character is there, find out how many are missing
     for char in given_word:
         if char_missing.count(char) != 0:
             char_missing.remove(char)
 
-    grade["missing"] = list(char_missing)
 
+    grade["missing"] = list(char_missing)
+    # for each character, hold whether it is correct or incorrect
     index = 0
     for ind_1, char in enumerate(given_word):
         match_found = False
         for ind_2, match in enumerate(correct_word[index:]):
-            # print(word, match)
+
             if char == match:
                 match_found = True
                 match_index = ind_2 + index
@@ -114,52 +159,3 @@ def correct_words(given_word, correct_word):
                             "grade": "incorrect"}
 
     return grade
-
-
-if __name__ == '__main__':
-    actual = "i like soup"
-    given = "i like, soop"
-    print(actual, given)
-    print(correct_sentence(given, actual))
-
-    # actual = ["i like soup", "soup likes me", "EOM"]
-    #
-    # res = [{'sentence': sentence} for sentence in actual]
-    # print(res)
-
-    # part_of_speech = ['noun', 'verb', 'adjective', 'adverb']
-    #
-    # # Reused the old image url dictionary if we are not getting all of the urls
-    # word_urls = {}
-    # word_definitions = {}
-    # word_examples = {}
-
-    # for pos in part_of_speech:
-    #     print("Getting definitions and examples for " + pos + " in the text " +
-    #           text_obj.title + "... (This might take a while)")
-    #     words = get_valid_words(text_obj.content.lower(), pos)
-    #     definitions = get_word_definition(words, pos)
-    #     examples = get_word_examples(words, pos, text_obj.content.lower())
-    #
-    #     print("Updating database for " + pos + " in the text " + text_obj.title)
-    #     for word in tqdm.tqdm(words):
-    #         word = word.lower()
-    #         if word not in word_urls:
-    #             image_url = get_bing_image_url(word)
-    #             if image_url is not None:
-    #                 word_urls[word.lower()] = image_url
-    #
-    #         if word not in word_definitions:
-    #             word_definitions[word] = {pos: definitions[word]}
-    #         else:
-    #             word_definitions[word][pos] = definitions[word]
-    #
-    #         if word not in word_examples:
-    #             word_examples[word] = {pos: examples[word]}
-    #         else:
-    #             word_examples[word][pos] = examples[word]
-    #
-    # text_obj.images = word_urls
-    # text_obj.definitions = word_definitions
-    # text_obj.examples = word_examples
-    # text_obj.save()
