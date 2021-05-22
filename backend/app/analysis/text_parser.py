@@ -1,8 +1,8 @@
 """
 Custom command to populate text model with definition, examples, and images
 """
-import nltk
 import string
+import nltk
 import Levenshtein as Lev
 
 
@@ -38,15 +38,15 @@ def correct_sentence(given_sent, correct_sent):
     correct_tok = nltk.tokenize.word_tokenize(correct_sent.lower().translate(
         str.maketrans('', '', string.punctuation)))
 
-    words_missing = correct_tok.copy()
+    # hold all the correct words and removed every word that is found to hold only
+    # the missing words
+    grade["missing"] = correct_tok.copy()
 
     for word in given_tok:
-        if words_missing.count(word) != 0:
+        if grade["missing"].count(word) != 0:
             # remove the words that the user typed in to get the missing words
-            words_missing.remove(word)
+            grade["missing"].remove(word)
 
-    # hold all the missing words
-    grade["missing"] = words_missing
 
     incorrect_word_index = []
 
@@ -84,7 +84,7 @@ def correct_sentence(given_sent, correct_sent):
     for word_index in incorrect_word_index:
 
         # find the  most similar word
-        sim_word = most_similar_word(given_tok[word_index], words_missing)
+        sim_word = most_similar_word(given_tok[word_index], grade["missing"])
 
         if sim_word is not None:
             word_grade = correct_words(given_tok[word_index], sim_word)
@@ -109,7 +109,7 @@ def most_similar_word(word, comparisons):
         current_val = Lev.distance(word, current_word)
 
         # see if the word is less or more similar
-        if min_lev_val == None or min_lev_val > current_val:
+        if min_lev_val is None or min_lev_val > current_val:
             min_lev_val = current_val
             min_lev_word = current_word
 
