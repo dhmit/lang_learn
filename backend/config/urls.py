@@ -31,6 +31,7 @@ from app.views import (
     text,
     get_indiv_sentences,
     get_sentence_grade,
+    get_response_quiz_data,
 )
 
 
@@ -59,6 +60,7 @@ urlpatterns = [
     path('api/get_flashcards/<int:text_id>/<str:part_of_speech>', get_flashcards),
     path('api/get_crossword/<int:text_id>/<str:part_of_speech>', get_crossword),
     path('api/get_quiz_data/<int:text_id>/', get_quiz_data),
+    path('api/get_response_quiz_data/<int:text_id>/', get_response_quiz_data),
     path('api/text/<int:text_id>', text),
     path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
     path('api/get_picturebook_data', get_picturebook_data),
@@ -76,5 +78,7 @@ urlpatterns = [
     react_view_path('quiz/', 'AllQuizView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
     react_view_path('picturebook/<int:textID>/<str:partOfSpeech>', 'PictureBookView'),
-    react_view_path('textToSpeech/<int:textID>', 'TextToSpeech')
+    react_view_path('response_quiz/', 'ResponseAllQuizView'),
+    react_view_path('response_quiz/<int:textID>/', 'ResponseQuizView'),
+    react_view_path('textToSpeech/<int:textID>', 'TextToSpeech'),
 ]

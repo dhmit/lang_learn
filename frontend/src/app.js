@@ -15,6 +15,8 @@ import { FlashcardView } from './flashcard/flashcardView';
 import { AllQuizView } from './quizView/allQuizView';
 import { PictureBookView } from './pictureBookView/pictureBookView';
 import { CrosswordView } from './crosswordView/crosswordView';
+import { ResponseAllQuizView } from './responseQuizView/responseAllQuizView';
+import { ResponseQuizView } from './responseQuizView/responseQuizView';
 import { TextToSpeech } from './textToSpeech/textToSpeech';
 
 // Import all styles
@@ -33,5 +35,7 @@ window.app_modules = {
     CrosswordView,
     IndexView,
     QuizView,
+    ResponseAllQuizView,
+    ResponseQuizView,
     TextToSpeech,
 };

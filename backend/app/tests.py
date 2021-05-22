@@ -1,10 +1,12 @@
 """
 Tests for the main app.
 """
+import copy
+from textwrap import dedent
 
 from django.test import TestCase
 
-from app.analysis import anagrams, crosswords
+from app.analysis import anagrams, crosswords, conversation_quiz, error_functions
 from app.quiz_creation import conjugation_quiz
 
 
@@ -160,3 +162,186 @@ class MainTests(TestCase):
         self.assertEqual(crosswords.is_valid(solution, 'rotation', (0, 2), 'down', clues), False)
         self.assertEqual(crosswords.is_valid(solution, 'colon', (-3, 4), 'down', clues), False)
         self.assertEqual(crosswords.is_valid(solution, 'colon', (14, 4), 'down', clues), False)
+
+    def test_apply_question_option_errors(self):
+        """
+        Tests the apply_question_option_errors from conversation quiz
+        """
+        test_text = """
+        Hello, how are you today?
+        I am doing well. How are you?
+        """
+        questions = conversation_quiz.get_quiz_questions(dedent(test_text))
+        self.assertEqual(len(questions), 1)
+        question = questions[0]
+        expected = {
+            'question': 'Hello, how are you today?',
+            'options': [
+                {'error-types': [], 'text': 'I am doing well. How are you?'},
+                {'error-types': [], 'text': 'random mutation 1'},
+                {'error-types': [], 'text': 'random mutation 2'},
+                {'error-types': [], 'text': 'random mutation 3'},
+            ],
+            'answer': 'I am doing well. How are you?',
+        }
+        # All questions should have a question string, options, and an answer string
+        self.assertEqual(set(question.keys()), set(expected.keys()))
+        # All questions should have exactly 4 options
+        self.assertEqual(len(question['options']), 4)
+        # All question options should be unique and one must be equal to the answer text
+        num_eq_to_answer = 0
+        for i in range(len(question['options'])):
+            if i < 3:
+                self.assertNotEqual(
+                    question['options'][i]['text'],
+                    question['options'][i + 1]['text']
+                )
+            num_eq_to_answer += (question['options'][i]['text'] == expected['answer'])
+        self.assertEqual(num_eq_to_answer, 1)
+
+    def test_error_functions(self):
+        """
+        General test for error functions used in apply_question_option_errors
+        """
+        err_funcs = [
+            error_functions.capitalization,
+            error_functions.comma_splice,
+            error_functions.homophone,
+            error_functions.run_on,
+            error_functions.verb_conjugation,
+            error_functions.verb_deletion
+        ]
+        options = [
+            {'error-types': [], 'text': 'I am doing well. How are you?'},
+            {'error-types': ['comma-splice'],
+             'text': 'I will go to the park later, i will also go to the store.'},
+            {'error-types': [],
+             'text': 'I will go to the park later. I will also go to the store.'},
+            {'error-types': [], 'text': 'Did you hear their performance?'},
+            {'error-types': [], 'text': 'I run outside when the weather is nice.'}
+        ]
+        original_options = copy.deepcopy(options)
+        for error_function in err_funcs:
+            for option, original_option in zip(options, original_options):
+                new_option, success = error_function.apply(option)
+                # The original option error-types should not be mutated
+                self.assertDictEqual(option, original_option)
+                # No duplicates in error-types
+                self.assertEqual(
+                    len(new_option['error-types']), len(set(new_option['error-types']))
+                )
+                if success:
+                    # If the error was successfully applied, the text must be different and there
+                    # should also be a new error type in error-types
+                    self.assertNotEqual(new_option['text'], option['text'])
+                    self.assertEqual(len(new_option['error-types']), len(option['error-types']) + 1)
+                    self.assertEqual(
+                        len(set(new_option['error-types']) ^ set(option['error-types'])), 1
+                    )
+                else:
+                    # If application of the error failed, the new option text should be equal to the
+                    # original text and error-types should not be changed
+                    self.assertEqual(new_option['text'], option['text'])
+                    self.assertEqual(new_option['error-types'], option['error-types'])
+
+    def test_capitalization(self):
+        """
+        Test capitalization error function
+        """
+        option_1 = {'error-types': [], 'text': 'I am doing well. How are you?'}
+        new_option_1, success = error_functions.capitalization.apply(option_1)
+        if success:  # If the error was applies, check that it was applied correctly
+            expected_1 = [
+                {'error-types': ['capitalization'], 'text': 'i am doing well. How are you?'},
+                {'error-types': ['capitalization'], 'text': 'I am doing well. how are you?'}
+            ]
+            self.assertIn(new_option_1, expected_1)
+
+        option_2 = {
+            'error-types': ['comma-splice'],
+            'text': 'I will go to the park later, I will also go to the store.'
+        }
+        new_option_2, success = error_functions.capitalization.apply(option_2)
+        if success:
+            expected_2 = {
+                'error-types': ['comma-splice', 'capitalization'],
+                'text': 'i will go to the park later, I will also go to the store.'
+            }
+            self.assertEqual(new_option_2, expected_2)
+
+    def test_comma_splice(self):
+        """
+        Test comma splice error function
+        """
+        option_1 = {
+            'error-types': [],
+            'text': 'I will go to the park later. I will also go to the store.'
+        }
+        new_option_1, success = error_functions.comma_splice.apply(option_1)
+        if success:
+            expected_1 = {
+                'error-types': ['comma-splice'],
+                'text': 'I will go to the park later, i will also go to the store.'
+            }
+            self.assertEqual(new_option_1, expected_1)
+
+    def test_homophone(self):
+        """
+        Test homophone error function
+        """
+        option_1 = {'error-types': [], 'text': 'Did you hear their performance?'}
+        new_option_1, success = error_functions.homophone.apply(option_1)
+        if success:
+            # The first word that can be replaced with a homophone is replaced
+            expected_1 = [
+                {'error-types': ['homophone'], 'text': "Did yew hear their performance?"},
+                {'error-types': ['homophone'], 'text': "Did ewe hear their performance?"}
+            ]
+            self.assertIn(new_option_1, expected_1)
+
+    def test_run_on(self):
+        """
+        Test run-on sentence error function
+        """
+        option_1 = {
+            'error-types': [],
+            'text': 'I will go to the park later. I will also go to the store.'
+        }
+        new_option_1, success = error_functions.run_on.apply(option_1)
+        if success:
+            expected_1 = {
+                'error-types': ['run-on'],
+                'text': 'I will go to the park later i will also go to the store.'
+            }
+            self.assertEqual(new_option_1, expected_1)
+
+    def test_verb_error_func(self):
+        """
+        Test for error functions that use get_quiz_sentences from conjugation quiz to produce
+        verb-related errors
+        """
+        option = {'error-types': [], 'text': 'I run outside when the weather is nice.'}
+        verb_error_funcs = [
+            error_functions.verb_conjugation,
+            error_functions.verb_deletion
+        ]
+        for error_function in verb_error_funcs:
+            new_option, success = error_function.apply(option)
+            if not success:
+                continue
+            option_words = set(option['text'].split())
+            new_option_1_words = set(new_option['text'].split())
+            # The either 'run' or 'is' should be changed
+            changed_words = option_words - new_option_1_words
+            run_or_is = 'run' in changed_words or 'is' in changed_words
+            self.assertTrue(run_or_is)
+
+    def test_verb_deletion(self):
+        """
+        Test verb deletion error function
+        """
+        option_1 = {'error-types': [], 'text': 'I run outside when the weather is nice.'}
+        new_option_1, success = error_functions.verb_deletion.apply(option_1)
+        # The new text should be shorter than the original answer choice
+        if success:
+            self.assertLess(len(new_option_1['text']), len(option_1['text']))

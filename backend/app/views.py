@@ -4,9 +4,12 @@ These view functions and classes implement API endpoints
 import json
 import random
 
+from django.http import Http404
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .analysis.conversation_quiz import get_quiz_questions
 from .models import (
     Text
 )
@@ -228,12 +231,26 @@ def get_quiz_data(request, text_id):
     the id of the text. The first verb in each sentence of the text will be fill-in. The options
     will be randomly selected and arranged.
     """
-    text_obj = Text.objects.get(id=text_id)
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
 
 @api_view(['GET'])
+def get_response_quiz_data(request, text_id):
+    """
+    API endpoint for getting the necessary information for the conversation quiz given
+    the id of the text. [add more important info]
+    """
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
+    res = get_quiz_questions(text_obj.content)
+    return Response(res)
 def get_indiv_sentences(request, text_id):
     """
     API endpoint for getting the individual sentences from the given text.
@@ -250,44 +267,6 @@ def get_sentence_grade(request, user_sent, actual_sent):
     """
     API endpoint for getting the individual sentences from the given text.
     """
-    # sentences = request.query_params.get('content')
-    # print(sentences)
-    # user_sentence ,actual_sentence = sentences.split(';')
-    #
     graded_sentence = correct_sentence(user_sent, actual_sent)
-    # return Response(graded_sentence)
-    # test = ["hello", "this", "is", "a", "test"]
-    # res = [{'word': word,}
-    #         for word in test]
-    # #res = [graded_sentence]
-    # return Response(res)
 
-    # story_content = "Hello, my name is pain"
-    # urls = get_story_data(story_content)
-    # misspelled = get_misspelled_words(story_content)
-    # res = [{'word': word,
-    #         'url': urls[word]}
-    #        for word in urls]
-    # res.append(misspelled)
-    # return Response(res)
-    # story_content = request.query_params.get('content')
-    # print('hmmm:', story_content)
-    # urls = get_story_data(story_content)
-    # misspelled = get_misspelled_words(story_content)
-    # res = [{'word': word,
-    #         'url': urls[word]}
-    #        for word in urls]
-    # res.append(misspelled)
-    # return Response(res)
-    # return get_picturebook_data(request)
-    text = user_sent
-    text_2 = actual_sent
-
-    # print('hmmm:', story_content)
-    # urls = get_story_data(story_content)
-    # misspelled = get_misspelled_words(story_content)
-    # res = [{'word': word,
-    #         'url': urls[word]}
-    #        for word in urls]
-    # res.append(misspelled)
     return Response(graded_sentence)
