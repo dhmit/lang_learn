@@ -114,7 +114,6 @@ export class TextToSpeech extends Component {
             const apiURL = `/api/get_sentence_grade/${input}/${this.getCurrentSentence()}`;
             const response = await fetch(apiURL);
             const grade = await response.json();
-            // this.setState({ pictureBookWords });
             console.log(grade);
 
             this.setState({ grade: grade, graded: true });
@@ -143,15 +142,12 @@ export class TextToSpeech extends Component {
     giveGrade = () => {
         const words = [];
         for (let i = 0; i < this.state.grade['length']; i++) {
-            // let word = this.state.grade[i]['word']
             if (this.state.grade[i]['grade'] === 'correct') {
-                // const color = '#3ED7AF';
                 words.push(
                     <span className="correct-word">{this.state.grade[i]['word']}</span>,
                 );
                 words.push(<span> </span>);
             } else {
-                // const color = '#F64F4F';
                 words.push(
                     <span className="incorrect-word">{this.state.grade[i]['word']}</span>,
                 );
@@ -174,7 +170,6 @@ export class TextToSpeech extends Component {
 
         this.shuffle(words);
         return words;
-        // return 'missing words was called';
     }
 
     shuffle = async (arr) => {
@@ -191,18 +186,14 @@ export class TextToSpeech extends Component {
             return (<LoadingPage text='Loading Sentences...'/>);
         }
 
-        /* Generate Text On Top of Progress Bar */
         const sentenceLength = textData.length;
         const progressText = sentenceLength === 0
             ? 'No Sentences Available'
             : `${sentenceIndex + 1}/${sentenceLength} Words`;
 
-
-        /* Actual Return statement */
         let missingWord = null;
         if (this.state.graded) {
             missingWord = this.giveMissingWords();
-            // const missingWordsLength = missingWords.len
         }
 
         return (

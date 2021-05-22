@@ -5,8 +5,6 @@ import nltk
 import string
 import Levenshtein as Lev
 
-# Ours
-
 
 # Modified Code from Bing library
 def get_sentences(text):
@@ -29,8 +27,7 @@ def correct_sentence(given_sent, correct_sent):
     :param given_sent: str, sentence the user types into the text box
     :param correct_sent: str, the correct sentence that the instructor inputs
     :return: dictionary with parameters holding the missing words, correct words, length of user
-             input, word/correctness at each index,
-
+             input, word/correctness at each index
     """
 
     grade = {}
@@ -86,9 +83,8 @@ def correct_sentence(given_sent, correct_sent):
     # incorrect indices
     for word_index in incorrect_word_index:
 
-        # find a similar word
+        # find the  most similar word
         sim_word = most_similar_word(given_tok[word_index], words_missing)
-
 
         if sim_word is not None:
             word_grade = correct_words(given_tok[word_index], sim_word)
@@ -100,6 +96,7 @@ def correct_sentence(given_sent, correct_sent):
 def most_similar_word(word, comparisons):
     """
     Take a word and find the most similar word in a given list
+
     :param word: string with one word
     :param comparisons: list of words
     :return: string, most similar word in comparisons to word
@@ -123,6 +120,7 @@ def most_similar_word(word, comparisons):
 def correct_words(given_word, correct_word):
     """
     Determine which letters in a input word are correct and incorrect
+
     :param given_word: string with one word, the incorrect word from the user's input
     :param correct_word: string with one word, the similar word that is correct
     :return:
@@ -138,8 +136,8 @@ def correct_words(given_word, correct_word):
         if char_missing.count(char) != 0:
             char_missing.remove(char)
 
-
     grade["missing"] = list(char_missing)
+
     # for each character, hold whether it is correct or incorrect
     index = 0
     for ind_1, char in enumerate(given_word):
