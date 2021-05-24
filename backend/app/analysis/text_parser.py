@@ -146,7 +146,7 @@ def correct_words(given_word, correct_word):
 
     # for each character, hold whether it is correct or incorrect
     index = 0
-    for ind_1, char in enumerate(given_word):
+    for char in given_word:
         match_found = False
         for ind_2, match in enumerate(correct_word[index:]):
 
