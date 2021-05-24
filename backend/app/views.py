@@ -151,7 +151,6 @@ def get_picturebook_data(request):
     API endpoint for getting the picture book images given the story the user wrote.
     """
     story_content = request.query_params.get('content')
-    print('hmmm:', story_content)
     urls = get_story_data(story_content)
     misspelled = get_misspelled_words(story_content)
     res = [{'word': word,
@@ -251,13 +250,15 @@ def get_response_quiz_data(request, text_id):
         raise Http404 from text_not_exist
     res = get_quiz_questions(text_obj.content)
     return Response(res)
+
+
+@api_view(['GET'])
 def get_indiv_sentences(request, text_id):
     """
     API endpoint for getting the individual sentences from the given text.
     """
     text_obj = Text.objects.get(id=text_id)
     sentences = get_sentences(text_obj.content)
-    # return Response(sentences)
     res = [{'sentence': sentence} for sentence in sentences]
     return Response(res)
 

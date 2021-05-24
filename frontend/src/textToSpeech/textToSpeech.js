@@ -125,9 +125,9 @@ export class TextToSpeech extends Component {
 
     modalHandler = (event) => {
         event.preventDefault();
-        this.setState({
-            showModal: !this.state.showModal,
-        });
+        this.setState((prevState) => ({
+            showModal: !prevState.showModal,
+        }));
     }
 
     checkProgress = () => {
@@ -141,19 +141,16 @@ export class TextToSpeech extends Component {
 
     giveGrade = () => {
         const words = [];
-        for (let i = 0; i < this.state.grade['length']; i++) {
-            if (this.state.grade[i]['grade'] === 'correct') {
-                words.push(
-                    <span className="correct-word">{this.state.grade[i]['word']}</span>,
-                );
-                words.push(<span> </span>);
-            } else {
-                words.push(
-                    <span className="incorrect-word">{this.state.grade[i]['word']}</span>,
-                );
-                words.push(<span> </span>);
-            }
+
+        for (let i = 0; i < this.state.grade['words'].length; i++) {
+            const word = this.state.grade['words'][i]['word'];
+            const grade = this.state.grade['words'][i]['grade'];
+            const isWordCorrect = grade === 'correct';
+            const classNameString = isWordCorrect ? 'correct-word' : 'incorrect-word';
+            words.push(<span className={classNameString}>{word}</span>);
+            words.push(<span> </span>);
         }
+
         return words;
     }
 
