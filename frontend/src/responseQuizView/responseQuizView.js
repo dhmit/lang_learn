@@ -1,5 +1,7 @@
+/* eslint-disable no-alert */
+
 import React from 'react';
-import './quizView.scss';
+import './responseQuizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 import * as PropTypes from 'prop-types';
 import {
@@ -10,8 +12,17 @@ import {
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
+// This dictionary maps specific error types to their respective error message.
+const ERROR_DESCRIPTIONS = {
+    'backwards': 'The letters are reversed',
+    'verb-conjugation': 'One or more verbs are incorrectly conjugated',
+    'comma-splice': 'Two independent clauses are incorrectly joined by a comma',
+    'run-on': 'There is a run on sentence',
+    'homophone': 'Misuse of a similar sounding word (homophone)',
+    'verb-deletion': 'This sentence doesn\'t contain a verb.',
+};
 
-export class QuizView extends React.Component {
+export class ResponseQuizView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +37,7 @@ export class QuizView extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch(`/api/get_quiz_data/${this.props.textID}/`);
+            const response = await fetch(`/api/get_response_quiz_data/${this.props.textID}/`);
             if (!response.ok) {
                 console.log('Something went wrong :(');
                 this.setState({ error: true });
@@ -45,8 +56,6 @@ export class QuizView extends React.Component {
             this.setState({
                 question: nextQuestionNumber,
             });
-        } else {
-            console.log();
         }
     }
 
@@ -56,8 +65,6 @@ export class QuizView extends React.Component {
             this.setState({
                 question: prevQuestionNumber,
             });
-        } else {
-            console.log();
         }
     }
 
@@ -75,16 +82,11 @@ export class QuizView extends React.Component {
     gradeQuiz() {
         let cSubmit;
         if (this.getUnanswered() === 0) {
-            // eslint-disable-next-line no-alert
-            cSubmit = window.confirm(
-                'Are you sure that you want to submit your quiz? Your answers are final.',
-            );
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? Your'
+                + ' answers are final.');
         } else {
-            // eslint-disable-next-line no-alert
-            cSubmit = window.confirm(
-                'Are you sure that you want to submit your quiz? '
-                + `You have ${this.getUnanswered()} unanswered questions(s).`,
-            );
+            cSubmit = window.confirm('Are you sure that you want to submit your quiz? You'
+                + ' have ' + this.getUnanswered() + ' unanswered questions(s).');
         }
         if (cSubmit === true) {
             this.setState({ graded: true });
@@ -99,23 +101,26 @@ export class QuizView extends React.Component {
         } else {
             console.log();
         }
+
+        // Brings the user back to the first question (beginning of the quiz) upon submission.
+        this.setState({ question: 1 });
     }
 
     onProgressBarClick = (event) => {
         this.setState({
-            ...this.state,
             question: parseInt(event.target.value),
         });
     }
 
     onAnswerChoiceClick = (event) => {
         const currentQ = this.state.question;
-        if ((typeof event.target.value) === 'undefined') {
-            console.log();
-        } else if (!this.state.graded) {
-            const answers = this.state.userAnswers;
-            answers[currentQ] = event.target.value;
-            this.setState({ userAnswers: answers });
+        if ((!this.state.graded) && ((typeof event.target.value) !== 'undefined')) {
+            this.setState({
+                userAnswers: {
+                    ...this.state.userAnswers,
+                    [currentQ]: event.target.value,
+                },
+            });
         }
     }
 
@@ -128,33 +133,76 @@ export class QuizView extends React.Component {
             return (<LoadingPage />);
         }
 
-        const choices = this.state.data[this.state.question - 1].options;
+        const displayFeedback = () => {
+            // This function is only called if the user selects an answer.
+            const currQ = this.state.question;
+            const choices = this.state.data[currQ - 1].options;
+            const userChoice = this.state.userAnswers[currQ];
+            const choiceIndex = choices.findIndex((obj) => (obj.text) === userChoice);
+            const errorTypes = this.state.data[currQ - 1].options[choiceIndex]['error-types'];
+            if (errorTypes.length === 0) {
+                return (<>
+                    You chose the correct answer. Congratulations!
+                </>);
+            }
+            const errors = errorTypes.map((error, i) => {
+                let errorText = error;
+                if (errorText in ERROR_DESCRIPTIONS) {
+                    errorText = ERROR_DESCRIPTIONS[errorText];
+                }
+                return (
+                    <li key={i}>{errorText}</li>
+                );
+            });
+            return (<>
+                The answer choice you selected had the following errors:
+                <ul>
+                    {errors}
+                </ul>
+            </>);
+        };
 
-        const radios = choices.map((choice, i) => {
+        const displayQuestion = () => {
+            const choices = this.state.data[this.state.question - 1].options;
+
+            const radios = choices.map((choice, i) => {
+                const choiceText = choice['text'];
+                return (
+                    <ToggleButton
+                        key={i + 1}
+                        variant="outline-light"
+                        value={choiceText}
+                        className="c-button"
+                        onClick={this.onAnswerChoiceClick}
+                    >
+                        {choiceText}
+                    </ToggleButton>
+                );
+            });
+
             return (
-                <ToggleButton
-                    key={i + 1}
-                    variant="outline-light"
-                    value={choice}
-                    className="c-button"
-                    onClick={this.onAnswerChoiceClick}
+                <ToggleButtonGroup
+                    className="text-center"
+                    type="radio"
+                    name="options"
+                    value={this.state.userAnswers[this.state.question]}
                 >
-                    {choice}
-                </ToggleButton>
+                    {radios}
+                </ToggleButtonGroup>
             );
-        });
+        };
 
         return (
             <React.Fragment>
                 <Navbar />
                 <div className="page">
                     <div className="row justify-content-between" id="top">
-                        <a className="exit-button" href={'/quiz'}>
+                        <a className="exit-button" href={'/response_quiz'}>
                             <p>&lt;</p>
                             {/* Eventually, this button will let you leave the quiz */}
                         </a>
                         <div className="col">
-                            <h1 className="quiz-title">Verb Conjugation Quiz</h1>
+                            <h1 className="quiz-title">Dialogue Quiz</h1>
                             <p className="quiz-author"><i>by Takako Aikawa</i></p>
                         </div>
                         <div className="col text-right submit-button">
@@ -178,10 +226,7 @@ export class QuizView extends React.Component {
                                     const answers = this.state.userAnswers;
 
                                     if (this.state.graded) {
-                                        if (Object.prototype.hasOwnProperty.call(
-                                            answers,
-                                            qNumber,
-                                        )) {
+                                        if (qNumber in answers) {
                                             const userAnswer = answers[qNumber];
                                             const correctAnswer = this.state.data[key].answer;
                                             if (userAnswer === correctAnswer) {
@@ -192,10 +237,8 @@ export class QuizView extends React.Component {
                                         }
                                     } else {
                                         for (const i in answers) {
-                                            if (Object.prototype.hasOwnProperty.call(answers, i)) {
-                                                if (qNumber.toString() === i) {
-                                                    qStatus = 'Answered';
-                                                }
+                                            if (qNumber.toString() === i) {
+                                                qStatus = 'Answered';
                                             }
                                         }
                                     }
@@ -220,39 +263,41 @@ export class QuizView extends React.Component {
                             }
                         </div>
                         <div className="col-9 shaded-box">
-                            <h3 className="question-title">Question #{this.state.question}</h3>
+                            <h2 className="question-title">Question #{this.state.question}</h2>
                             <p className="question-primary-text">
-                                Select the correct conjugation for the missing word.
+                                Respond to the prompt below:
                             </p>
                             <br />
                             <p className="question-secondary-text">
-                                {this.state.data[this.state.question - 1].sentence}
+                                {this.state.data[this.state.question - 1].question}
                             </p>
                             <br />
-                            <div className="row justify-content-center">
-                                {(this.state.graded)
-                                    ? <p className="results">
-                                        Your answer: {(Object.prototype.hasOwnProperty.call(
-                                            this.state.userAnswers,
-                                            this.state.question,
-                                        ))
+                            {(this.state.graded)
+                                ? <div>
+                                    <h2 className="results-header">Your Response</h2>
+                                    <p className="results-text">
+                                        Your answer: {this.state.question in this.state.userAnswers
                                             ? <>{this.state.userAnswers[this.state.question]}</>
                                             : <i>Unanswered</i>}
-                                        <br />
+                                    </p>
+                                    <p className="results-text">
                                         Correct answer: {
                                             this.state.data[this.state.question - 1].answer
                                         }
                                     </p>
-                                    : <ToggleButtonGroup
-                                        className="text-center"
-                                        type="radio"
-                                        name="options"
-                                        value={this.state.userAnswers[this.state.question]}
-                                    >
-                                        {radios}
-                                    </ToggleButtonGroup>
-                                }
-                            </div>
+                                    <br />
+                                    <h2 className="results-header">Machine-Generated Feedback</h2>
+                                    <p className="results-text">
+                                        {(Object.prototype.hasOwnProperty.call(
+                                            this.state.userAnswers,
+                                            this.state.question,
+                                        ))
+                                            ? <>{displayFeedback()}</>
+                                            : <i>No feedback.</i>}
+                                    </p>
+                                </div> : <div className="row justify-content-center">
+                                    {displayQuestion()}
+                                </div>}
                         </div>
                     </div>
                     <div className="row justify-content-between">
@@ -287,10 +332,10 @@ export class QuizView extends React.Component {
     }
 }
 
-QuizView.propTypes = {
+ResponseQuizView.propTypes = {
     textID: PropTypes.number,
     sentence: PropTypes.string,
     answer: PropTypes.string,
 };
 
-export default QuizView;
+export default ResponseQuizView;

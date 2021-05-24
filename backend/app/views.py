@@ -4,6 +4,7 @@ These view functions and classes implement API endpoints
 import json
 import random
 
+from django.http import Http404
 from os.path import join, dirname
 from django.conf import settings
 from ibm_watson import SpeechToTextV1
@@ -11,6 +12,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .analysis.conversation_quiz import get_quiz_questions
 from .models import (
     Text
 )
@@ -130,7 +132,6 @@ def get_anagram(request, text_id, part_of_speech):
     return Response(res)
 
 
-
 @api_view(['GET'])
 def get_picturebook_prompt(request, text_id, part_of_speech):
     """
@@ -233,7 +234,10 @@ def get_quiz_data(request, text_id):
     the id of the text. The first verb in each sentence of the text will be fill-in. The options
     will be randomly selected and arranged.
     """
-    text_obj = Text.objects.get(id=text_id)
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
@@ -266,4 +270,17 @@ def get_transcript(request):
             'score': get_transcript_score(expected_words, transcript)
         }
     ]
+    return Response(res)
+
+@api_view(['GET'])
+def get_response_quiz_data(request, text_id):
+    """
+    API endpoint for getting the necessary information for the conversation quiz given
+    the id of the text. [add more important info]
+    """
+    try:
+        text_obj = Text.objects.get(id=text_id)
+    except Text.DoesNotExist as text_not_exist:
+        raise Http404 from text_not_exist
+    res = get_quiz_questions(text_obj.content)
     return Response(res)
