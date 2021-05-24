@@ -32,7 +32,14 @@ from .analysis.textdata import (
 from .analysis.crosswords import (
     get_crosswords,
 )
-from .quiz_creation.conjugation_quiz import get_quiz_sentences
+from .quiz_creation.conjugation_quiz import (
+    get_quiz_sentences,
+)
+from .analysis.text_parser import (
+    get_sentences,
+    correct_sentence,
+)
+
 
 
 @api_view(['GET'])
@@ -243,3 +250,24 @@ def get_response_quiz_data(request, text_id):
         raise Http404 from text_not_exist
     res = get_quiz_questions(text_obj.content)
     return Response(res)
+
+
+@api_view(['GET'])
+def get_indiv_sentences(request, text_id):
+    """
+    API endpoint for getting the individual sentences from the given text.
+    """
+    text_obj = Text.objects.get(id=text_id)
+    sentences = get_sentences(text_obj.content)
+    res = [{'sentence': sentence} for sentence in sentences]
+    return Response(res)
+
+
+@api_view(['GET'])
+def get_sentence_grade(request, user_sent, actual_sent):
+    """
+    API endpoint for getting the individual sentences from the given text.
+    """
+    graded_sentence = correct_sentence(user_sent, actual_sent)
+
+    return Response(graded_sentence)

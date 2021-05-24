@@ -1,0 +1,103 @@
+/* Styles for the text to speech page */
+.correct-word {
+    color: #28a745;
+}
+
+.incorrect-word {
+    color: #F64F4F;
+}
+
+.hide-button {
+    visibility: hidden;
+}
+
+.box {
+    background: #5941A9;
+    border-radius: 1vh;
+    margin: 5vh 1vw 3vh 1vw;
+    padding: 2vh;
+    width: 100%;
+}
+
+.box-answer{
+    background: #E8C2FF;
+    border-radius: 1vh;
+    padding: 1vh 2vh 0vh 2vh;
+    width: 100%;
+    color: #5941A9;
+    font-size: 25px;
+}
+
+.box-missing-words{
+    background: #E8C2FF;
+    border-radius: 1vh;
+    padding: 1vh 2vh 0vh 2vh;
+    width: 100%;
+    color: #5941A9;
+    font-size: 20px;
+    height: 100%;
+}
+
+.play-button-buffer {
+    height: 100%;
+}
+
+.grade-text{
+    color: #2D2155;
+}
+
+.para {
+    margin: 0vh;
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+    width: 100%;
+}
+
+.sub-div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.instruction {
+    border: 3px solid;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    margin: -25px 10px 0;
+    padding: 0;
+}
+
+.bot-but {
+    margin: 0;
+}
+
+.popup {
+    color: #000;
+    background-color: #c0c0c0;
+}
+
+.popup-word {
+	position: relative;
+	display: block;
+	width: 130px;
+	line-height: 30px;
+	text-align: right;
+	padding: 0 10px;
+	margin: 0;
+	border: 1px solid #666;
+	text-decoration: none;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.popup-word-grade {
+	display: none;
+}
+
+.popup-word-grade:hover {
+	background-color: #e9e9e2;
+}
