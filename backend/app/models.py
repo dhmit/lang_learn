@@ -33,6 +33,9 @@ def default_module():
             'adjective': False,
             'adverb': False,
         },
+        'speech to text': {
+            'sentence by sentence': False,
+        },
     }
     return mods
 

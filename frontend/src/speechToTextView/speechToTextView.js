@@ -45,6 +45,9 @@ export class SpeechToTextView extends React.Component {
     }
 
     nextSentence = () => {
+        this.setState({
+            transcribedData: null,
+        });
         if (this.state.sentenceIndex === this.state.sentences.length - 1) {
             this.setState({ sentenceIndex: 0 });
         } else {
@@ -180,7 +183,9 @@ export class SpeechToTextView extends React.Component {
                         />
                     </div>
                     <div className="col-1 vertical-center">
-                        <button className="btn btn-success btn-done" onClick={this.getTranscript} disabled={!this.state.canTranscribe}>
+                        <button className="btn btn-success btn-done"
+                            onClick={this.getTranscript}
+                            disabled={!this.state.canTranscribe}>
                             Done
                         </button>
                     </div>
@@ -191,7 +196,8 @@ export class SpeechToTextView extends React.Component {
                     </div>
                 </div>
                 <span hidden={!this.state.transcribing}>Processing Audio
-                    <div className="spinner-grow spinner-grow-sm mx-2" role="status" hidden={!this.state.transcribing}>
+                    <div className="spinner-grow spinner-grow-sm mx-2"
+                        role="status" hidden={!this.state.transcribing}>
                         <span className="sr-only">Processing Audio...</span>
                     </div>
                 </span>
