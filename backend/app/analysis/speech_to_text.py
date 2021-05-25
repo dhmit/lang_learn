@@ -14,6 +14,10 @@ def tokenize_sentence(sentence):
     return [word for word in nltk.tokenize.word_tokenize(sentence) if word.isalpha()]
 
 def get_transcript_score(expected, sentence):
+    """
+    Calculates the score according to the edit distance between the original sentence and the
+    spoken sentence.
+    """
     expected = ' '.join(expected)
     edit_dist = edit_distance(sentence, expected)
     return int((len(expected) - edit_dist) / len(expected) * 100)

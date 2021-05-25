@@ -4,7 +4,6 @@ These view functions and classes implement API endpoints
 import json
 import random
 
-from os.path import join, dirname
 from django.conf import settings
 from ibm_watson import SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -248,9 +247,14 @@ def get_text_sentences(request, text_id):
 
 @api_view(['POST'])
 def get_transcript(request):
+    """
+    API endpoint to get a text transcript from an audio file.
+    """
     authenticator = IAMAuthenticator(settings.IBM_KEY)
     speech_to_text = SpeechToTextV1(authenticator=authenticator)
-    speech_to_text.set_service_url('https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/0a741a70-e987-4969-85b8-3e6e290d31f6')
+    service_url = 'https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/0a741a70' \
+                  '-e987-4969-85b8-3e6e290d31f6 '
+    speech_to_text.set_service_url(service_url)
     audio_file = request.FILES.get('audio')
     expected_words = tokenize_sentence(request.POST.get('sentence').lower())
     speech_recognition_results = speech_to_text.recognize(
