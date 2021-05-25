@@ -73,10 +73,9 @@ def process_text(text):
     return processed
 
 
-
 def get_quiz_sentences(text):
     """
-    Given a piece of text, create a dictionary of lists. The lists contain a single sentence
+    Given a piece of text, create a list of dictionaries. The dictionaries contain a single sentence
     missing a verb, 4 options for the quiz (including the missing verb), and the missing verb.
     :param text: A body of text as a string
     :return: List of sentences (Sentences are formatted as dictionaries with a sentence string,
@@ -115,8 +114,8 @@ def get_quiz_sentences(text):
             continue
 
         # prevent contractions from splitting
-        if i != len(pos_tags)-1 and word + pos_tags[i+1][0] in CONTRACTIONS:
-            current_sentence['sentence'].append(word + pos_tags[i+1][0])
+        if i != len(pos_tags) - 1 and word + pos_tags[i + 1][0] in CONTRACTIONS:
+            current_sentence['sentence'].append(word + pos_tags[i + 1][0])
             is_contraction = True
             continue
 
@@ -125,7 +124,6 @@ def get_quiz_sentences(text):
             current_sentence['sentence'].append("~~")
             is_contraction = False
             continue
-
 
         # Add a new word to the current sentence.
         current_sentence['sentence'].append(word)

@@ -16,6 +16,8 @@ import { AllQuizView } from './quizView/allQuizView';
 import { PictureBookView } from './pictureBookView/pictureBookView';
 import { CrosswordView } from './crosswordView/crosswordView';
 import { SpeechToTextView } from './speechToTextView/speechToTextView';
+import { ResponseAllQuizView } from './responseQuizView/responseAllQuizView';
+import { ResponseQuizView } from './responseQuizView/responseQuizView';
 
 // Import all styles
 import './UILibrary/styles.scss';
@@ -34,4 +36,6 @@ window.app_modules = {
     IndexView,
     QuizView,
     SpeechToTextView,
+    ResponseAllQuizView,
+    ResponseQuizView,
 };

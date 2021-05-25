@@ -15,8 +15,8 @@ def tokenize_sentence(sentence):
 
 def get_transcript_score(expected, sentence):
     """
-    Calculates the score according to the edit distance between the original sentence and the
-    spoken sentence.
+    Given a transcribed sentence and the expected sentence, return a score out of 100
+    based on the edit distance.
     """
     expected = ' '.join(expected)
     edit_dist = edit_distance(sentence, expected)
