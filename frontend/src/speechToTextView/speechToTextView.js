@@ -16,9 +16,11 @@ export class SpeechToTextView extends React.Component {
             transcribedData: null,
             canTranscribe: false,
             transcribing: false,
+            showModal: false,
         };
         this.getTranscript = this.getTranscript.bind(this);
         this.nextSentence = this.nextSentence.bind(this);
+        this.modalHandler = this.modalHandler.bind(this);
     }
 
     onStop = (recordedBlob) => {
@@ -43,6 +45,9 @@ export class SpeechToTextView extends React.Component {
     }
 
     nextSentence = () => {
+        this.setState({
+            transcribedData: null,
+        });
         if (this.state.sentenceIndex === this.state.sentences.length - 1) {
             this.setState({ sentenceIndex: 0 });
         } else {
@@ -50,6 +55,13 @@ export class SpeechToTextView extends React.Component {
                 return { sentenceIndex: prevState.sentenceIndex + 1 };
             });
         }
+    }
+
+    modalHandler = (event) => {
+        event.preventDefault();
+        this.setState((prevState) => ({
+            showModal: !prevState.showModal,
+        }));
     }
 
     async getTranscript() {
@@ -69,7 +81,7 @@ export class SpeechToTextView extends React.Component {
             });
             const transcribedData = await response.json();
             this.setState({
-                transcribedData: transcribedData,
+                transcribedData: transcribedData[0],
                 transcribing: false,
             });
         } catch (e) {
@@ -101,9 +113,42 @@ export class SpeechToTextView extends React.Component {
             <Navbar />
             <div className="page">
                 <div className="row">
-                    <h1>
-                        Speech to Text
-                    </h1>
+                    <h1>Speech to Text</h1>
+                    <button className="btn btn-outline-light btn-circle mx-3 btn-instructions"
+                        onClick={this.modalHandler}>
+                        <b>?</b>
+                    </button>
+                </div>
+                <div>
+                    {
+                        this.state.showModal
+                        && <div className="backdrop" onClick={this.modalHandler}></div>
+                    }
+                    <div className={`Modal modal-content ${this.state.showModal
+                        ? 'modal-show' : 'modal-hide'}`}>
+                        <div className="modal-header">
+                            <h5 className="modal-title">Instructions</h5>
+                            <button type="button" className="close"
+                                disabled={!this.state.showModal}
+                                onClick={this.modalHandler}>
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Welcome to the Speech to Text Module! The goal of the
+                            module is to read alout the sentence that has been extracted
+                            from the text. Press the start button to start recording and
+                            the stop button when you are done. </p>
+                            <p> If you are happy with your audio, press the Done button
+                            to receive your score for the sentence. Once you are satisfied
+                            with you score, feel free to move on to the next sentence
+                            by pressing the Next Sentence button.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary"
+                                onClick={this.modalHandler}>Close</button>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <h3>Please read this sentence: </h3>
@@ -138,7 +183,9 @@ export class SpeechToTextView extends React.Component {
                         />
                     </div>
                     <div className="col-1 vertical-center">
-                        <button className="btn btn-success btn-done" onClick={this.getTranscript} disabled={!this.state.canTranscribe}>
+                        <button className="btn btn-success btn-done"
+                            onClick={this.getTranscript}
+                            disabled={!this.state.canTranscribe}>
                             Done
                         </button>
                     </div>
@@ -148,17 +195,20 @@ export class SpeechToTextView extends React.Component {
                         </button>
                     </div>
                 </div>
-<<<<<<< Updated upstream
-                <p>Transcript: {transcribedData ? transcribedData[0]['transcript'] : ''}</p>
-                <p>Score: {transcribedData ? transcribedData[0]['score'] : ''}</p>
-=======
-                <p>Transcript:
-                    <div className="spinner-grow spinner-grow-sm mx-2" role="status" hidden={!this.state.transcribing}>
-                        <span className="sr-only">Loading...</span>
+                <span hidden={!this.state.transcribing}>Processing Audio
+                    <div className="spinner-grow spinner-grow-sm mx-2"
+                        role="status" hidden={!this.state.transcribing}>
+                        <span className="sr-only">Processing Audio...</span>
                     </div>
-                    {transcribedData ? transcribedData[0]['transcript'] : ''}
-                </p>
->>>>>>> Stashed changes
+                </span>
+                {
+                    transcribedData
+                        ? <div>
+                            <p>Transcript: {transcribedData['transcript']}</p>
+                            <p>Score: {transcribedData['score']}</p>
+                        </div>
+                        : null
+                }
             </div>
             <Footer />
         </React.Fragment>);
