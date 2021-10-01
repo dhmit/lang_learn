@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import dotenv
 
 CONFIG_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BACKEND_DIR = os.path.dirname(CONFIG_DIR)
@@ -159,3 +160,9 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats.json'),
     }
 }
+
+# Store API Key
+DOTENV_FILE = os.path.join(PROJECT_ROOT, ".env")
+if os.path.isfile(DOTENV_FILE):
+    dotenv.load_dotenv(DOTENV_FILE)
+IBM_KEY = os.environ['IBM_KEY']

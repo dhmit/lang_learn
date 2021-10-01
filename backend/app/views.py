@@ -4,8 +4,10 @@ These view functions and classes implement API endpoints
 import json
 import random
 
+from django.conf import settings
 from django.http import Http404
-
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -32,7 +34,16 @@ from .analysis.textdata import (
 from .analysis.crosswords import (
     get_crosswords,
 )
-from .quiz_creation.conjugation_quiz import get_quiz_sentences
+from .quiz_creation.conjugation_quiz import (
+    get_quiz_sentences,
+)
+from .analysis.speech_to_text import (
+    sentence_feeder,
+    tokenize_sentence,
+    get_transcript_score,
+)
+
+
 
 
 @api_view(['GET'])
@@ -158,8 +169,7 @@ def add_text(request):
     """
     API endpoint for adding a piece of text
     """
-    body = json.loads(request.body.decode('utf-8'))
-    new_text_obj = Text(title=body['title'], content=body['content'])
+    new_text_obj = Text(title=request.data['title'], content=request.data['content'])
     new_text_obj.save()
     get_text_data(new_text_obj)
     serializer = TextSerializer(new_text_obj)
@@ -230,6 +240,41 @@ def get_quiz_data(request, text_id):
     res = get_quiz_sentences(text_obj.content)
     return Response(res)
 
+@api_view(['GET'])
+def get_text_sentences(request, text_id):
+    """
+    API endpoint to get a single piece of text based on the ID (maybe we want to change this).
+    """
+    text_obj = Text.objects.get(id=text_id)
+    res = [{'sentence': sentence} for sentence in sentence_feeder(text_obj.content)]
+    return Response(res)
+
+@api_view(['POST'])
+def get_transcript(request):
+    """
+    API endpoint to get a text transcript from an audio file.
+    """
+    authenticator = IAMAuthenticator(settings.IBM_KEY)
+    speech_to_text = SpeechToTextV1(authenticator=authenticator)
+    service_url = 'https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/0a741a70' \
+                  '-e987-4969-85b8-3e6e290d31f6 '
+    speech_to_text.set_service_url(service_url)
+    audio_file = request.FILES.get('audio')
+    expected_words = tokenize_sentence(request.POST.get('sentence').lower())
+    speech_recognition_results = speech_to_text.recognize(
+        audio=audio_file,
+        content_type='audio/webm;codecs=opus',
+        keyword=expected_words,
+        word_alternatives_threshold=0.9,
+    ).get_result()
+    transcript = speech_recognition_results['results'][0]['alternatives'][0]['transcript']
+    res = [
+        {
+            'transcript': transcript,
+            'score': get_transcript_score(expected_words, transcript)
+        }
+    ]
+    return Response(res)
 
 @api_view(['GET'])
 def get_response_quiz_data(request, text_id):

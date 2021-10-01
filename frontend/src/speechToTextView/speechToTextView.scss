@@ -1,0 +1,29 @@
+.btn-done {
+    color: white;
+    background-color: #278E73;
+}
+
+.btn-instructions {
+    border: 3px solid;
+    font-size: 20px;
+}
+
+.modal-hide {
+    opacity: 0;
+    transform: translateY(-100vh);
+    z-index: -1;
+}
+
+.modal-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sound-wave {
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.vertical-center {
+    margin: auto;
+}
