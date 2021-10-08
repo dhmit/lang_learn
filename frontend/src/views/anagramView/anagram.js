@@ -3,7 +3,7 @@ import ReactTooltipDefaultExport from 'react-tooltip';
 import Confetti from 'react-dom-confetti';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../UILibrary/components';
 
 const CONFETTI_CONFIG = {
     angle: 90,
@@ -43,7 +43,7 @@ const generateFreq = (word) => {
     return freq;
 };
 
-export class AnagramView extends React.Component {
+export class Anagram extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -506,7 +506,7 @@ export class AnagramView extends React.Component {
         </React.Fragment>);
     }
 }
-AnagramView.propTypes = {
+Anagram.propTypes = {
     textID: PropTypes.number,
     partOfSpeech: PropTypes.string,
 };
