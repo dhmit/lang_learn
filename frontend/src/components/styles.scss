@@ -3,11 +3,11 @@
  */
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import '../index/index';
-@import '../anagramView/anagramView';
-@import '../crosswordView/crosswordView';
-@import '../instructorView/instructorView';
-@import '../flashcard/flashcardView';
-@import '../pictureBookView/pictureBookView';
+@import '../views/anagram/anagramView';
+@import '../views/crossword/crosswordView';
+@import '../views/instructor/instructorView';
+@import '../views/flashcard/flashcardView';
+@import '../views/pictureBook/pictureBookView';
 
 html {
     position: relative;
