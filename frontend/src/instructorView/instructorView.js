@@ -3,6 +3,7 @@ import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 import { capitalize, getCookie } from '../common';
+import ShortVideoModal from '../UILibrary/shortVideoClipsModal';
 
 class Module extends React.Component {
     render() {
@@ -321,11 +322,18 @@ export class InstructorView extends React.Component {
                 </button>
                 <div>
                     {
-                        this.state.showModal
+                       true
                             ? <div className="backdrop" onClick={this.modalHandler}>
                             </div>
                             : null
                     }
+                      <div className="Modal modal-content" style={{
+                        transform: true
+                            ? 'translateY(0)' : 'translateY(-100vh)',
+                        opacity: true ? 1 : 0,
+                    }}>
+                          <ShortVideoModal />
+                      </div>
                     <div className="Modal modal-content" style={{
                         transform: this.state.showModal
                             ? 'translateY(0)' : 'translateY(-100vh)',
