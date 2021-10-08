@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
 import { QuizView } from './quizView/quizView';
-import { Anagram } from './views/anagramView/anagram';
+import { Anagram } from './views/anagramQuiz/anagramQuiz';
 import { InstructorView } from './instructorView/instructorView';
 import { FlashcardView } from './flashcard/flashcardView';
 import { AllQuizView } from './quizView/allQuizView';

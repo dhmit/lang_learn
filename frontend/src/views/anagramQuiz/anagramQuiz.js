@@ -43,7 +43,7 @@ const generateFreq = (word) => {
     return freq;
 };
 
-export class Anagram extends React.Component {
+export class AnagramQuiz extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -506,7 +506,7 @@ export class Anagram extends React.Component {
         </React.Fragment>);
     }
 }
-Anagram.propTypes = {
+AnagramQuiz.propTypes = {
     textID: PropTypes.number,
     partOfSpeech: PropTypes.string,
 };
