@@ -3,7 +3,7 @@ import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 // import * as PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
 
 export class AllQuizView extends React.Component {
     constructor(props) {

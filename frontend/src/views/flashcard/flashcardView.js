@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 
-import { Footer, Navbar, LoadingPage } from '../UILibrary/components';
+import { Footer, Navbar, LoadingPage } from '../../components/components';
 
 const capitalize = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
