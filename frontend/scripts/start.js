@@ -143,15 +143,3 @@ checkBrowsers(paths.appPath, isInteractive)
     }
     process.exit(1);
   });
-
-console.log("hello!");
-
-var getSubtitles = require('youtube-captions-scraper').getSubtitles;
-
-console.log("hello!");
-getSubtitles({
-  videoID: 'jdi0Iq9NBqQ', // youtube video id
-  lang: 'en' // default: `en`
-}).then(function(captions) {
-  console.log(captions);
-});
