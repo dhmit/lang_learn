@@ -64,11 +64,11 @@ urlpatterns = [
 
     # View paths
     react_view_path('', 'IndexView'),
-    react_view_path('anagrams/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
+    react_view_path('anagrams/<int:textID>/<str:partOfSpeech>', 'Anagram'),
     react_view_path('instructor', 'InstructorView'),
     react_view_path('flashcards/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('crossword/<int:textID>/<str:partOfSpeech>', 'CrosswordView'),
-    react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
+    react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'Anagram'),
     react_view_path('quiz/', 'AllQuizView'),
     react_view_path('quiz/<int:textId>/', 'QuizView'),
     react_view_path('picturebook/<int:textID>/<str:partOfSpeech>', 'PictureBookView'),
