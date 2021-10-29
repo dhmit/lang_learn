@@ -29,6 +29,7 @@ from app.views import (
     get_crossword,
     get_quiz_data,
     text, get_response_quiz_data,
+    get_video_transcript,
 )
 
 
@@ -61,6 +62,7 @@ urlpatterns = [
     path('api/text/<int:text_id>', text),
     path('api/get_picturebook_prompt/<int:text_id>/<str:part_of_speech>', get_picturebook_prompt),
     path('api/get_picturebook_data', get_picturebook_data),
+    path('api/get_video_transcript/<str:video_id>', get_video_transcript),
 
     # View paths
     react_view_path('', 'IndexView'),
