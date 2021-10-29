@@ -8,18 +8,18 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IndexView } from './index/index';
-import { QuizView } from './quizView/quizView';
-import { AnagramView } from './anagramView/anagramView';
-import { InstructorView } from './instructorView/instructorView';
-import { FlashcardView } from './flashcard/flashcardView';
-import { AllQuizView } from './quizView/allQuizView';
-import { PictureBookView } from './pictureBookView/pictureBookView';
-import { CrosswordView } from './crosswordView/crosswordView';
-import { ResponseAllQuizView } from './responseQuizView/responseAllQuizView';
-import { ResponseQuizView } from './responseQuizView/responseQuizView';
+import { QuizView } from './views/quiz/quizView';
+import { AnagramView } from './views/anagram/anagramView';
+import { InstructorView } from './views/instructor/instructorView';
+import { FlashcardView } from './views/flashcard/flashcardView';
+import { AllQuizView } from './views/quiz/allQuizView';
+import { PictureBookView } from './views/pictureBook/pictureBookView';
+import { CrosswordView } from './views/crossword/crosswordView';
+import { ResponseAllQuizView } from './views/responseQuiz/responseAllQuizView';
+import { ResponseQuizView } from './views/responseQuiz/responseQuizView';
 
 // Import all styles
-import './UILibrary/styles.scss';
+import './components/styles.scss';
 
 window.app_modules = {
     React,  // Make React accessible from the base template

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { Navbar, Footer } from '../UILibrary/components';
+import { Navbar, Footer } from '../components/components';
 
 
 // Functions to use to generate links for different formats

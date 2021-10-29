@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
 import Crossword from './crossword';
 
 // Given a word and the clue that it is part of, remove the word from the clue

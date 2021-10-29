@@ -1,8 +1,8 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
-import { capitalize, getCookie } from '../common';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
+import { capitalize, getCookie } from '../../common';
 
 class Module extends React.Component {
     render() {

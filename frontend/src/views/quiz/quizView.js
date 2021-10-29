@@ -8,7 +8,7 @@ import {
     ToggleButtonGroup,
 } from 'react-bootstrap';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
 
 
 export class QuizView extends React.Component {

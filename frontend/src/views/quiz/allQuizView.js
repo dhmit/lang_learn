@@ -1,11 +1,11 @@
 import React from 'react';
-import './responseQuizView.scss';
+import './quizView.scss';
 // import ReactTooltipDefaultExport from 'react-tooltip';
 // import * as PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
 
-export class ResponseAllQuizView extends React.Component {
+export class AllQuizView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ export class ResponseAllQuizView extends React.Component {
 
         const textList = this.state.data.map((text, i) => {
             return (
-                <Button key={i + 1} id='response-quiz-text' href={`/response_quiz/${text.id}`}>
+                <Button key={i + 1} id='quiz-text' href={`/quiz/${text.id}`}>
                     {text.title}
                 </Button>
             );
@@ -41,7 +41,7 @@ export class ResponseAllQuizView extends React.Component {
             <div className="page">
                 <div className="row justify-content-between" id="top">
                     <div className="col">
-                        <h1 className="quiz-title">Dialogue Quiz</h1>
+                        <h1 className="quiz-title">Verb Conjugation Quiz</h1>
                         <p className="quiz-author"><i>by Takako Aikawa</i></p>
                     </div>
                     <div className="col text-right submit-button">
@@ -59,4 +59,4 @@ export class ResponseAllQuizView extends React.Component {
     }
 }
 
-export default ResponseAllQuizView;
+export default AllQuizView;

@@ -3,7 +3,7 @@ import ReactTooltipDefaultExport from 'react-tooltip';
 import Confetti from 'react-dom-confetti';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
+import { Navbar, Footer, LoadingPage } from '../../components/components';
 
 const CONFETTI_CONFIG = {
     angle: 90,
