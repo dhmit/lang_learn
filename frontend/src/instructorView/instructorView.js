@@ -333,6 +333,7 @@ export class InstructorView extends React.Component {
                         opacity: true ? 1 : 0,
                     }}>
                           <ShortVideoModal />
+
                       </div>
                     <div className="Modal modal-content" style={{
                         transform: this.state.showModal

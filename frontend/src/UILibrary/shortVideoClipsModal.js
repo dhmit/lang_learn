@@ -5,11 +5,18 @@ import {
 } from 'react-compound-slider';
 import {
     SliderRail, Handle, Track, Tick
-} from './slider'; // example render components -
+} from './slider';
+import {getCookie} from "../common"; // example render components -
 // source below
 export class ShortVideoClipsModal extends React.Component {
     constructor(props) {
         super(props);
+    }
+    handleSubmit = (event) => {
+
+    }
+    onCancel =  (event) => {
+
     }
 
     render() {
@@ -98,8 +105,9 @@ export class ShortVideoClipsModal extends React.Component {
                     </section>
                     <div className='modal-footer'>
                         <button type='button' className='btn btn-danger'
-                            onClick={() => {}}>Cancel</button>
-                        <button type='submit' className='btn btn-success'>
+                            onClick={this.onCancel}>Cancel</button>
+                        <button type='submit' className='btn btn-success'
+                                onClick={this.handleSubmit}>
                             Next
                         </button>
                     </div>
