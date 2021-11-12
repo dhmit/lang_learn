@@ -8,7 +8,6 @@ import ExerciseType from '../ExerciseTypes';
 
 export default function TextExerciseModal() {
     const state = useContext(InstructorViewContext);
-    const [stateTextData, setTextData] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     //     this.modalHandler = this.modalHandler.bind(this);
@@ -18,7 +17,7 @@ export default function TextExerciseModal() {
                 const apiURL = '/api/all_text';
                 const response = await fetch(apiURL);
                 const data = await response.json();
-                setTextData(data);
+                state.setTextData(data);
             } catch (e) {
                 console.log(e);
             }
@@ -69,16 +68,17 @@ export default function TextExerciseModal() {
             });
 
             const newText = await response.json();
-            const currentText = stateTextData;
+            const currentText = state.textData;
             currentText.push(newText);
-            setTextData(currentText);
+            console.log('current text ', currentText);
+            state.setTextData(currentText);
             state.setResourceAmount(state.resourceAmount - 1);
             console.log('state resource amount: ', state.resourceAmount);
         } catch (e) {
             console.log(e);
         }
     };
-    if (!stateTextData) {
+    if (!state.textData) {
         return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
     return (<React.Fragment>

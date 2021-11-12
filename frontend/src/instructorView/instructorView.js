@@ -248,6 +248,8 @@ export function InstructorView() {
         return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
     const contextState = {
+        setTextData,
+        textData,
         showModal,
         setShowModal,
         resourceAmount,
