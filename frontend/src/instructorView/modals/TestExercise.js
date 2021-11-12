@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as PropTypes from 'prop-types';
 
-import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
-import { capitalize, getCookie } from '../common';
+import { LoadingPage } from '../../UILibrary/components';
+import { capitalize, getCookie } from '../../common';
+import { InstructorViewContext } from '../../contexts/InstructorViewContext';
 
 class Module extends React.Component {
     render() {
@@ -205,72 +206,53 @@ TextInfo.propTypes = {
     delete: PropTypes.func,
 };
 
-export class TestExcerciseModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            textData: null,
-            showModal: this.props.showModal,
-            setModal: this.props.setShowModal,
-            resourceAmount: this.props.resourceAmount,
-            setResourceAmount: this.props.setResourceAmount,
-
-            addTitle: '',
-            addContent: '',
-        };
-        this.modalHandler = this.modalHandler.bind(this);
-    }
-
-    async componentDidMount() {
-        try {
-            const apiURL = '/api/all_text';
-            const response = await fetch(apiURL);
-            const data = await response.json();
-            this.setState({
-                textData: data,
-            });
-        } catch (e) {
-            console.log(e);
+export default function TestExcerciseModal() {
+    const state = useContext(InstructorViewContext);
+    const [stateTextData, setTextData] = useState(null);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    //     this.modalHandler = this.modalHandler.bind(this);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const apiURL = '/api/all_text';
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                setTextData(data);
+            } catch (e) {
+                console.log(e);
+            }
         }
-    }
+        fetchData();
+    }, []);
 
-    deleteText = (id) => {
-        let { textData } = this.state;
-        textData = textData.filter((text) => text.id !== id);
-        this.setState({ textData });
-    }
+    const deleteText = (id) => {
+        const textData = stateTextData.filter((t) => t.id !== id);
+        setTextData(textData);
+    };
 
-    modalHandler = (event) => {
+    const modalHandler = (event) => {
         event.preventDefault();
-        this.setState({
-            showModal: !this.state.showModal,
-        });
-    }
+        state.setShowModal(!state.showModal);
+    };
 
-    handleInput = (event) => {
+    const handleInput = (event) => {
         if (event.target.id === 'title') {
-            this.setState({
-                addTitle: event.target.value,
-            });
+            setTitle(event.target.value);
         } else {
-            this.setState({
-                addContent: event.target.value,
-            });
+            setContent(event.target.value);
         }
-    }
+    };
 
-    handleSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const csrftoken = getCookie('csrftoken');
             const apiURL = '/api/add_text';
-
-            this.setState({
-                addTitle: '',
-                addContent: '',
-                resourceAmount: this.resourceAmount + 1,
-            });
-            this.modalHandler(event);
+            setTitle('');
+            setContent('');
+            state.setResourceAmount(state.resourceAmount + 1);
+            modalHandler(event);
 
             const response = await fetch(apiURL, {
                 credentials: 'include',
@@ -282,85 +264,82 @@ export class TestExcerciseModal extends React.Component {
                     'X-CSRFToken': csrftoken,
                 },
                 body: JSON.stringify({
-                    title: this.state.addTitle,
-                    content: this.state.addContent,
+                    title,
+                    content,
                 }),
             });
 
             const newText = await response.json();
-            const { textData } = this.state;
-            textData.push(newText);
-            this.setState({ textData, resourceAmount: this.state.resourceAmount - 1 });
+            const currentText = stateTextData;
+            currentText.push(newText);
+            setTextData(currentText);
+            state.setResourceAmount(state.resourceAmount - 1);
         } catch (e) {
             console.log(e);
         }
+    };
+    if (!stateTextData) {
+        return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
-
-    render() {
-        if (!this.state.textData) {
-            return (<LoadingPage text='Setting up Teacher Interface...'/>);
-        }
-        return (<React.Fragment>
-            <Navbar color='light' />
-            <div className="page instructor">
-                <div>
-                    {
-                        this.state.showModal
-                            ? <div className="backdrop" onClick={this.modalHandler}>
+    return (<React.Fragment>
+        <div className="page instructor">
+            <div>
+                {
+                    state.showModal
+                        ? <div className="backdrop" onClick={modalHandler}>
+                        </div>
+                        : null
+                }
+                <div className="Modal modal-content" style={{
+                    transform: state.showModal
+                        ? 'translateY(0)' : 'translateY(-100vh)',
+                    opacity: state.showModal ? 1 : 0,
+                }}>
+                    <div className="modal-header">
+                        <h5 className="modal-title">Create Resource</h5>
+                        <button type="button" className="close" onClick={modalHandler}>
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="modal-body">
+                            <div className="row align-items-center">
+                                <div className="col-auto">
+                                    <label htmlFor="title" className="form-label">Title:</label>
+                                </div>
+                                <div className="col-auto">
+                                    <input type="text" id="title"
+                                        className="form-control" onChange={handleInput}
+                                        value={title} required/>
+                                </div>
                             </div>
-                            : null
-                    }
-                    <div className="Modal modal-content" style={{
-                        transform: this.state.showModal
-                            ? 'translateY(0)' : 'translateY(-100vh)',
-                        opacity: this.state.showModal ? 1 : 0,
-                    }}>
-                        <div className="modal-header">
-                            <h5 className="modal-title">Create Resource</h5>
-                            <button type="button" className="close" onClick={this.modalHandler}>
-                                <span>&times;</span>
+                            <div>
+                                <label htmlFor="content" className="form-label">Content:</label>
+                                <textarea className="form-control" id="content"
+                                    rows="7" onChange={handleInput}
+                                    value={content} required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-danger"
+                                onClick={modalHandler}>Cancel</button>
+                            <button type="submit" className="btn btn-success btn-create">
+                                Create
                             </button>
                         </div>
-                        <form onSubmit={this.handleSubmit}>
-                            <div className="modal-body">
-                                <div className="row align-items-center">
-                                    <div className="col-auto">
-                                        <label htmlFor="title" className="form-label">Title:</label>
-                                    </div>
-                                    <div className="col-auto">
-                                        <input type="text" id="title"
-                                            className="form-control" onChange={this.handleInput}
-                                            value={this.state.addTitle} required/>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="content" className="form-label">Content:</label>
-                                    <textarea className="form-control" id="content"
-                                        rows="7" onChange={this.handleInput}
-                                        value={this.state.addContent} required>
-                                    </textarea>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-danger"
-                                    onClick={this.modalHandler}>Cancel</button>
-                                <button type="submit" className="btn btn-success btn-create">
-                                    Create
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-                {
-                    this.state.textData.map((text) => (
-                        <TextInfo
-                            key={text.id}
-                            text={text}
-                            delete={() => this.deleteText(text.id)}
-                        />
-                    ))
-                }
             </div>
-        </React.Fragment>);
-    }
+            {
+                stateTextData.map((t) => (
+                    <TextInfo
+                        key={t.id}
+                        text={t}
+                        delete={() => deleteText(t.id)}
+                    />
+                ))
+            }
+        </div>
+    </React.Fragment>);
 }

@@ -1,86 +1,81 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
-import { getCookie } from '../common';
-import {TestExcerciseModal} from "./TestExcercise";
-import {InstructorViewContext} from "../contexts/InstructorViewContextProvider";
+import TestExerciseModal from './modals/TestExercise';
+import { InstructorViewContext } from '../contexts/InstructorViewContext';
 
 
-export class InstructorView extends React.Component {
-    constructor(props) {
-        super(props);
+export function InstructorView() {
+    const [textData, setTextData] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    // used to keep track how many resources to be added
+    const [resourceAmount, setResourceAmount] = useState(0);
+    // this.modalHandler = this.modalHandler.bind(this);
 
-        this.state = {
-            textData: null,
-            showModal: showModal,
-            setShowModal : setShowModal,
-            resourceAmount: 0,
-            setResourceAmount : setResourceAmount,
-            addTitle: '',
-            addContent: '',
-        };
-        this.modalHandler = this.modalHandler.bind(this);
-    }
-
-    async componentDidMount() {
-        try {
-            const apiURL = '/api/all_text';
-            const response = await fetch(apiURL);
-            const data = await response.json();
-            this.setState({
-                textData: data,
-            });
-        } catch (e) {
-            console.log(e);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const apiURL = '/api/all_text';
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                setTextData(data);
+            } catch (e) {
+                console.log(e);
+            }
         }
-    }
+        fetchData();
+    }, []);
 
-    modalHandler = (event) => {
+    const modalHandler = (event) => {
         event.preventDefault();
-        this.setState({
-            showModal: !this.state.showModal,
-        });
+        console.log(setShowModal);
+        setShowModal(!showModal);
+        console.log('state ', showModal);
+    };
+    if (!textData) {
+        return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
+    const contextState = {
+        showModal,
+        setShowModal,
+        resourceAmount,
+        setResourceAmount,
+    };
 
-    render() {
-        if (!this.state.textData) {
-            return (<LoadingPage text='Setting up Teacher Interface...'/>);
-        }
-        return (<React.Fragment>
-            <Navbar color='light' />
-            <div className="page instructor">
-                <h1 className='instructor-header'>Resources</h1>
-                {
-                    this.state.resourceAmount > 0
-                    && <div
-                        className="alert"
-                        style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
-                        role="alert"
-                    >
-                        Currently adding {this.state.resourceAmount} text(s)! (Do
-                            not close this page.)
-                    </div>
-                }
-                <button className='add-text-button' onClick={this.modalHandler}>
-                    <div className='plus-icon'>
-                        <div className="plus-1" />
-                        <div className="plus-2"/>
-                    </div>
-                    Add Text
-                </button>
-                <InstructorViewContext.Provider>
-                {({showModal, setShowModal, resourceAmount, setResourceAmount}) => (
-                    <TestExcerciseModal
-                        showModal={showModal}
-                        setShowModal={setShowModal}
-                        resourceAmount={resourceAmount}
-                        setResourceAmount={setResourceAmount}
-                    />
-                  )}
-                </InstructorViewContext.Provider>
+    return (<React.Fragment>
+        <Navbar color='light' />
+        <div className='page instructor'>
+            <h1 className='instructor-header'>Resources</h1>
+            {
+                resourceAmount > 0
+                && <div
+                    className="alert"
+                    style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
+                    role="alert"
+                >
+                    Currently adding {resourceAmount} text(s)! (Do
+                        not close this page.)
+                </div>
+            }
+            <button className='add-text-button' onClick={modalHandler}>
+                <div className='plus-icon'>
+                    <div className="plus-1" />
+                    <div className="plus-2"/>
+                </div>
+                Add Text
+            </button>
+            <InstructorViewContext.Provider value={contextState}>
+                <TestExerciseModal/>
+            </InstructorViewContext.Provider>
             <Footer />
-            </div>
-        </React.Fragment>);
-    }
+        </div>
+    </React.Fragment>);
 }
+
+InstructorView.propTypes = {
+    showModal: PropTypes.bool,
+    setShowModal: PropTypes.func,
+    setResourceAmount: PropTypes.func,
+    resourceAmount: PropTypes.number,
+};
