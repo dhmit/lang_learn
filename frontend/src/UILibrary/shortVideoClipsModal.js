@@ -1,22 +1,10 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
-import {
-    Slider, Rail, Handles, Tracks, Ticks
-} from 'react-compound-slider';
-import {
-    SliderRail, Handle, Track, Tick
-} from './slider';
-import {getCookie} from "../common"; // example render components -
+import Slider from './slider';
+
 // source below
 export class ShortVideoClipsModal extends React.Component {
     constructor(props) {
         super(props);
-    }
-    handleSubmit = (event) => {
-
-    }
-    onCancel =  (event) => {
-
     }
 
     render() {
@@ -44,56 +32,7 @@ export class ShortVideoClipsModal extends React.Component {
                         </form>
                         <h4 className='modal-title'>Time: </h4>
                         <div style={{ margin: '6%', height: 10, width: '80%'}}>
-                            <Slider
-                              mode={2}
-                              step={0.1}
-                              domain={domain}
-                              rootStyle={{position: 'relative', width: '100%'}}
-                              onUpdate={this.onUpdate}
-                              onChange={this.onChange}
-                              values={defaultValues}
-                            >
-                              <Rail>
-                                {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
-                              </Rail>
-                              <Handles>
-                                {({ handles, getHandleProps }) => (
-                                  <div className='slider-handles'>
-                                    {handles.map((handle) => (
-                                      <Handle
-                                        key={handle.id}
-                                        handle={handle}
-                                        domain={domain}
-                                        getHandleProps={getHandleProps}
-                                      />
-                                    ))}
-                                  </div>
-                                )}
-                              </Handles>
-                              <Tracks left={false} right={false}>
-                                {({ tracks, getTrackProps }) => (
-                                  <div className='slider-tracks'>
-                                    {tracks.map(({ id, source, target }) => (
-                                      <Track
-                                        key={id}
-                                        source={source}
-                                        target={target}
-                                        getTrackProps={getTrackProps}
-                                      />
-                                    ))}
-                                  </div>
-                                )}
-                              </Tracks>
-                              <Ticks count={10}>
-                                {({ ticks }) => (
-                                  <div className='slider-ticks'>
-                                    {ticks.map((tick) => (
-                                      <Tick key={tick.id} tick={tick} count={ticks.length} />
-                                    ))}
-                                  </div>
-                                )}
-                              </Ticks>
-                            </Slider>
+                            <Slider></Slider>
                         </div>
                         <h4 className='modal-title'>Quiz Type: </h4>
                         <form>
@@ -105,7 +44,7 @@ export class ShortVideoClipsModal extends React.Component {
                     </section>
                     <div className='modal-footer'>
                         <button type='button' className='btn btn-danger'
-                            onClick={this.onCancel}>Cancel</button>
+                            onClick={() => {}}>Cancel</button>
                         <button type='submit' className='btn btn-success'
                                 onClick={this.handleSubmit}>
                             Next

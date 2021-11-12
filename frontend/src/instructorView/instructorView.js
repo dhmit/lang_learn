@@ -323,9 +323,8 @@ export class InstructorView extends React.Component {
                 <div>
                     {
                        true
-                            ? <div className="backdrop" onClick={this.modalHandler}>
-                            </div>
-                            : null
+                           ? <div className="backdrop" onClick={this.modalHandler}></div>
+                           : null
                     }
                       <div className="Modal modal-content" style={{
                         transform: true
@@ -333,7 +332,6 @@ export class InstructorView extends React.Component {
                         opacity: true ? 1 : 0,
                     }}>
                           <ShortVideoModal />
-
                       </div>
                     <div className="Modal modal-content" style={{
                         transform: this.state.showModal
