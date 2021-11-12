@@ -29,9 +29,7 @@ export function InstructorView() {
 
     const modalHandler = (event) => {
         event.preventDefault();
-        console.log(setShowModal);
         setShowModal(!showModal);
-        console.log('state ', showModal);
     };
     if (!textData) {
         return (<LoadingPage text='Setting up Teacher Interface...'/>);
