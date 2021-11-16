@@ -34,8 +34,6 @@ from .analysis.crosswords import (
 )
 from .quiz_creation.conjugation_quiz import get_quiz_sentences
 
-from .analysis.short_video_clips import get_video_data
-
 
 @api_view(['GET'])
 def all_text(request):
@@ -245,9 +243,3 @@ def get_response_quiz_data(request, text_id):
         raise Http404 from text_not_exist
     res = get_quiz_questions(text_obj.content)
     return Response(res)
-
-@api_view(['GET'])
-def get_video_transcript(request, video_id):
-    transcript = get_video_data(video_id)
-    return Response(transcript)
-
