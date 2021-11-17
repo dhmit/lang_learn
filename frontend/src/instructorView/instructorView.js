@@ -287,7 +287,6 @@ export function InstructorView() {
                 </div>
                 Add Short Video Clips
             </button>
-            <div>
                 {
                     showModal !== ExerciseType.NONE
                         ? <div className="backdrop"
@@ -316,7 +315,6 @@ export function InstructorView() {
                     />
                 ))
             }
-        </div>
             <Footer />
         </div>
     </React.Fragment>);

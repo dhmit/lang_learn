@@ -3,6 +3,7 @@
     background-color: #F9EEFF;
     color: black;
     overflow-y: hidden;
+    justify-content: center;
 }
 
 .instructor-header {
@@ -63,9 +64,10 @@
 
 .Modal {
     color: #2D2155;
-    position: fixed;
+    //position: fixed;
     z-index: 500;
     transition: all 0.4s ease-out;
+    width: 50%;
 }
 
 
@@ -81,8 +83,8 @@
 
 @media (min-width: 600px) {
     .Modal {
-        width: 500px;
-        left: calc(50% - 250px);
+        //width: 500px;
+        //left: calc(50% - 250px);
     }
 }
 

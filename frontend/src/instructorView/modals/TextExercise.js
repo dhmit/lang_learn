@@ -82,7 +82,7 @@ export default function TextExerciseModal() {
         return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
     return (<React.Fragment>
-        <div className="page instructor">
+        <div>
             <div className="modal-header">
                 <h5 className="modal-title">Create Resource</h5>
                 <button type="button" className="close"
