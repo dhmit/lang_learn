@@ -65,6 +65,7 @@
 .Modal {
     color: #2D2155;
     //position: fixed;
+    top: 0; // TODO: Fix this!
     z-index: 500;
     transition: all 0.4s ease-out;
     width: 50%;

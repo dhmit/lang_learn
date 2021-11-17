@@ -37,7 +37,7 @@ export default function VideoPlayer(props) {
 
     console.log('START TIME: ', props.start);
     console.log('END TIME: ', props.end);
-    const source = `https://www.youtube.com/embed/${props.youtubeVideoID}?start=${props.start}&end=${props.end}&controls=0&disablekb=1`;
+    const source = `https://www.youtube.com/embed/${props.youtubeVideoID}?start=${props.start}&end=${props.end}&cc_load_policy=1&controls=0&disablekb=1`;
 
     return (
         <div>
@@ -46,6 +46,8 @@ export default function VideoPlayer(props) {
                     allow='encrypted-media'
                     allowFullScreen
                     title='video'
+                    width='300'
+                    height='300'
             />
         </div>);
 }

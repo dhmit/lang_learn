@@ -38,7 +38,9 @@ export default function Slider(props) {
                 min={0}
                 max={Object.keys(allMarks).length}
                 marks={allMarks}
-                onChange={props.onChange}/>
+                onChange={props.onChange}
+                style={props.style}
+            />
         </>
     );
 }
@@ -47,6 +49,7 @@ Slider.propTypes = {
     max: PropTypes.number,
     labels: PropTypes.array,
     onChange: PropTypes.func,
+    style: PropTypes.object, // TODO: change to not required
 };
 
 

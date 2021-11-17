@@ -10,9 +10,11 @@ export default function ShortVideoClipsModal() {
     const state = useContext(InstructorViewContext);
     const [youtubeVideoID, setYoutubeVideoID] = useState('');
     const [videoTitle, setVideoTitle] = useState('');
+    // transcript from backend
     const [transcript, setTranscript] = useState([]);
     // [start, end]
     const [videoRange, setVideoRange] = useState([0, 0]);
+    const [videoTranscript, setVideoTranscript] = useState('');
 
     const modalHandler = (exerciseType, event) => {
         event.preventDefault();
@@ -41,6 +43,7 @@ export default function ShortVideoClipsModal() {
     };
 
     const convertToSeconds = (time) => {
+        console.log('time here ... ', time);
         const [minuteString, secondString] = time.split(':');
         const minute = parseInt(minuteString);
         const seconds = parseInt(secondString);
@@ -50,11 +53,19 @@ export default function ShortVideoClipsModal() {
     const sliderChange = (sliderValues) => {
         const start = sliderValues[0];
         const end = sliderValues[1];
+        const startData = transcript[start];
         const startTime = transcript[start].start;
         const endTime = end < transcript.length
             ? transcript[end].start
             : transcript[end - 1].end; // treat end of slider as the end of the whole video
-        setVideoRange([convertToSeconds(startTime), convertToSeconds(endTime)]);
+        let entireTranscript = '';
+        for (let i = start; i < end; i++) {
+            entireTranscript += ' ' + (i < transcript.length
+                ? transcript[i].text
+                : '');
+        }
+        setVideoTranscript(entireTranscript);
+        setVideoRange([convertToSeconds(startData.start), convertToSeconds(endTime)]);
 
         // format is 00:00 so we must convert this to seconds
 
@@ -87,23 +98,26 @@ export default function ShortVideoClipsModal() {
                         <label htmlFor='youtube-video-title'> Title: </label>
                         <input id='youtube-video-title' value={videoTitle}/>
                     </form>
-                    <h4 className='modal-title'>Time: </h4>
-                   { transcript.length !== 0 ? <VideoPlayer
-                        youtubeVideoID = {youtubeVideoID}
-                        start = {videoRange[0]}
-                        end = {videoRange[1]}
-                    /> : null }
-                    <div style={{ margin: '6%', height: 10, width: '80%'}}>
-                        { transcript.length !== 0 ?
+                   { transcript.length !== 0 ?
+                       <div style={{display: 'flex', flexDirection: 'row'}}>
+                           <VideoPlayer
+                            youtubeVideoID = {youtubeVideoID}
+                            start = {videoRange[0]}
+                            end = {videoRange[1]}
+                            />
+                           <textarea style={{width: '300px', height: '300px'}} value={videoTranscript}/>
+                       </div>
+                       : null }
+                    { transcript.length !== 0 ?
                             <Slider min={transcript[0].start}
                                 max={transcript[transcript.length - 1].end}
                                 labels={transcript.map((entry) => entry.start)}
                                 onChange={sliderChange}
+                                style={{ margin: '6%', height: 10, width: '90%'}}
                             >
                             </Slider>
 
-                            : <p> not showing </p>}
-                    </div>
+                        : <p> Video Will Be Displayed After Submitting a URL </p>}
                     <h4 className='modal-title'>Quiz Type: </h4>
                     <form>
                         <input id='video-to-text' type='radio' name='content-type'/>
