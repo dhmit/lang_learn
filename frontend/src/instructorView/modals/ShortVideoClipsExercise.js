@@ -26,6 +26,7 @@ export default function ShortVideoClipsModal() {
         const urlInputted = document.getElementById('youtube-url-input').value;
         const videoID = getVideoId(urlInputted).id;
         setYoutubeVideoID(videoID);
+        setVideoTranscript('');
 
         if (videoID) {
             try {
