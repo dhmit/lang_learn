@@ -40,16 +40,15 @@ export default function VideoPlayer(props) {
     const source = `https://www.youtube.com/embed/${props.youtubeVideoID}?start=${props.start}&end=${props.end}&cc_load_policy=1&controls=0&disablekb=1`;
 
     return (
-        <div>
-            <iframe src={source}
-                    frameBorder='0'
-                    allow='encrypted-media'
-                    allowFullScreen
-                    title='video'
-                    width='300'
-                    height='300'
-            />
-        </div>);
+        <iframe
+            src={source}
+            frameBorder='0'
+            allow='encrypted-media'
+            allowFullScreen
+            title='video'
+            width='100%'
+            height='400px'
+        />);
 }
 VideoPlayer.propTypes = {
     youtubeVideoID: PropTypes.string,

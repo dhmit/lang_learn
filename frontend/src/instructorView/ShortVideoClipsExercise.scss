@@ -1,0 +1,18 @@
+.short-clip-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.youtube-url-input-container {
+    display: inline-flex;
+    width: 100%;
+}
+
+#youtube-url-input {
+    flex-grow: 2;
+    overflow: scroll;
+}
+
+.short-clip-no-input-msg {
+    font-style: italic;
+}

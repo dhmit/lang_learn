@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import { LoadingPage } from '../../UILibrary/components';
 import { getCookie } from '../../common';
 import { InstructorViewContext } from '../../contexts/InstructorViewContext';
-import ExerciseType from '../ExerciseTypes';
+import ExerciseTypes from '../ExerciseTypes';
 
 export default function TextExerciseModal() {
     const state = useContext(InstructorViewContext);
@@ -81,44 +81,49 @@ export default function TextExerciseModal() {
     if (!state.textData) {
         return (<LoadingPage text='Setting up Teacher Interface...'/>);
     }
-    return (<React.Fragment>
-        <div>
-            <div className="modal-header">
-                <h5 className="modal-title">Create Resource</h5>
-                <button type="button" className="close"
-                        onClick={(e) => modalHandler(ExerciseType.NONE, e)}>
-                    <span>&times;</span>
-                </button>
+    return (
+    <React.Fragment>
+        <div className="modal fade" id="textExerciseModal" tabIndex="-1" aria-labelledby="textExerciseModalLabel" aria-hidden="true">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="textExerciseModalLabel">Create Resource</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"
+                            onClick={(e) => modalHandler(ExerciseTypes.NONE, e)}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="row align-items-center">
+                            <div className="col-auto">
+                                <label htmlFor="title" className="form-label">Title:</label>
+                            </div>
+                            <div className="col-auto">
+                                <input type="text" id="title"
+                                    className="form-control" onChange={handleInput}
+                                    value={title} required/>
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="content" className="form-label">Content:</label>
+                            <textarea className="form-control" id="content"
+                                rows="7" onChange={handleInput}
+                                value={content} required>
+                            </textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-danger" data-dismiss="modal"
+                            onClick={(e) => modalHandler(ExerciseTypes.NONE, e)}>
+                            Cancel
+                        </button>
+                        <button type="submit" className="btn btn-success btn-create" data-dismiss="modal"
+                            onClick={(e) => handleSubmit(ExerciseTypes.NONE, e)}>
+                            Create
+                        </button>
+                    </div>
+                </div>
             </div>
-            <form onSubmit={(e) => handleSubmit(ExerciseType.NONE, e)}>
-                <div className="modal-body">
-                    <div className="row align-items-center">
-                        <div className="col-auto">
-                            <label htmlFor="title" className="form-label">Title:</label>
-                        </div>
-                        <div className="col-auto">
-                            <input type="text" id="title"
-                                className="form-control" onChange={handleInput}
-                                value={title} required/>
-                        </div>
-                    </div>
-                    <div>
-                        <label htmlFor="content" className="form-label">Content:</label>
-                        <textarea className="form-control" id="content"
-                            rows="7" onChange={handleInput}
-                            value={content} required>
-                        </textarea>
-                    </div>
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn btn-danger"
-                        onClick={(e) => modalHandler(ExerciseType.NONE, e)}
-                    >Cancel</button>
-                    <button type="submit" className="btn btn-success btn-create">
-                        Create
-                    </button>
-                </div>
-            </form>
         </div>
     </React.Fragment>);
 }

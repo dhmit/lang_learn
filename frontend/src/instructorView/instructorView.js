@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 import TextExerciseModal from './modals/TextExercise';
 import { InstructorViewContext } from '../contexts/InstructorViewContext';
-import ShortVideoClips from './modals/ShortVideoClipsExercise';
+import ShortVideoClipsModal from './modals/ShortVideoClipsExercise';
 import { capitalize, getCookie } from '../common';
 import ExerciseType from './ExerciseTypes';
 
@@ -259,62 +259,56 @@ export function InstructorView() {
     return (<React.Fragment>
         <Navbar color='light' />
         <div className='page instructor'>
+            <section className="create-resources">
             <h1 className='instructor-header'>Resources</h1>
-            {
-                resourceAmount > 0
-                && <div
-                    className="alert"
-                    style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
-                    role="alert"
-                >
-                    Currently adding {resourceAmount} text(s)! (Do
-                        not close this page.)
-                </div>
-            }
-            <button className='add-text-button'
+                {
+                    resourceAmount > 0
+                    && <div
+                        className="alert"
+                        style={{ background: 'rgba(39, 142, 115, 0.6)', color: 'white' }}
+                        role="alert"
+                    >
+                        Currently adding {resourceAmount} text(s)! (Do
+                            not close this page.)
+                    </div>
+                }
+                <button type="button" className="add-text-button" data-toggle="modal" data-target="#textExerciseModal"
                     onClick={(e) => modalHandler(ExerciseType.TEXT, e)}>
-                <div className='plus-icon'>
-                    <div className="plus-1" />
-                    <div className="plus-2"/>
-                </div>
-                Add Text
-            </button>
-            <button className='add-text-button'
+                    <div className='plus-icon'>
+                        <div className="plus-1" />
+                        <div className="plus-2"/>
+                    </div>
+                    Add Text
+                </button>
+                <button type="button" className="add-text-button" data-toggle="modal" data-target="#videoExerciseModal"
                     onClick={(e) => modalHandler(ExerciseType.SHORT_VIDEO_CLIPS, e)}>
-                <div className='plus-icon'>
-                    <div className="plus-1" />
-                    <div className="plus-2"/>
-                </div>
-                Add Short Video Clips
-            </button>
+                    <div className='plus-icon'>
+                        <div className="plus-1" />
+                        <div className="plus-2"/>
+                    </div>
+                    Add Short Video Clips
+                </button>
                 {
                     showModal !== ExerciseType.NONE
-                        ? <div className="backdrop"
-                               onClick={(e) => modalHandler(showModal, e)}>
-                        </div>
-                        : null
-                }
-                <div className="Modal modal-content" style={{
-                    transform: showModal !== ExerciseType.NONE
-                        ? 'translateY(0)' : 'translateY(-100vh)',
-                    opacity: showModal !== ExerciseType.NONE ? 1 : 0,
-                }}>
-                    <InstructorViewContext.Provider value={contextState}>
-                        {showModal === ExerciseType.TEXT
-                            ? <TextExerciseModal/>
-                            : <ShortVideoClips/>
+                    ? <InstructorViewContext.Provider value={contextState}>
+                        {
+                        showModal === ExerciseType.TEXT
+                            ? <TextExerciseModal id="textExerciseModal"/>
+                            : <ShortVideoClipsModal id="videoExerciseModal"/>
                         }
                     </InstructorViewContext.Provider>
-                </div>
-            {
-                textData.map((t) => (
-                    <TextInfo
-                        key={t.id}
-                        text={t}
-                        delete={() => deleteText(t.id)}
-                    />
-                ))
-            }
+                    : null
+                }
+                {
+                    textData.map((t) => (
+                        <TextInfo
+                            key={t.id}
+                            text={t}
+                            delete={() => deleteText(t.id)}
+                        />
+                    ))
+                }
+            </section>
             <Footer />
         </div>
     </React.Fragment>);
