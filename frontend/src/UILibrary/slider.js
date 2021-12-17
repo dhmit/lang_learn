@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 
 const tickStyle = {
     width: '50px',
-    marginTop: -25,
+    marginTop: '32px',
     fontFamily: 'GillSans',
     fontSize: '16px',
     fontWeight: 600,
@@ -33,15 +33,13 @@ export default function Slider(props) {
     console.log(Object.keys(allMarks).length);
 
     return (
-        <>
-            <Range
-                min={0}
-                max={Object.keys(allMarks).length}
-                marks={allMarks}
-                onChange={props.onChange}
-                style={props.style}
-            />
-        </>
+        <Range
+            min={0}
+            max={Object.keys(allMarks).length - 1}
+            marks={allMarks}
+            onChange={props.onChange}
+            style={props.style}
+        />
     );
 }
 Slider.propTypes = {
