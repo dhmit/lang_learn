@@ -13,6 +13,9 @@ DEBUG = False
 
 ADMINS = ['rahmed@mit.edu']  # Django will email Ryaan on internal server errors
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'langlearn.dhmit.xyz',
+    'langlearn.dhlab.mit.edu',
+]
 
 CORS_ORIGIN_WHITELIST = []
