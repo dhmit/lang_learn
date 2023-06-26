@@ -5,6 +5,7 @@ import * as PropTypes from 'prop-types';
 
 import { Navbar, Footer, LoadingPage } from '../UILibrary/components';
 
+// Configurations for Confetti library
 const CONFETTI_CONFIG = {
     angle: 90,
     spread: 70,
@@ -43,30 +44,32 @@ const generateFreq = (word) => {
     return freq;
 };
 
+// Modes
+const UNSELECTED = 0;
+const SINGLE = 1;
+const COMBINED = 2;
+
 export class AnagramView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            targetWordDefs: null,
-            targetWords: [],
-            extraWords: [],
-            targetExamples: [],
-            userInput: '',
-            targetWordsFound: [],
             extraWordsFound: [],
-            score: 0,
-            letters: [],
             gameOver: false,
-            timeLeft: 90,
-            showModal: false,
+            letters: [],
+            mode: UNSELECTED,
+            score: 0,
             shake: false,
             showConfetti: false,
+            showModal: false,
+            scrambled: [],
+            targetExamples: [],
+            targetWords: [],
+            targetWordDefs: null,
+            targetWordsFound: [],
+            timeLeft: 90,
+            userInput: '',
         };
         this.timer = 0;
-        this.startTimer = this.startTimer.bind(this);
-        this.pauseTimer = this.pauseTimer.bind(this);
-        this.countDown = this.countDown.bind(this);
-        this.modalHandler = this.modalHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -92,12 +95,17 @@ export class AnagramView extends React.Component {
         });
     };
 
-    handleSubmit = (event) => {
+    checkExtraWord = async (word) => {
+        const apiURL = `/api/check_word/${word}/${this.props.partOfSpeech}`;
+        const response = await fetch(apiURL);
+        return response.json();
+    }
+
+    handleSubmit = async (event) => {
         event.preventDefault();
         const userInput = this.state.userInput.toLowerCase().trim();
         const targetWords = this.state.targetWords.map((word) => (word.toLowerCase()));
         const targetWordsFound = this.state.targetWordsFound;
-        const extraWords = this.state.extraWords;
         if (targetWords.includes(userInput) && !targetWordsFound.includes(userInput)) {
             this.setState({
                 showConfetti: true,
@@ -109,12 +117,18 @@ export class AnagramView extends React.Component {
                     gameOver: true,
                 });
             }
-        } else if (extraWords.has(userInput) && !this.state.extraWordsFound.includes(userInput)) {
-            this.setState({
-                showConfetti: true,
-                extraWordsFound: this.state.extraWordsFound.concat(userInput),
-                score: this.state.score + userInput.length,
-            });
+        } else if (!targetWords.includes(userInput)
+                   && !this.state.extraWordsFound.includes(userInput)) {
+            const isWord = await this.checkExtraWord(userInput);
+            if (isWord) {
+                this.setState({
+                    showConfetti: false,
+                    extraWordsFound: this.state.extraWordsFound.concat(userInput),
+                    score: this.state.score + userInput.length,
+                });
+            } else {
+                this.setState({ shake: true });
+            }
         } else {
             this.setState({ shake: true });
         }
@@ -135,8 +149,7 @@ export class AnagramView extends React.Component {
         this.timer = 0;
     };
 
-    modalHandler = (event) => {
-        event.preventDefault();
+    modalHandler = () => {
         if (this.state.showModal) this.startTimer();
         else this.pauseTimer();
         this.setState({
@@ -144,21 +157,23 @@ export class AnagramView extends React.Component {
         });
     }
 
-    reset() {
+    reset = () => {
         this.setState({
-            targetWordDefs: null,
-            targetWords: [],
-            extraWords: [],
-            targetExamples: [],
-            userInput: '',
-            targetWordsFound: [],
             extraWordsFound: [],
-            score: 0,
-            letters: [],
             gameOver: false,
-            timeLeft: 90,
+            letters: [],
+            mode: UNSELECTED,
+            score: 0,
+            scrambled: [],
             shake: false,
             showConfetti: false,
+            showModal: false,
+            targetExamples: [],
+            targetWords: [],
+            targetWordDefs: null,
+            targetWordsFound: [],
+            timeLeft: 90,
+            userInput: '',
         });
         this.timer = 0;
     }
@@ -173,6 +188,7 @@ export class AnagramView extends React.Component {
             let letters = [];
             const targetWordDefs = [];
             const targetExamples = [];
+            const scrambled = [];
             const wordData = data['word_data'];
             for (let i = 0; i < wordData.length; i++) {
                 const curData = wordData[i];
@@ -180,6 +196,7 @@ export class AnagramView extends React.Component {
                 const examples = curData['example'];
                 targetWords.push(word);
                 targetWordDefs.push(curData['definition']);
+                scrambled.push(curData['scrambled']);
                 if (examples.length === 0) {
                     targetExamples.push(['N/A']);
                 } else {
@@ -189,16 +206,14 @@ export class AnagramView extends React.Component {
             for (let i = 0; i < (data['letters']).length; i++) {
                 letters.push(data['letters'][i].toUpperCase());
             }
-            const extraWordsSet = new Set(data['extra_words']);
             letters = shuffleArray(letters);
             this.setState({
-                targetWordDefs: targetWordDefs,
-                extraWords: extraWordsSet,
-                targetWords: targetWords,
-                letters: letters,
-                targetExamples: targetExamples,
+                targetWordDefs,
+                targetWords,
+                letters,
+                targetExamples,
+                scrambled,
             });
-            this.startTimer();
         } catch (e) {
             console.log(e);
         }
@@ -229,83 +244,60 @@ export class AnagramView extends React.Component {
         }
     }
 
-    render() {
-        if (!this.state.targetWordDefs) {
-            return (<LoadingPage loadingText='Creating Anagram Quiz...' />);
-        }
+    /**
+     * Render Methods
+     */
 
-        /*
-         * Words Found
-         */
-        const wordsFound = this.state.targetWords.map((word, i) => {
-            if (this.state.gameOver) {
-                return (
-                    <div key={i}>
-                        <li>
-                            <span data-tip data-for={word}>
-                                {word.toUpperCase()}
-                            </span>
-                        </li>
-                        <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
-                            <ol>
-                                {
-                                    this.state.targetExamples[i]
-                                        .map((ex, j) => (
-                                            <li key={j}>
-                                                {ex}
-                                            </li>
-                                        ))
-                                }
-                            </ol>
-                        </ReactTooltipDefaultExport>
-                    </div>
-                );
-            }
-            if (this.state.targetWordsFound.includes(word.toLowerCase())) {
-                return (
-                    <div key={i}>
-                        <li>
-                            <span data-tip data-for={word}>
-                                {word.toUpperCase()}
-                            </span>
-                        </li>
-                        <ReactTooltipDefaultExport id={word} place="right">
-                            Examples:
-                            <ol>
-                                {
-                                    this.state.targetExamples[i]
-                                        .map((ex, j) => {
-                                            return (
-                                                <li key={j}>
-                                                    {ex}
-                                                </li>
-                                            );
-                                        })
-                                }
-                            </ol>
-                        </ReactTooltipDefaultExport>
-                    </div>
-                );
-            }
-            let buffer = '';
-            for (let j = 0; j < word.length; j++) {
-                buffer += '_ ';
-            }
+    renderWordsFound = () => this.state.targetWords.map((word, i) => {
+        if (this.state.gameOver) {
             return (
                 <div key={i}>
                     <li>
-                        <span data-tip data-for={word}>{buffer}</span>
+                        <span
+                            data-tip
+                            data-for={word}
+                            style= {
+                                this.state.targetWordsFound.includes(word.toLowerCase())
+                                    ? null
+                                    : { 'color': '#FB9AA0' }
+                            }
+                        >
+                            {word.toUpperCase()}
+                        </span>
                     </li>
                     <ReactTooltipDefaultExport id={word} place="right">
-                        Examples:
+                        <h3>Examples of Word Usage:</h3>
+                        <ol>
+                            {
+                                this.state.targetExamples[i]
+                                    .map((ex, j) => (
+                                        <li key={j}>
+                                            {ex}
+                                        </li>
+                                    ))
+                            }
+                        </ol>
+                    </ReactTooltipDefaultExport>
+                </div>
+            );
+        }
+        if (this.state.targetWordsFound.includes(word.toLowerCase())) {
+            return (
+                <div key={i}>
+                    <li>
+                        <span data-tip data-for={word}>
+                            {word.toUpperCase()}
+                        </span>
+                    </li>
+                    <ReactTooltipDefaultExport id={word} place="right">
+                        <h3>Examples of Word Usage:</h3>
                         <ol>
                             {
                                 this.state.targetExamples[i]
                                     .map((ex, j) => {
                                         return (
                                             <li key={j}>
-                                                {ex.replaceAll(word, buffer)}
+                                                {ex}
                                             </li>
                                         );
                                     })
@@ -314,193 +306,328 @@ export class AnagramView extends React.Component {
                     </ReactTooltipDefaultExport>
                 </div>
             );
-        });
+        }
+        let buffer = '';
+        for (let j = 0; j < word.length; j++) {
+            buffer += '_ ';
+        }
+        return (
+            <div key={i}>
+                <li>
+                    <span data-tip data-for={word}>{buffer}</span>
+                </li>
+                <ReactTooltipDefaultExport id={word} place="right">
+                    <h3>Examples of Word Usage:</h3>
+                    <ol>
+                        {
+                            this.state.targetExamples[i]
+                                .map((ex, j) => {
+                                    return (
+                                        <li key={j}>
+                                            {ex.replaceAll(word, buffer)}
+                                        </li>
+                                    );
+                                })
+                        }
+                    </ol>
+                </ReactTooltipDefaultExport>
+            </div>
+        );
+    });
 
-        /*
-         * Definitions
-         */
-        const definitions = this.state.targetWordDefs.map((defs, i) => {
-            if (defs.length === 0) {
-                return (
-                    <li key={i}>
-                        <span>N/A</span>
-                    </li>
-                );
-            }
+    renderDefinitions = () => this.state.targetWordDefs.map((defs, i) => {
+        if (defs.length === 0) {
             return (
-                <div key={i}>
-                    <li data-tip data-for={`${i}`}>
-                        <span>{defs[0]}</span>
-                    </li>
-                    <ReactTooltipDefaultExport
-                        id={`${i}`}
-                        place="top"
-                    >
-                        Definitions:
-                        <ol>
-                            {
-                                defs.map((def, j) => (
-                                    <li key={j}>
-                                        {def}
-                                    </li>
-                                ))
-                            }
-                        </ol>
-                    </ReactTooltipDefaultExport>
-                </div>
+                <li key={i}>
+                    <span>N/A</span>
+                </li>
             );
-        });
+        }
+        return (
+            <div key={i}>
+                <li data-tip data-for={`${i}`}>
+                    <span>{defs[0]}</span>
+                </li>
+                <ReactTooltipDefaultExport
+                    id={`${i}`}
+                    place="top"
+                >
+                    <h3>Extra Definitions:</h3>
+                    <ol>
+                        {
+                            defs.map((def, j) => (
+                                <li key={j}>
+                                    {def}
+                                </li>
+                            ))
+                        }
+                    </ol>
+                </ReactTooltipDefaultExport>
+            </div>
+        );
+    });
 
+    renderInstructionModal = () => <div>
+        {
+            this.state.showModal
+                ? <div className="backdrop" onClick={this.modalHandler}>
+                </div>
+                : null
+        }
+        <div className="Modal modal-content" style={{
+            display: this.state.showModal ? 'block' : 'none',
+            opacity: this.state.showModal ? 1 : 0,
+        }}>
+            <div className="modal-header">
+                <h5 className="modal-title">Instructions</h5>
+                <button type="button" className="close" onClick={this.modalHandler}>
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div className="modal-body">
+                <p>With the list of given letters, rearrange them (or some of them)
+                to form words from the text you selected. To enter the words,
+                type in the slot that says "Type Here" then press enter, and
+                your score is shown on the top right corner in the green box
+                labeled "Score". To shuffle the letters, click on the button
+                to the left of the list of letters. You may also look at the
+                "Definitions" column as a hint. If you find a word that was
+                not part of the text, it will appear on the "Extra
+                Words" column. When you hover over the words in "Target Words",
+                you can view example sentences that may help with better
+                understanding the vocabulary.</p>
+                <p>To give up and view all the target words, click on the "Give Up"
+                button. To restart the game again, click on the "Restart" button.
+                The game will end if either the timer runs out or if you have
+                found all the target words.</p>
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-secondary"
+                    onClick={this.modalHandler}>Close</button>
+            </div>
+        </div>
+    </div>;
+
+    renderAnagramHeader = () => <>
+        <div className="row">
+            <div className="col-md-6 col-12">
+                <h1>
+                    Anagrams
+                    <button className="btn btn-outline-light btn-circle mx-3"
+                        style= {{ 'border': '3px solid', 'fontSize': '20px' }}
+                        onClick={this.modalHandler}>
+                        <b>?</b>
+                    </button>
+                </h1>
+                <h2 className='anagram-category'>
+                    Category: {this.props.partOfSpeech}
+                </h2>
+            </div>
+            { this.renderInstructionModal() }
+            <div
+                className="col-lg-6 col-12 text-lg-right text-left"
+                style= {{ 'paddingBottom': '18px' }}
+            >
+                <h2>Time Left: {this.state.timeLeft}</h2>
+            </div>
+        </div>
+    </>
+
+    renderHeader = () => <>
+        {
+            this.state.gameOver
+                ? <div className="alert alert-success" role="alert">
+                    Congratulations! You found <b>
+                        {this.state.targetWordsFound.length}
+                    </b> of the target words!
+                    Click restart to start a new game!
+                </div>
+                : null
+        }
+        <div className="row mb-4">
+            <div className="col-8 text-left">
+                <button type="button" className="btn btn-primary"
+                    disabled={!this.state.gameOver}
+                    onClick={this.startNewGame}>Restart</button>
+                <button className="btn btn-danger mx-3"
+                    onClick={this.giveUp}
+                    disabled={this.state.gameOver}>Give Up</button>
+            </div>
+            <div className="col-4 text-right">
+                <span className="score">Score: {this.state.score}</span>
+            </div>
+        </div>
+    </>;
+
+    renderExtraWords = () => <>
+        <h3>Extra Words</h3>
+        <ul>
+            {
+                this.state.extraWordsFound.map((word, i) => (
+                    <li key={i}>
+                        {word.toUpperCase()}
+                    </li>
+                ))
+            }
+        </ul>
+    </>;
+
+    renderScrambled = () => <>
+        <h3>Scrambed Words (Click One)</h3>
+        <ol>
+            {
+                this.state.scrambled.map((scrambledWord, k) => (
+                    <li
+                        className='scrambled-li'
+                        onClick={() => { this.setState({ letters: [...scrambledWord] }); }}
+                        key={k}
+                    >
+                        { scrambledWord }
+                    </li>
+                ))
+            }
+        </ol>
+    </>;
+
+    renderAnagramInfo = () => <div className="row">
+        <div className="col-lg-3 col-6 pr-lg-4 pr-2 mb-4" >
+            <div className="anagram-shaded-box">
+                {
+                    this.state.mode === SINGLE
+                        ? this.renderScrambled()
+                        : this.renderExtraWords()
+                }
+            </div>
+        </div>
+        <div className="col-lg-3 col-6 pr-lg-4 pr-0 mb-4">
+            <div className='anagram-shaded-box'>
+                <h3>Words Found</h3>
+                <ol className='anagram-ol'>{this.renderWordsFound()}</ol>
+            </div>
+        </div>
+        <div className="col-lg-6 col-12 mb-4">
+            <div className='anagram-shaded-box'>
+                <h3>Definitions</h3>
+                <Confetti active={this.state.showConfetti} config={CONFETTI_CONFIG}/>
+                <ol className='anagram-ol'>{this.renderDefinitions()}</ol>
+            </div>
+        </div>
+    </div>;
+
+    renderInput = () => {
         const enteredFreq = generateFreq(this.state.userInput);
         const curFreq = {};
         for (const key of Object.keys(enteredFreq)) {
             curFreq[key] = 0;
         }
+
+        return <>
+            <div className="row">
+                <div className="col-2 col-md-3 d-flex align-items-center" >
+                    <button
+                        className="btn btn-outline-light d-block ml-auto shuffle-btn"
+                        onClick={this.handleShuffle}
+                        disabled={this.state.gameOver}
+                    >
+                        <img
+                            alt='shuffle'
+                            className="shuffle-icon"
+                            src='../../static/img/shuffle.png'
+                        />
+                    </button>
+                </div>
+                <div className="col-10 col-md-9 letters">
+                    {
+                        this.state.letters.map((letter, k) => {
+                            let letterClass = 'light-letter';
+                            const letterKey = letter.toLowerCase();
+                            if (letterKey in enteredFreq
+                                && curFreq[letterKey] < enteredFreq[letterKey]) {
+                                letterClass = 'dark-letter';
+                                curFreq[letterKey]++;
+                            }
+                            return (
+                                <span className={letterClass} key={k}>
+                                    {letter}
+                                </span>
+                            );
+                        })
+                    }
+                </div>
+            </div>
+            <br/>
+            <div className="row mb-5">
+                <div className="col-0 col-md-3" >
+                </div>
+                <div className="col-12 col-md-9">
+                    <form
+                        className="form-inline"
+                        onSubmit={this.handleSubmit}
+                    >
+                        <input
+                            className={`form-control ${this.state.shake ? 'shake-input' : ''}`}
+                            type="text"
+                            name="userInput"
+                            placeholder="Type here"
+                            disabled={this.state.gameOver}
+                            onChange={this.handleInput}
+                            value={this.state.userInput}
+                            autoComplete='off'
+                            onAnimationEnd={() => { this.setState({ shake: false }); }}
+                        />
+                        <button
+                            className="btn btn-outline-light anagram-submit-button"
+                            disabled={this.state.gameOver}
+                            type="submit"
+                        >
+                            Enter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </>;
+    }
+
+    renderModeSelection = () => <>
+        <h2 className='anagram-selection'>Please select a mode:</h2>
+        <button
+            className='btn btn-light anagram-mode-button'
+            onClick={() => {
+                this.setState({
+                    mode: SINGLE,
+                    showModal: true,
+                    letters: [...this.state.scrambled[0]],
+                });
+            }}
+        >
+            Single Word Anagrams
+        </button>
+        <button
+            className='btn btn-light anagram-mode-button'
+            onClick={() => { this.setState({ mode: COMBINED, showModal: true }); }}
+        >
+            Combined Anagrams
+        </button>
+    </>;
+
+    render() {
+        if (!this.state.targetWordDefs) {
+            return (<LoadingPage loadingText='Creating Anagram Quiz...' />);
+        }
+
         return (<React.Fragment>
             <Navbar />
             <div className="page">
-                <div className="row">
-                    <div className="col">
-                        <h1>
-                            Anagrams
-                            <button className="btn btn-outline-light btn-circle mx-3"
-                                style= {{ 'border': '3px solid', 'fontSize': '20px' }}
-                                onClick={this.modalHandler}>
-                                <b>?</b>
-                            </button>
-                        </h1>
-                    </div>
-                    <div>
-                        {
-                            this.state.showModal
-                                ? <div className="backdrop" onClick={this.modalHandler}>
-                                </div>
-                                : null
-                        }
-                        <div className="Modal modal-content" style={{
-                            transform: this.state.showModal
-                                ? 'translateY(0)' : 'translateY(-100vh)',
-                            opacity: this.state.showModal ? 1 : 0,
-                        }}>
-                            <div className="modal-header">
-                                <h5 className="modal-title">Instructions</h5>
-                                <button type="button" className="close" onClick={this.modalHandler}>
-                                    <span>&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Instructions will go here.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary"
-                                    onClick={this.modalHandler}>Close</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col text-right">
-                        <h4>Time Left: {this.state.timeLeft}</h4>
-                    </div>
-                </div>
-                <h4 style= {{ 'paddingBottom': '5px' }}>Category: {this.props.partOfSpeech}</h4>
+                { this.renderAnagramHeader() }
                 {
-                    this.state.gameOver
-                        ? <div className="alert alert-success" role="alert">
-                            Congratulations! You found <b>
-                                {this.state.targetWordsFound.length}
-                            </b> of the target words!
-                            Click restart to start a new game!
-                        </div>
-                        : null
+                    this.state.mode === UNSELECTED
+                        ? this.renderModeSelection()
+                        : <>
+                            { this.renderHeader() }
+                            { this.renderAnagramInfo() }
+                            { this.renderInput() }
+                        </>
                 }
-                <div className="row">
-                    <div className="col-6 text-left">
-                        <button type="button" className="btn btn-primary"
-                            disabled={!this.state.gameOver}
-                            onClick={this.startNewGame}>Restart</button>
-                        <button className="btn btn-danger mx-3"
-                            onClick={this.giveUp}
-                            disabled={this.state.gameOver}>Give Up</button>
-                    </div>
-                    <div className="col text-right">
-                        <span className="score">Score: {this.state.score}</span>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col shaded-box" >
-                        <h3>Extra Words</h3>
-                        <ul>
-                            {
-                                this.state.extraWordsFound.map((word, i) => (
-                                    <li key={i}>
-                                        {word.toUpperCase()}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </div>
-                    <div className="col shaded-box mx-4">
-                        <h3>Words Found</h3>
-                        <ol>{wordsFound}</ol>
-                    </div>
-                    <div className="col-6 shaded-box">
-                        <h3>Definitions</h3>
-                        <Confetti active={this.state.showConfetti} config={CONFETTI_CONFIG}/>
-                        <ol>{definitions}</ol>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-3" >
-                        <button className="btn btn-outline-light float-right"
-                            onClick={this.handleShuffle}
-                            disabled={this.state.gameOver}>
-                            <img className="shuffle-icon" src='../../static/img/shuffle.png'/>
-                        </button>
-                    </div>
-                    <div className="col-9 letters">
-                        {
-                            this.state.letters.map((letter, k) => {
-                                let letterClass = 'light-letter';
-                                const letterKey = letter.toLowerCase();
-                                if (letterKey in enteredFreq
-                                    && curFreq[letterKey] < enteredFreq[letterKey]) {
-                                    letterClass = 'dark-letter';
-                                    curFreq[letterKey]++;
-                                }
-                                return (
-                                    <span className={letterClass} key={k}>
-                                        {letter}
-                                    </span>
-                                );
-                            })
-                        }
-                    </div>
-                </div>
-                <br/>
-                <div className="row mb-5">
-                    <div className="col-3" >
-                    </div>
-                    <div className="col-9">
-                        <form
-                            className="form-inline"
-                            onSubmit={this.handleSubmit}
-                        >
-                            <input
-                                className={`form-control ${this.state.shake ? 'shake-input' : ''}`}
-                                type="text"
-                                name="userInput"
-                                placeholder="Type here"
-                                disabled={this.state.gameOver}
-                                onChange={this.handleInput}
-                                value={this.state.userInput}
-                                autoComplete='off'
-                                onAnimationEnd={() => { this.setState({ shake: false }); }}
-                            />
-                            <button className="btn btn-outline-light mx-2"
-                                disabled={this.state.gameOver}
-                                type="submit">Enter</button>
-                        </form>
-                    </div>
-                </div>
             </div>
             <Footer />
         </React.Fragment>);
