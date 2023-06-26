@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
+import {Modal, Button} from 'react-bootstrap';
 import { Navbar, Footer } from '../UILibrary/components';
-
 
 // Functions to use to generate links for different formats
 const posLink = (textId, pos) => `${textId}/${pos.toLowerCase()}`;
@@ -94,6 +94,7 @@ export class IndexView extends React.Component {
         super(props);
         this.state = {
             data: null,
+            show: true
         };
     }
 
@@ -108,6 +109,8 @@ export class IndexView extends React.Component {
     }
 
     render() {
+        const handleClose = () => this.setState({show: false});
+
         if (!this.state.data) {
             return (<>
                 Loading!
@@ -115,6 +118,21 @@ export class IndexView extends React.Component {
         }
 
         return (<React.Fragment>
+            <Modal show={this.state.show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Archived Copy</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Emerging Technologies for Language Learning was a project by the <a href = "https://digitalhumanities.mit.edu/">MIT Programs in Digital Humanities</a> in collaboration with our Spring 2021 Faculty Fellow, <a href = "https://languages.mit.edu/people/takako-aikawa/">Takako Aikawa</a>, Senior Lecturer in Japanese in Global Languages. The project has been archived, and is no longer being actively maintained.
+                    <br/><br/>
+                    The project contains student work, and there may be features which are incomplete or inaccurate.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Navbar />
             <div className="page">
                 {this.state.data.map((text, k) => (
