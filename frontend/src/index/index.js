@@ -14,6 +14,7 @@ const QUIZ_TYPES = {
     'Quiz': ['quiz', idLink],
     'Crossword': ['crossword', posLink],
     'Story Generator': ['picturebook', posLink],
+    'TextToSpeech': ['textToSpeech', idLink],
 };
 
 class TextInfo extends React.Component {
