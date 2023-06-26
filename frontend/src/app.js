@@ -10,7 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { IndexView } from './index/index';
 import { QuizView } from './quizView/quizView';
 import { AnagramView } from './anagramView/anagramView';
-import { InstructorView } from './instructorView/instructorView';
+// import { InstructorView } from './instructorView/instructorView';
+import { AboutView } from './aboutView/aboutView';
 import { FlashcardView } from './flashcard/flashcardView';
 import { AllQuizView } from './quizView/allQuizView';
 import { PictureBookView } from './pictureBookView/pictureBookView';
@@ -28,7 +29,8 @@ window.app_modules = {
     // Add all frontend views here
     AllQuizView,
     AnagramView,
-    InstructorView,
+    // InstructorView,
+    AboutView,
     FlashcardView,
     PictureBookView,
     CrosswordView,

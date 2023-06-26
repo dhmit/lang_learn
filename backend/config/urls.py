@@ -65,7 +65,8 @@ urlpatterns = [
     # View paths
     react_view_path('', 'IndexView'),
     react_view_path('anagrams/<int:textID>/<str:partOfSpeech>', 'AnagramView'),
-    react_view_path('instructor', 'InstructorView'),
+    # react_view_path('instructor', 'InstructorView'),
+    react_view_path('about/', 'AboutView'),
     react_view_path('flashcards/<int:textID>/<str:partOfSpeech>', 'FlashcardView'),
     react_view_path('crossword/<int:textID>/<str:partOfSpeech>', 'CrosswordView'),
     react_view_path('anagram/<int:textID>/<str:partOfSpeech>', 'AnagramView'),

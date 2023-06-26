@@ -134,7 +134,7 @@ export class Footer extends React.Component {
 }
 
 const navbarLinks = [
-    { name: 'Instructor\'s Page', link: '/instructor' },
+    { name: 'About', link: '/about' },
 ];
 
 export class Navbar extends Component {
